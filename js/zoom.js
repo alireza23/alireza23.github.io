@@ -189,15 +189,15 @@ function update() {
   current.height = originalSize.height * zoom;
   current.width = originalSize.width * zoom;
   //console.log(current.height + ' ' + current.width)
-  if (current.x < 0) {
-    current.x = 0;
-  }
-  if (current.y < 0) {
-    current.y = 0;
-  }
-// if(current.x > (current.width - originalSize.width)){
-//    current.x =  (current.width - originalSize.width)/2
-// }
+//   if (current.x < 0) {
+//     current.x = 0;
+//   }
+//   if (current.y < 0) {
+//     current.y = 0;
+//   }
+if(current.x > (current.width - originalSize.width)){
+   current.x =  (current.width - originalSize.width)/2
+}
  // console.log(`zoom: ${zoom}`);
 console.log({zoom, x: current.x, w: current.width, y: current.y, h: current.height})
   //console.log(`x  =  ${current.x}, y = ${current.y}`)
