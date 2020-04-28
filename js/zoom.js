@@ -119,6 +119,7 @@ var height = element.offsetHeight;
     hammertime.on('pan', function(e) {
 
         console.log(e.maxPointers)
+        console.log(e)
         if(e.maxPointers == 2){
         if (lastEvent !== 'pan') {
             fixHammerjsDeltaIssue = {
