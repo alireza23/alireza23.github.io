@@ -1,11 +1,7 @@
 $(document).ready(function () {
   var element = document.getElementById("container");
-  var width// = element.offsetWidth;
-var height// = element.offsetHeight;
-  $("#container").load(function(){
-    width = this.width()
-    height = this.height()
-  });
+  var width = element.offsetWidth;
+var height = element.offsetHeight;
 
 console.log(height)
 console.log(width)
