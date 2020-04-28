@@ -203,9 +203,11 @@ if(current.y < - ((current.height - originalSize.height)/2)){
 if(current.y > (current.height - originalSize.height)/2){
   current.y = (current.height - originalSize.height)/2
 }
-// if(current.y < 0){
-//     current.y = 0
-// }
+var windowH = $(window).height()
+console.log(windowH)
+if(current.height>=  windowH){
+  console.log('is bigger')
+}
 
 console.log({zoom, x: current.x, w: current.width, y: current.y, h: current.height})
   //console.log(`x  =  ${current.x}, y = ${current.y}`)
