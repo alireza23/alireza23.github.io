@@ -1,6 +1,12 @@
-var element = document.getElementById("container");
-var width = element.offsetWidth;
-var height = element.offsetHeight;
+$(document).ready(function () {
+  var element = document.getElementById("container");
+  var width// = element.offsetWidth;
+var height// = element.offsetHeight;
+  $("#container").load(function(){
+    width = this.width()
+    height = this.height()
+  });
+
 console.log(height)
 console.log(width)
 var hammertime = new Hammer(element, {});
@@ -217,3 +223,5 @@ console.log({zoom, x: current.x, w: current.width, y: current.y, h: current.heig
     zoom +
     ")";
 }
+
+});
