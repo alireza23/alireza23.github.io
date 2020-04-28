@@ -195,7 +195,7 @@ function update() {
   if (current.y < 0) {
     current.y = 0;
   }
-if(current.x > (current.width - originalSize.width)/2){
+if(current.x > (current.width - originalSize.width)){
    current.x =  (current.width - originalSize.width)/2
 }
  // console.log(`zoom: ${zoom}`);
