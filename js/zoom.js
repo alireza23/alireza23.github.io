@@ -188,7 +188,7 @@ function update() {
   }
   current.height = originalSize.height * zoom * 13.69;
   current.width = originalSize.width * zoom;
-  console.log(current.height + ' ' + current.width)
+  //console.log(current.height + ' ' + current.width)
   if (current.x < 0) {
     current.x = 0;
   }
@@ -196,9 +196,9 @@ function update() {
     current.y = 0;
   }
   console.log(`zoom: ${zoom}`);
-
-  console.log(`x  =  ${current.x}, y = ${current.y}`)
-  //console.log(`w  =  ${current.width}, h = ${current.height}`)
+console.log({zoom, x: current.x, w: current.width, y: current.y, h: current.height})
+  //console.log(`x  =  ${current.x}, y = ${current.y}`)
+ // console.log(`w  =  ${current.width}, h = ${current.height}`)
   element.style.transform =
     "translate3d(" +
     current.x +
