@@ -1,6 +1,8 @@
 var element = document.getElementById("container");
 var width = element.offsetWidth;
 var height = element.offsetHeight;
+console.log(height)
+console.log(width)
 var hammertime = new Hammer(element, {});
 
 hammertime.get("pinch").set({ enable: true });
@@ -186,6 +188,7 @@ function update() {
   }
   current.height = originalSize.height * zoom;
   current.width = originalSize.width * zoom;
+  console.log(current.height + ' ' + current.width)
   if (current.x < 0) {
     current.x = 0;
   }
@@ -195,7 +198,7 @@ function update() {
   console.log(`zoom: ${zoom}`);
 
   console.log(`x  =  ${current.x}, y = ${current.y}`)
-  console.log(`w  =  ${current.width}, h = ${current.height}`)
+  //console.log(`w  =  ${current.width}, h = ${current.height}`)
   element.style.transform =
     "translate3d(" +
     current.x +
