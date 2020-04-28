@@ -117,20 +117,18 @@ var height = element.offsetHeight;
     })
 
     hammertime.on('pan', function(e) {
-        if(e.maxPointers ==2){
-            if (lastEvent !== 'pan') {
-                fixHammerjsDeltaIssue = {
-                    x: e.deltaX,
-                    y: e.deltaY
-                }
+        console.log(e.maxPointers)
+        if (lastEvent !== 'pan') {
+            fixHammerjsDeltaIssue = {
+                x: e.deltaX,
+                y: e.deltaY
             }
-    
-            current.x = last.x + e.deltaX - fixHammerjsDeltaIssue.x;
-            current.y = last.y + e.deltaY - fixHammerjsDeltaIssue.y;
-            lastEvent = 'pan';
-            update();
         }
-      
+
+        current.x = last.x + e.deltaX - fixHammerjsDeltaIssue.x;
+        current.y = last.y + e.deltaY - fixHammerjsDeltaIssue.y;
+        lastEvent = 'pan';
+        update();
     })    
 
     hammertime.on('pinch', function(e) {
@@ -151,12 +149,9 @@ var height = element.offsetHeight;
     })
 
     hammertime.on('panend', function(e) {
-        if(e.maxPointers ==2){
-            last.x = current.x;
-            last.y = current.y;
-            lastEvent = 'panend';
-        }
-    
+        last.x = current.x;
+        last.y = current.y;
+        lastEvent = 'panend';
     })
 
     hammertime.on('pinchend', function(e) {
