@@ -195,6 +195,7 @@ function update() {
   }
 
   console.log(`x  =  ${current.x}, y = ${current.y}`)
+  console.log(`w  =  ${current.width}, h = ${current.height}`)
   element.style.transform =
     "translate3d(" +
     current.x +
