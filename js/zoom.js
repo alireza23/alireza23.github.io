@@ -118,20 +118,20 @@ var height = element.offsetHeight;
 
     hammertime.on('pan', function(e) {
 
-        console.log(e.maxPointers)
-        console.log(e)
-        if(e.maxPointers == 2){
-        if (lastEvent !== 'pan') {
-            fixHammerjsDeltaIssue = {
-                x: e.deltaX,
-                y: e.deltaY
-            }
-        }
-        current.x = last.x + e.deltaX - fixHammerjsDeltaIssue.x;
-        current.y = last.y + e.deltaY - fixHammerjsDeltaIssue.y;
-        lastEvent = 'pan';
-        update();
-        }
+        // console.log(e.maxPointers)
+        // console.log(e)
+        // if(e.maxPointers == 2){
+        // if (lastEvent !== 'pan') {
+        //     fixHammerjsDeltaIssue = {
+        //         x: e.deltaX,
+        //         y: e.deltaY
+        //     }
+        // }
+        // current.x = last.x + e.deltaX - fixHammerjsDeltaIssue.x;
+        // current.y = last.y + e.deltaY - fixHammerjsDeltaIssue.y;
+        // lastEvent = 'pan';
+        // update();
+        // }
        
 
        
@@ -156,11 +156,11 @@ var height = element.offsetHeight;
     })
 
     hammertime.on('panend', function(e) {
-        if(e.maxPointers == 2){
-            last.x = current.x;
-            last.y = current.y;
-            lastEvent = 'panend';
-        }
+        // if(e.maxPointers == 2){
+        //     last.x = current.x;
+        //     last.y = current.y;
+        //     lastEvent = 'panend';
+        // }
 
       
     })
