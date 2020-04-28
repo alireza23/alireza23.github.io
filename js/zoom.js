@@ -198,7 +198,7 @@ function update() {
 if(current.x > current.width - originalSize.width){
     current.x = originalSize.width
 }
-  console.log(`zoom: ${zoom}`);
+ // console.log(`zoom: ${zoom}`);
 console.log({zoom, x: current.x, w: current.width, y: current.y, h: current.height})
   //console.log(`x  =  ${current.x}, y = ${current.y}`)
  // console.log(`w  =  ${current.width}, h = ${current.height}`)
