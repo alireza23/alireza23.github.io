@@ -4,7 +4,7 @@ var height = element.offsetHeight;
     var hammertime = new Hammer(element, {});
 
     hammertime.get('pinch').set({ enable: true });
-    hammertime.get('pan').set({ threshold: 0 });
+    hammertime.get('pan').set({ threshold: 10 });
 
     var fixHammerjsDeltaIssue = undefined;
     var pinchStart = { x: undefined, y: undefined }
@@ -120,7 +120,7 @@ var height = element.offsetHeight;
 
         console.log(e.maxPointers)
         if(e.maxPointers == 2){
- if (lastEvent !== 'pan') {
+        if (lastEvent !== 'pan') {
             fixHammerjsDeltaIssue = {
                 x: e.deltaX,
                 y: e.deltaY
@@ -137,6 +137,7 @@ var height = element.offsetHeight;
     })    
 
     hammertime.on('pinch', function(e) {
+        console.log('pinching')
         var d = scaleFrom(pinchZoomOrigin, last.z, last.z * e.scale)
         current.x = d.x + last.x + e.deltaX;
         current.y = d.y + last.y + e.deltaY;
@@ -154,13 +155,17 @@ var height = element.offsetHeight;
     })
 
     hammertime.on('panend', function(e) {
+        if(e.maxPointers == 2){
+            last.x = current.x;
+            last.y = current.y;
+            lastEvent = 'panend';
+        }
 
-        last.x = current.x;
-        last.y = current.y;
-        lastEvent = 'panend';
+      
     })
 
     hammertime.on('pinchend', function(e) {
+        console.log('pinch end')
         last.x = current.x;
         last.y = current.y;
         last.z = current.z;
