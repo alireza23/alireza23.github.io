@@ -188,7 +188,7 @@ function update() {
   }
   current.height = originalSize.height * zoom;
   current.width = originalSize.width * zoom;
-  console.log('new2')
+  console.log('new3')
   if(current.x < - ((current.width - originalSize.width)/2)){
       current.x = - ((current.width - originalSize.width)/2)
   }
