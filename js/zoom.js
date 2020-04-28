@@ -187,12 +187,13 @@ function update() {
   console.log(zoom);
   current.height = originalSize.height * zoom;
   current.width = originalSize.width * zoom;
-  if (current.x < 0) {
+  if (current.x) {
     current.x = 0;
   }
-  if (current.y < 0) {
+  if (current.y) {
     current.y = 0;
   }
+
   console.log(`x  =  ${current.x}, y = ${current.y}`)
   element.style.transform =
     "translate3d(" +
