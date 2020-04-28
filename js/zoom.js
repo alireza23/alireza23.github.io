@@ -154,7 +154,7 @@ var height = element.offsetHeight;
     })
 
     hammertime.on('panend', function(e) {
-        
+
         last.x = current.x;
         last.y = current.y;
         lastEvent = 'panend';
@@ -165,6 +165,7 @@ var height = element.offsetHeight;
         last.y = current.y;
         last.z = current.z;
         lastEvent = 'pinchend';
+        console.log(`pinch end ${e}`)
     })
 
     function update() {
