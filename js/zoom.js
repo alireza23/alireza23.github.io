@@ -175,11 +175,12 @@ var height = element.offsetHeight;
     })
 
     function update() {
-        console.log(current.z)
-        if(current.z < 1){
-            current.z = 1
+        zoom = current.z
+        if(zoom < 1){
+            zoom = 1
         }
-        current.height = originalSize.height * current.z;
-        current.width = originalSize.width * current.z;
-        element.style.transform = "translate3d(" + current.x + "px, " + current.y + "px, 0) scale(" + current.z + ")";
+        console.log(zoom)
+        current.height = originalSize.height * zoom;
+        current.width = originalSize.width * zoom;
+        element.style.transform = "translate3d(" + current.x + "px, " + current.y + "px, 0) scale(" + zoom + ")";
     }
