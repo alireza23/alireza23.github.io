@@ -138,7 +138,7 @@ var height = element.offsetHeight;
     })    
 
     hammertime.on('pinch', function(e) {
-        console.log('pinching')
+       // console.log('pinching')
         var d = scaleFrom(pinchZoomOrigin, last.z, last.z * e.scale)
         current.x = d.x + last.x + e.deltaX;
         current.y = d.y + last.y + e.deltaY;
@@ -166,12 +166,12 @@ var height = element.offsetHeight;
     })
 
     hammertime.on('pinchend', function(e) {
-        console.log('pinch end')
+        //console.log('pinch end')
         last.x = current.x;
         last.y = current.y;
         last.z = current.z;
         lastEvent = 'pinchend';
-        console.log(`pinch end ${e}`)
+       // console.log(`pinch end ${e}`)
     })
 
     function update() {
