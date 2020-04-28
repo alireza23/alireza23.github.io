@@ -1,4 +1,4 @@
-var element = document.getElementById('myImage')
+var element = document.getElementById('container')
     var hammertime = new Hammer(element, {});
 
     hammertime.get('pinch').set({ enable: true });
@@ -115,6 +115,7 @@ var element = document.getElementById('myImage')
     })
 
     hammertime.on('pan', function(e) {
+        console.log
         if (lastEvent !== 'pan') {
             fixHammerjsDeltaIssue = {
                 x: e.deltaX,
