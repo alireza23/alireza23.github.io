@@ -195,9 +195,9 @@ function update() {
   if(current.x > (current.width - originalSize.width)/2){
     current.x = (current.width - originalSize.width)/2
 }
-// if(current.y < - ((current.height - originalSize.height)/2)){
-//     current.y = - ((current.height - originalSize.height)/2)
-// }
+if(current.y < - ((current.height - originalSize.height)/2)){
+    current.y = - ((current.height - originalSize.height)/2)
+}
 if(current.y > (current.height - originalSize.height)/2){
   current.y = (current.height - originalSize.height)/2
 }
