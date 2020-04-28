@@ -188,6 +188,7 @@ function update() {
   }
   current.height = originalSize.height * zoom;
   current.width = originalSize.width * zoom;
+  console.log('new')
   //console.log(current.height + ' ' + current.width)
 //   if (current.x < 0) {
 //     current.x = 0;
