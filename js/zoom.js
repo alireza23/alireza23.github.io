@@ -175,6 +175,7 @@ var height = element.offsetHeight;
     })
 
     function update() {
+        console.log(current.z)
         current.height = originalSize.height * current.z;
         current.width = originalSize.width * current.z;
         element.style.transform = "translate3d(" + current.x + "px, " + current.y + "px, 0) scale(" + current.z + ")";
