@@ -3,11 +3,11 @@
     padding: 0;
   }
   #container {
-    top: 50px;
-    margin-bottom: 50px;
-    left: 10%;
+    top: 0;
+    /* margin-bottom: 50px; */
+    left: 0;
     border: 2px solid black;
-    width: 80%;
+    width: 100%;
     position: absolute;
     height: auto;
   }

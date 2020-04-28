@@ -184,7 +184,6 @@ function update() {
   if (zoom < 1) {
     zoom = 1;
   }
-  console.log(zoom);
   current.height = originalSize.height * zoom;
   current.width = originalSize.width * zoom;
   if (current.x < 0) {
@@ -193,6 +192,7 @@ function update() {
   if (current.y < 0) {
     current.y = 0;
   }
+  console.log(`zoom: ${zoom}`);
 
   console.log(`x  =  ${current.x}, y = ${current.y}`)
   console.log(`w  =  ${current.width}, h = ${current.height}`)
