@@ -231,7 +231,12 @@ console.log(delta)
 }else{
   console.log(` IMAGE bigger AND windwH= ${windowH}`)
   console.log({zoom, x: current.x, w: current.width, y: current.y, h: current.height})
-
+ if(current.y < - ((current.height - imageOriginalHeight)/2)){
+    current.y = - ((current.height - imageOriginalHeight)/2)
+}
+if(current.y > (current.height - imageOriginalHeight)/2){
+  current.y = (current.height - imageOriginalHeight)/2
+}
   element.style.transform =
     "translate3d(" +
     current.x +
