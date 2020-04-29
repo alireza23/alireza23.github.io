@@ -207,10 +207,32 @@ if(current.y > (current.height - imageOriginalHeight)/2){
 }
 
 var windowH = $(window).height()
-// //var screenH = screen.height()
-if(current.height > windowH){
-console.log(`windwH= ${windowH}`)
+if(current.height <= windowH){
+  console.log(` IMAGE SMALLER AND windwH= ${windowH}`)
+  console.log({zoom, x: current.x, w: current.width, y: current.y, h: current.height})
+var delta = windowH - current.height
+  element.style.transform =
+    "translate3d(" +
+    current.x +
+    "px, " +
+    delta/2 +
+    "px, 0) scale(" +
+    zoom +
+    ")";
+}else{
+  console.log(` IMAGE bigger AND windwH= ${windowH}`)
+  console.log({zoom, x: current.x, w: current.width, y: current.y, h: current.height})
+
+  element.style.transform =
+    "translate3d(" +
+    current.x +
+    "px, " +
+    current.y +
+    "px, 0) scale(" +
+    zoom +
+    ")";
 }
+
 
 // if(current.height <= windowH){
 //  if(current.y > (current.height - originalSize.height)/2){
@@ -223,17 +245,7 @@ console.log(`windwH= ${windowH}`)
 //   console.log('is bigger')
 // }
 
-console.log({zoom, x: current.x, w: current.width, y: current.y, h: current.height})
-  //console.log(`x  =  ${current.x}, y = ${current.y}`)
- // console.log(`w  =  ${current.width}, h = ${current.height}`)
-  element.style.transform =
-    "translate3d(" +
-    current.x +
-    "px, " +
-    current.y +
-    "px, 0) scale(" +
-    zoom +
-    ")";
+
 }
 
 });
