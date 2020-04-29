@@ -190,7 +190,7 @@ function update() {
   }
   imageOriginalHeight = $("#myImage").height()
   console.log(imageOriginalHeight)
-  current.height = originalSize.height * zoom;
+  current.height = imageOriginalHeight * zoom;
   current.width = originalSize.width * zoom;
   console.log('new3')
   if(current.x < - ((current.width - originalSize.width)/2)){
@@ -199,11 +199,11 @@ function update() {
   if(current.x > (current.width - originalSize.width)/2){
     current.x = (current.width - originalSize.width)/2
 }
-if(current.y < - ((current.height - originalSize.height)/2)){
-    current.y = - ((current.height - originalSize.height)/2)
+if(current.y < - ((current.height - imageOriginalHeight)/2)){
+    current.y = - ((current.height - imageOriginalHeight)/2)
 }
-if(current.y > (current.height - originalSize.height)/2){
-  current.y = (current.height - originalSize.height)/2
+if(current.y > (current.height - imageOriginalHeight)/2){
+  current.y = (current.height - imageOriginalHeight)/2
 }
 // var windowH = $(window).height()
 // //var screenH = screen.height()
