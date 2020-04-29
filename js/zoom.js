@@ -207,13 +207,16 @@ if(height2 <= windowH2){
     ")";
 }else{
   console.log(` IMAGE bigger AND windwH= ${windowH}`)
-  $("#container").css("top", `0px`)
+ // $("#container").css("top", `0px`)
   console.log({zoom, x: current.x, w: current.width, y: current.y, h: current.height})
  if(current.y < - ((current.height - imageOriginalHeight)/2)){
     current.y = - ((current.height - imageOriginalHeight)/2)
+    console.log("y-")
 }
 if(current.y > (current.height - imageOriginalHeight)/2){
   current.y = (current.height - imageOriginalHeight)/2
+  console.log("y+")
+
 }
   element.style.transform =
     "translate3d(" +
