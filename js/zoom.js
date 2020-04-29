@@ -218,7 +218,7 @@ if(current.height <= windowH){
   var bottom = windowH - (top + current.height)
   var deltaUpdate = (top + bottom)/2
 
-  console.log({windowH, currentHeight: current.height, deltaUpdate})
+  console.log({windowH, currentHeight: current.height, deltaUpdate, top, bottom})
  // console.log(`windowH = ${windowH}, current.height = ${current.height},  deltaUpdate =  ${deltaUpdate}`)
  $("#container").css("top", `${deltaUpdate}px`)
   console.log(` IMAGE SMALLER AND windwH= ${windowH}`)
