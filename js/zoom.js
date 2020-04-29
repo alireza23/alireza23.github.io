@@ -214,13 +214,17 @@ function update() {
 var windowH = $(window).innerHeight();
 
 if(current.height <= windowH){
-  var top = $("#container").position().top
-  var bottom = windowH - (top + current.height)
-  var deltaUpdate = (top + bottom)/2
+  $("#container").css("top", "0px")
+  var halfPage = windowH/2
+  var halfImageHeight = current.height/2
+var computedTop = halfPage - halfImageHeight
+  // var top = $("#container").position().top
+  // var bottom = windowH - (top + current.height)
+  // var deltaUpdate = (top + bottom)/2
 
-  console.log({windowH, currentHeight: current.height, deltaUpdate, top, bottom})
+  // console.log({windowH, currentHeight: current.height, deltaUpdate, top, bottom})
  // console.log(`windowH = ${windowH}, current.height = ${current.height},  deltaUpdate =  ${deltaUpdate}`)
- $("#container").css("top", `${deltaUpdate}px`)
+// $("#container").css("top", `${deltaUpdate}px`)
   console.log(` IMAGE SMALLER AND windwH= ${windowH}`)
   console.log({zoom, x: current.x, w: current.width, y: current.y, h: current.height})
 
@@ -230,7 +234,7 @@ if(current.height <= windowH){
     "translate3d(" +
     current.x +
     "px, " +
-    0 +
+    computedTop +
     "px, 0) scale(" +
     zoom +
     ")";
