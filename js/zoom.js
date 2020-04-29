@@ -226,7 +226,7 @@ var computedTop = halfPage - halfImageHeight
  // console.log(`windowH = ${windowH}, current.height = ${current.height},  deltaUpdate =  ${deltaUpdate}`)
 // $("#container").css("top", `${deltaUpdate}px`)
   console.log(` IMAGE SMALLER AND windwH= ${windowH}`)
-  console.log({zoom, x: current.x, w: current.width, y: current.y, h: current.height})
+  console.log({zoom, x: current.x, w: current.width, y: current.y, h: current.height, computedTop})
 
 //console.log(delta)
 //var finalY = (delta/2) + y
