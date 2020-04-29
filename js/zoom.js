@@ -217,7 +217,7 @@ console.log(delta)
     "translate3d(" +
     current.x +
     "px, " +
-    delta +
+    0 +
     "px, 0) scale(" +
     zoom +
     ")";
