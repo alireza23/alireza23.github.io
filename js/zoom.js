@@ -199,12 +199,12 @@ function update() {
   if(current.x > (current.width - originalSize.width)/2){
     current.x = (current.width - originalSize.width)/2
 }
-if(current.y < - ((current.height - imageOriginalHeight)/2)){
-    current.y = - ((current.height - imageOriginalHeight)/2)
-}
-if(current.y > (current.height - imageOriginalHeight)/2){
-  current.y = (current.height - imageOriginalHeight)/2
-}
+// if(current.y < - ((current.height - imageOriginalHeight)/2)){
+//     current.y = - ((current.height - imageOriginalHeight)/2)
+// }
+// if(current.y > (current.height - imageOriginalHeight)/2){
+//   current.y = (current.height - imageOriginalHeight)/2
+// }
 
 var windowH = $(window).height()
 if(current.height <= windowH){
