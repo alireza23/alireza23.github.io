@@ -215,7 +215,7 @@ var windowH = $(window).innerHeight();
 
 if(current.height <= windowH){
   $("#container").css("top", "0px")
-  var halfPage = windowH/2
+  var halfPage = windowH/4
   var halfImageHeight = current.height/2
   var computedTop
 
