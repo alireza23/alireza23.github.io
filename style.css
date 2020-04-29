@@ -8,21 +8,15 @@
   width: 100%;
   background-color:tomato
 }
-
+.pinch-zoom{
+  touch-action: none;
+}
 img {
   width: 100%;
 
 }
 
-div.pinch-zoom div.description h1 {
-  font-size: 40px;
-  margin: 0px;
-  margin-bottom: 10px;
-}
 
-div.pinch-zoom div.description p {
-  margin-bottom: 1em;
-}
 
 
 *{
