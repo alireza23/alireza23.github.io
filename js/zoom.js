@@ -214,7 +214,7 @@ function update() {
 var windowH = $(window).height()
 var delta =(windowH - current.height )/2
 if(current.height <= windowH){
-  $("#container").css("top", `${delta}px`)
+ // $("#container").css("top", `${delta}px`)
   console.log(` IMAGE SMALLER AND windwH= ${windowH}`)
   console.log({zoom, x: current.x, w: current.width, y: current.y, h: current.height})
 
