@@ -194,7 +194,7 @@ function update() {
     zoom = 1;
   }
   imageOriginalHeight = $("#myImage").height()
-  //console.log(imageOriginalHeight)
+ console.log(`image original height ${imageOriginalHeight}`)
   current.height = imageOriginalHeight * zoom;
   current.width = originalSize.width * zoom;
   console.log('new3')
