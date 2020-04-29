@@ -208,7 +208,9 @@ var windowH = $(window).height()
 
 
 if(current.height <= windowH){
-current.y = 0
+ if(current.y > (current.height - originalSize.height)/2){
+  current.y = (current.height - originalSize.height)/2
+ }
 }
 //console.log(screenH)
 console.log(windowH)
