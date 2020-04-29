@@ -200,12 +200,19 @@ function update() {
 if(current.y < - ((current.height - originalSize.height)/2)){
     current.y = - ((current.height - originalSize.height)/2)
 }
-if(current.y > (current.height - originalSize.height)/2){
-  current.y = (current.height - originalSize.height)/2
-}
+// if(current.y > (current.height - originalSize.height)/2){
+//   current.y = (current.height - originalSize.height)/2
+// }
 var windowH = $(window).height()
+var screenH = screen.height()
+
+
+if(current.height < screenH){
+current.y = 0
+}
+console.log(screenH)
 console.log(windowH)
-if(current.height>=  windowH){
+if(current.height>=  screenH){
   console.log('is bigger')
 }
 
