@@ -230,6 +230,7 @@ console.log(delta)
     ")";
 }else{
   console.log(` IMAGE bigger AND windwH= ${windowH}`)
+  $("#container").css("top", `0px`)
   console.log({zoom, x: current.x, w: current.width, y: current.y, h: current.height})
  if(current.y < - ((current.height - imageOriginalHeight)/2)){
     current.y = - ((current.height - imageOriginalHeight)/2)
