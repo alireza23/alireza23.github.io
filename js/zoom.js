@@ -214,7 +214,7 @@ function update() {
 var windowH = $(window).innerHeight();
 
 if(current.height <= windowH){
-  var deltaUpdate =(windowH - current.height )/2
+  var deltaUpdate = ($("#container").css("bottom") + $("#container").css("top"))/2
   console.log({windowH, currentHeight: current.height, deltaUpdate})
  // console.log(`windowH = ${windowH}, current.height = ${current.height},  deltaUpdate =  ${deltaUpdate}`)
  $("#container").css("top", `${deltaUpdate}px`)
