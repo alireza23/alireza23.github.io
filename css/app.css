@@ -6,10 +6,11 @@
     top: 0;
     /* margin-bottom: 50px; */
     left: 0;
-    border: 2px solid black;
+    border: .5px solid black;
     width: 100%;
     position: absolute;
     height: auto;
+    
   }
   #myImage {
     width: 100%;

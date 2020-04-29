@@ -215,7 +215,7 @@ var delta = windowH - current.height
     "translate3d(" +
     current.x +
     "px, " +
-    delta/2 +
+    ((delta/2) + y)  +
     "px, 0) scale(" +
     zoom +
     ")";
