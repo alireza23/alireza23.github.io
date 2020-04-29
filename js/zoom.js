@@ -243,7 +243,7 @@ var computedTop = halfPage - halfImageHeight
     "translate3d(" +
     current.x +
     "px, " +
-    halfPage +
+    halfImageHeight +
     "px, 0) scale(" +
     zoom +
     ")";
