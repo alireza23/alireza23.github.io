@@ -46,7 +46,14 @@ Tool:
         var canvas = document.createElement('canvas');
         canvas.width = stage.width();
         canvas.height = stage.height();
-  
+  var circle = new Konva.Circle({
+      stroke: 'black',
+      fill: 'red',
+      x:0,
+      y:0,
+      radius: 50,
+      strokeWidth: 2
+  })
         // created canvas we can add to layer as "Konva.Image" element
         var image = new Konva.Image({
           image: canvas,
