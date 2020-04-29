@@ -131,7 +131,63 @@ $(document).ready(function () {
     lastEvent = "pinchend";
     // console.log(`pinch end ${e}`)
   });
+  hammertime.on("doubletap", function (e) {
+    var scaleFactor = 1;
+    if (current.zooming === false) {
+      current.zooming = true;
+    } else {
+      current.zooming = false;
+      scaleFactor = -scaleFactor;
+    }
+  
+    element.style.transition = "0.3s";
+    setTimeout(function () {
+      element.style.transition = "none";
+    }, 300);
+  
+    var zoomOrigin = getRelativePosition(
+      element,
+      { x: e.center.x, y: e.center.y },
+      originalSize,
+      current.z
+    );
+    var d = scaleFrom(zoomOrigin, current.z, current.z + scaleFactor);
+    current.x += d.x;
+    current.y += d.y;
+    current.z += d.z;
+  
+    last.x = current.x;
+    last.y = current.y;
+    last.z = current.z;
+  
+    update();
+  });
 
+
+  hammertime.on("pan", function (e) {
+    console.log(e.maxPointers)
+    console.log(e)
+    
+    if (lastEvent !== 'pan') {
+        fixHammerjsDeltaIssue = {
+            x: e.deltaX,
+            y: e.deltaY
+        }
+    }
+    current.x = last.x + e.deltaX - fixHammerjsDeltaIssue.x;
+    current.y = last.y + e.deltaY - fixHammerjsDeltaIssue.y;
+    lastEvent = 'pan';
+    update();
+    
+  });
+
+  hammertime.on("panend", function (e) {
+
+    last.x = current.x;
+    last.y = current.y;
+    lastEvent = 'panend';
+
+});
   function update() {
     var zoom = current.z;
     if (zoom < 1) {
