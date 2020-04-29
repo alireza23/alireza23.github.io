@@ -211,11 +211,12 @@ if(current.height <= windowH){
   console.log(` IMAGE SMALLER AND windwH= ${windowH}`)
   console.log({zoom, x: current.x, w: current.width, y: current.y, h: current.height})
 var delta = windowH - current.height
+var finalY = (delta/2) + y
   element.style.transform =
     "translate3d(" +
     current.x +
     "px, " +
-    ((delta/2) + y)  +
+    finalY +
     "px, 0) scale(" +
     zoom +
     ")";
