@@ -211,7 +211,7 @@ function update() {
 //   current.y = (current.height - imageOriginalHeight)/2
 // }
 
-var windowH = $(window).height()
+var windowH = $(window).innerHeight();
 
 if(current.height <= windowH){
   var deltaUpdate =(windowH - current.height )/2
