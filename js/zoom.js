@@ -217,6 +217,15 @@ if(current.height <= windowH){
   $("#container").css("top", "0px")
   var halfPage = windowH/2
   var halfImageHeight = current.height/2
+  var computedTop
+
+  if(halfPage > halfImageHeight){
+   computedTop = halfPage - halfImageHeight
+
+  }else{
+    var computedTop = halfImageHeight - halfPage
+
+  }
 var computedTop = halfPage - halfImageHeight
   // var top = $("#container").position().top
   // var bottom = windowH - (top + current.height)
