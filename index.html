@@ -49,11 +49,14 @@ Tool:
   var circle = new Konva.Circle({
       stroke: 'black',
       fill: 'red',
-      x:0,
-      y:0,
+      x:100,
+      y:100,
       radius: 50,
       strokeWidth: 2
   })
+  layer.add(circle)
+  layer.draw();
+
         // created canvas we can add to layer as "Konva.Image" element
         var image = new Konva.Image({
           image: canvas,
