@@ -204,15 +204,15 @@ if(current.y < - ((current.height - originalSize.height)/2)){
 //   current.y = (current.height - originalSize.height)/2
 // }
 var windowH = $(window).height()
-var screenH = screen.height()
+//var screenH = screen.height()
 
 
-if(current.height < screenH){
+if(current.height <= windowH){
 current.y = 0
 }
-console.log(screenH)
+//console.log(screenH)
 console.log(windowH)
-if(current.height>=  screenH){
+if(current.height>=  windowH){
   console.log('is bigger')
 }
 
