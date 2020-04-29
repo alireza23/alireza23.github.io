@@ -210,7 +210,7 @@ var windowH = $(window).height()
 if(current.height <= windowH){
   console.log(` IMAGE SMALLER AND windwH= ${windowH}`)
   console.log({zoom, x: current.x, w: current.width, y: current.y, h: current.height})
-var delta =( (windowH - current.height )/2)+ current.y
+var delta =( (windowH - current.height )/2) - current.y
 console.log(delta)
 //var finalY = (delta/2) + y
   element.style.transform =
