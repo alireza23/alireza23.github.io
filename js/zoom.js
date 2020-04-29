@@ -99,55 +99,6 @@ function getCoordinateShiftDueToScale(size, scale) {
   };
 }
 
-hammertime.on("doubletap", function (e) {
-  var scaleFactor = 1;
-  if (current.zooming === false) {
-    current.zooming = true;
-  } else {
-    current.zooming = false;
-    scaleFactor = -scaleFactor;
-  }
-
-  element.style.transition = "0.3s";
-  setTimeout(function () {
-    element.style.transition = "none";
-  }, 300);
-
-  var zoomOrigin = getRelativePosition(
-    element,
-    { x: e.center.x, y: e.center.y },
-    originalSize,
-    current.z
-  );
-  var d = scaleFrom(zoomOrigin, current.z, current.z + scaleFactor);
-  current.x += d.x;
-  current.y += d.y;
-  current.z += d.z;
-
-  last.x = current.x;
-  last.y = current.y;
-  last.z = current.z;
-
-  update();
-});
-
-hammertime.on("pan", function (e) {
-  console.log(e.maxPointers)
-  console.log(e)
-  
-  if (lastEvent !== 'pan') {
-      fixHammerjsDeltaIssue = {
-          x: e.deltaX,
-          y: e.deltaY
-      }
-  }
-  current.x = last.x + e.deltaX - fixHammerjsDeltaIssue.x;
-  current.y = last.y + e.deltaY - fixHammerjsDeltaIssue.y;
-  lastEvent = 'pan';
-  update();
-  
-});
-
 hammertime.on("pinch", function (e) {
   // console.log('pinching')
   var d = scaleFrom(pinchZoomOrigin, last.z, last.z * e.scale);
@@ -169,14 +120,6 @@ hammertime.on("pinchstart", function (e) {
     current.z
   );
   lastEvent = "pinchstart";
-});
-
-hammertime.on("panend", function (e) {
-
-      last.x = current.x;
-      last.y = current.y;
-      lastEvent = 'panend';
-  
 });
 
 hammertime.on("pinchend", function (e) {
@@ -214,36 +157,51 @@ function update() {
 var windowH = $(window).innerHeight();
 
 if(current.height <= windowH){
-  $("#container").css("top", "0px")
-  var halfPage = windowH/4
-  var halfImageHeight = current.height/2
-  var computedTop
 
-  if(halfPage > halfImageHeight){
-   computedTop = halfPage - halfImageHeight
+  var element2 = document.getElementById("container");
+  var width2 = element.offsetWidth;
+var height2 = element.offsetHeight;
 
-  }else{
-    var computedTop = halfImageHeight - halfPage
+console.log(height2)
+console.log(width2)
+var windowH2 = $(window).height()
+ var delta2 =(windowH2 - height2 )/2
+ console.log(`delta =  ${delta2}    ${current.height}    ${height2}`)
+if(height2 <= windowH2){
+   $("#container").css("top", `${delta2}px`)}
 
-  }
-var computedTop = halfPage - halfImageHeight
-  // var top = $("#container").position().top
-  // var bottom = windowH - (top + current.height)
-  // var deltaUpdate = (top + bottom)/2
 
-  // console.log({windowH, currentHeight: current.height, deltaUpdate, top, bottom})
- // console.log(`windowH = ${windowH}, current.height = ${current.height},  deltaUpdate =  ${deltaUpdate}`)
-// $("#container").css("top", `${deltaUpdate}px`)
-  console.log(` IMAGE SMALLER AND windwH= ${windowH}`)
-  console.log({zoom, x: current.x, w: current.width, y: current.y, h: current.height, computedTop})
 
-//console.log(delta)
-//var finalY = (delta/2) + y
+//   $("#container").css("top", "0px")
+//   var halfPage = windowH/4
+//   var halfImageHeight = current.height/2
+//   var computedTop
+
+//   if(halfPage > halfImageHeight){
+//    computedTop = halfPage - halfImageHeight
+
+//   }else{
+//     var computedTop = halfImageHeight - halfPage
+
+//   }
+// var computedTop = halfPage - halfImageHeight
+//   // var top = $("#container").position().top
+//   // var bottom = windowH - (top + current.height)
+//   // var deltaUpdate = (top + bottom)/2
+
+//   // console.log({windowH, currentHeight: current.height, deltaUpdate, top, bottom})
+//  // console.log(`windowH = ${windowH}, current.height = ${current.height},  deltaUpdate =  ${deltaUpdate}`)
+// // $("#container").css("top", `${deltaUpdate}px`)
+//   console.log(` IMAGE SMALLER AND windwH= ${windowH}`)
+//   console.log({zoom, x: current.x, w: current.width, y: current.y, h: current.height, computedTop})
+
+// //console.log(delta)
+// //var finalY = (delta/2) + y
   element.style.transform =
     "translate3d(" +
     current.x +
     "px, " +
-    halfImageHeight +
+    0 +
     "px, 0) scale(" +
     zoom +
     ")";
