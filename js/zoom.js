@@ -5,6 +5,10 @@ var height = element.offsetHeight;
 
 console.log(height)
 console.log(width)
+var windowH = $(window).height()
+var delta =(windowH - height )/2
+if(current.height <= windowH){
+  $("#container").css("top", `${delta}px`)}
 var hammertime = new Hammer(element, {});
 
 hammertime.get("pinch").set({ enable: true });
