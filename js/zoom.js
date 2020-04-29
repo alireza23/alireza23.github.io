@@ -220,7 +220,7 @@ if(current.height <= windowH){
   console.log(` IMAGE SMALLER AND windwH= ${windowH}`)
   console.log({zoom, x: current.x, w: current.width, y: current.y, h: current.height})
 
-console.log(delta)
+//console.log(delta)
 //var finalY = (delta/2) + y
   element.style.transform =
     "translate3d(" +
