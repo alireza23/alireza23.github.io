@@ -100,7 +100,7 @@ function startPosition(e) {
      console.log(e)
     isDrawing = true;
     lastPoint = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-    draw()
+    draw(e)
   }
   function finishedPosition() {
     isDrawing = false;
