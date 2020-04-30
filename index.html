@@ -59,9 +59,9 @@
     ctx.lineTo(e.clientX, e.clientY);
     ctx.stroke();
   }
-  canvas.addEventListener("mousedown", startPosition);
-  canvas.addEventListener("mouseup", finishedPosition);
-  canvas.addEventListener("mousemove", draw);
+  canvas.addEventListener("touchstart", startPosition);
+  canvas.addEventListener("touchend", finishedPosition);
+  canvas.addEventListener("touchmove", draw);
   var select = document.getElementById("tool");
   select.addEventListener("change", function () {
     mode = select.value;
