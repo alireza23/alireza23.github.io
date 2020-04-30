@@ -88,12 +88,43 @@ ctx.globalCompositeOperation = "source-over"
   ctx.lineJoin = ctx.lineCap = 'round';
 
   var isDrawing, lastPoint;
+
 //e.touches[0].clientX, e.touches[0].clientY
-  el.touchstart = function(e) {
+
+  el.addEventListener("touchstart", startPosition);
+  el.addEventListener("touchend", finishedPosition);
+  el.addEventListener("touchmove", draw);
+
+//
+function startPosition(e) {
+    painting = true;
+    draw(e);
     console.log(e)
-    isDrawing = true;
-    lastPoint = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-  };
+  }
+  function finishedPosition() {
+    painting = false;
+    ctx.beginPath();
+  }
+//   function draw(e) {
+//     if (!painting) return;
+//     if(mode=='brush') {
+//         ctx.globalCompositeOperation = 'source-over';
+//         ctx.strokeStyle = 'black';
+//         //ctx.lineWidth = 3;
+//     } else {
+//         ctx.globalCompositeOperation = 'destination-out';
+//        // ctx.lineWidth = 10;
+//     }
+//     console.log(e)
+//     console.log({'x': e.touches[0].clientX, 'y': e.touches[0].clientY})
+//     ctx.lineTo(e.touches[0].clientX, e.touches[0].clientY);
+//     ctx.stroke();
+//   }
+  // el.touchstart = function(e) {
+  //   console.log(e)
+  //   isDrawing = true;
+  //   lastPoint = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+  // };
 
   el.touchmove = function(e) {
     if (!isDrawing) return;
