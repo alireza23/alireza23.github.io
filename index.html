@@ -92,13 +92,13 @@ ctx.globalCompositeOperation = "source-over"
 //e.touches[0].clientX, e.touches[0].clientY
 
   el.addEventListener("touchstart", startPosition);
-  el.addEventListener("touchend", finishedPosition);
-  el.addEventListener("touchmove", draw);
+  // el.addEventListener("touchend", finishedPosition);
+  // el.addEventListener("touchmove", draw);
 
 //
 function startPosition(e) {
     painting = true;
-    draw(e);
+  //  draw(e);
     console.log(e)
   }
   function finishedPosition() {
