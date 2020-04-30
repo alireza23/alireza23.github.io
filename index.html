@@ -41,7 +41,7 @@ Tool:
           //  selectable: false,
             selectionBackgroundColor: 'white'
         })
-        canvas.on('mouse:move', function( options ) {
+        canvas.on('touch:drag', function( options ) {
         console.log('dragging')
         console.log(options)
         this.remove(options.target)
