@@ -1,345 +1,72 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Pinchzoom.js Demo</title>
-    <script src="https://unpkg.com/konva@5.0.2/konva.min.js"></script>
-    <link rel="stylesheet" href="./style.css" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <script src="./fabric3.6.min.js"></script>
-
-    <script type="text/javascript" src="./pinch-zoom.umd.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        #c{
+            border: 2px black solid;
+        }
+    </style>
 </head>
 <body>
-<!-- <div class="toolbar"></div> -->
-Tool:
+    Tool:
     <select id="tool">
       <option value="brush">Brush</option>
       <option value="eraser">Eraser</option>
     </select>
-    <div class="page pinch-zoom-parent">
-        <div class="pinch-zoom">
-    <canvas id="c" width="800" height="600"></canvas>
-          
-            <!-- <img src="frog.jpg"/> -->
-            <!-- <div id="container" style="width: 100%; background-color:aliceblue"></div> -->
-        </div>
-    </div>
+    <canvas id="canvas"></canvas>
+    <!-- <canvas id="c" width="500" height="300"></canvas> -->
+    <!-- <script src="./canvas.js"></script> -->
     <script>
-        var canvas = new fabric.Canvas('c', {
-          backgroundColor: 'white',
-          isDrawingMode: true
-         // selectionBackgroundColor: 'yellow'
-        });
-        var rect = new fabric.Rect({
-            left: 100,
-            top: 100,
-            fill : 'red',
-            width:200,
-            height:200,
-           // hasControls: false,
-          //  selectable: false,
-            selectionBackgroundColor: 'white'
-        })
-        canvas.on('touch:drag', function( options ) {
-        console.log('dragging')
-        console.log(options)
-        this.remove(options.target)
-    
-});
-        rect.on('selected', function() {
-          canvas.remove(this)
-       //  canvas.isDrawingMode = false
-        })
-        canvas.add(rect)
-        //canvas.item(0).hasControls =false
-        
-        // fabric.ActiveSelection({
-        //   hasControls:false,
-        //   hasRotatingPoint:false
-        // })
-    </script>
-    <!-- <script>
-        (function() {
-  var $ = function(id){return document.getElementById(id)};
-
-  var canvas = this.__canvas = new fabric.Canvas('c', {
-    isDrawingMode: true
+        window.addEventListener("load", () => {
+  const canvas = document.getElementById("canvas");
+  const ctx = canvas.getContext("2d");
+  canvas.height = window.innerHeight - 8;
+  canvas.width = window.innerWidth - 8;
+  ctx.strokeStyle = "black";
+  ctx.lineWidth = 10;
+    ctx.shadowBlur = 10;
+    ctx.shadowColor = "rgb(0, 0, 0)";
+    ctx.lineJoin = "round";
+    ctx.lineCap = "round";
+  let painting = false;
+  let mode = 'brush'
+  function startPosition(e) {
+    painting = true;
+    draw(e);
+  }
+  function finishedPosition() {
+    painting = false;
+    ctx.beginPath();
+  }
+  function draw(e) {
+    if (!painting) return;
+    if(mode=='brush') {
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.strokeStyle = 'black';
+        ctx.lineWidth = 3;
+    } else {
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.lineWidth = 10;
+    }
+    ctx.lineTo(e.clientX, e.clientY);
+    ctx.stroke();
+  }
+  canvas.addEventListener("mousedown", startPosition);
+  canvas.addEventListener("mouseup", finishedPosition);
+  canvas.addEventListener("mousemove", draw);
+  var select = document.getElementById("tool");
+  select.addEventListener("change", function () {
+    mode = select.value;
   });
-
-  fabric.Object.prototype.transparentCorners = false;
-
-  var drawingModeEl = $('drawing-mode'),
-      drawingOptionsEl = $('drawing-mode-options'),
-      drawingColorEl = $('drawing-color'),
-      drawingShadowColorEl = $('drawing-shadow-color'),
-      drawingLineWidthEl = $('drawing-line-width'),
-      drawingShadowWidth = $('drawing-shadow-width'),
-      drawingShadowOffset = $('drawing-shadow-offset'),
-      clearEl = $('clear-canvas');
-
-  clearEl.onclick = function() { canvas.clear() };
-
-  drawingModeEl.onclick = function() {
-    canvas.isDrawingMode = !canvas.isDrawingMode;
-    if (canvas.isDrawingMode) {
-      drawingModeEl.innerHTML = 'Cancel drawing mode';
-      drawingOptionsEl.style.display = '';
-    }
-    else {
-      drawingModeEl.innerHTML = 'Enter drawing mode';
-      drawingOptionsEl.style.display = 'none';
-    }
-  };
-
-  if (fabric.PatternBrush) {
-    var vLinePatternBrush = new fabric.PatternBrush(canvas);
-    vLinePatternBrush.getPatternSrc = function() {
-
-      var patternCanvas = fabric.document.createElement('canvas');
-      patternCanvas.width = patternCanvas.height = 10;
-      var ctx = patternCanvas.getContext('2d');
-
-      ctx.strokeStyle = this.color;
-      ctx.lineWidth = 5;
-      ctx.beginPath();
-      ctx.moveTo(0, 5);
-      ctx.lineTo(10, 5);
-      ctx.closePath();
-      ctx.stroke();
-
-      return patternCanvas;
-    };
-
-    var hLinePatternBrush = new fabric.PatternBrush(canvas);
-    hLinePatternBrush.getPatternSrc = function() {
-
-      var patternCanvas = fabric.document.createElement('canvas');
-      patternCanvas.width = patternCanvas.height = 10;
-      var ctx = patternCanvas.getContext('2d');
-
-      ctx.strokeStyle = this.color;
-      ctx.lineWidth = 5;
-      ctx.beginPath();
-      ctx.moveTo(5, 0);
-      ctx.lineTo(5, 10);
-      ctx.closePath();
-      ctx.stroke();
-
-      return patternCanvas;
-    };
-
-    var squarePatternBrush = new fabric.PatternBrush(canvas);
-    squarePatternBrush.getPatternSrc = function() {
-
-      var squareWidth = 10, squareDistance = 2;
-
-      var patternCanvas = fabric.document.createElement('canvas');
-      patternCanvas.width = patternCanvas.height = squareWidth + squareDistance;
-      var ctx = patternCanvas.getContext('2d');
-
-      ctx.fillStyle = this.color;
-      ctx.fillRect(0, 0, squareWidth, squareWidth);
-
-      return patternCanvas;
-    };
-
-    var diamondPatternBrush = new fabric.PatternBrush(canvas);
-    diamondPatternBrush.getPatternSrc = function() {
-
-      var squareWidth = 10, squareDistance = 5;
-      var patternCanvas = fabric.document.createElement('canvas');
-      var rect = new fabric.Rect({
-        width: squareWidth,
-        height: squareWidth,
-        angle: 45,
-        fill: this.color
-      });
-
-      var canvasWidth = rect.getBoundingRect().width;
-
-      patternCanvas.width = patternCanvas.height = canvasWidth + squareDistance;
-      rect.set({ left: canvasWidth / 2, top: canvasWidth / 2 });
-
-      var ctx = patternCanvas.getContext('2d');
-      rect.render(ctx);
-
-      return patternCanvas;
-    };
-
-    var img = new Image();
-    img.src = '../assets/honey_im_subtle.png';
-
-    var texturePatternBrush = new fabric.PatternBrush(canvas);
-    texturePatternBrush.source = img;
-  }
-
-  $('drawing-mode-selector').onchange = function() {
-
-    if (this.value === 'hline') {
-      canvas.freeDrawingBrush = vLinePatternBrush;
-    }
-    else if (this.value === 'vline') {
-      canvas.freeDrawingBrush = hLinePatternBrush;
-    }
-    else if (this.value === 'square') {
-      canvas.freeDrawingBrush = squarePatternBrush;
-    }
-    else if (this.value === 'diamond') {
-      canvas.freeDrawingBrush = diamondPatternBrush;
-    }
-    else if (this.value === 'texture') {
-      canvas.freeDrawingBrush = texturePatternBrush;
-    }
-    else {
-      canvas.freeDrawingBrush = new fabric[this.value + 'Brush'](canvas);
-    }
-
-    if (canvas.freeDrawingBrush) {
-      canvas.freeDrawingBrush.color = drawingColorEl.value;
-      canvas.freeDrawingBrush.width = parseInt(drawingLineWidthEl.value, 10) || 1;
-      canvas.freeDrawingBrush.shadow = new fabric.Shadow({
-        blur: parseInt(drawingShadowWidth.value, 10) || 0,
-        offsetX: 0,
-        offsetY: 0,
-        affectStroke: true,
-        color: drawingShadowColorEl.value,
-      });
-    }
-  };
-
-  drawingColorEl.onchange = function() {
-    canvas.freeDrawingBrush.color = this.value;
-  };
-  drawingShadowColorEl.onchange = function() {
-    canvas.freeDrawingBrush.shadow.color = this.value;
-  };
-  drawingLineWidthEl.onchange = function() {
-    canvas.freeDrawingBrush.width = parseInt(this.value, 10) || 1;
-    this.previousSibling.innerHTML = this.value;
-  };
-  drawingShadowWidth.onchange = function() {
-    canvas.freeDrawingBrush.shadow.blur = parseInt(this.value, 10) || 0;
-    this.previousSibling.innerHTML = this.value;
-  };
-  drawingShadowOffset.onchange = function() {
-    canvas.freeDrawingBrush.shadow.offsetX = parseInt(this.value, 10) || 0;
-    canvas.freeDrawingBrush.shadow.offsetY = parseInt(this.value, 10) || 0;
-    this.previousSibling.innerHTML = this.value;
-  };
-
-  if (canvas.freeDrawingBrush) {
-    canvas.freeDrawingBrush.color = drawingColorEl.value;
-    canvas.freeDrawingBrush.width = parseInt(drawingLineWidthEl.value, 10) || 1;
-    canvas.freeDrawingBrush.shadow = new fabric.Shadow({
-      blur: parseInt(drawingShadowWidth.value, 10) || 0,
-      offsetX: 0,
-      offsetY: 0,
-      affectStroke: true,
-      color: drawingShadowColorEl.value,
-    });
-  }
-})();
-    </script> -->
-    <script type="text/javascript">
-      var el = document.querySelector('div.pinch-zoom');
-      new PinchZoom.default(el, {draggableUnzoomed: false});
+});
     </script>
-    <script>
-        var width = window.innerWidth;
-        var height = window.innerHeight - 25;
-  
-        // first we need Konva core things: stage and layer
-        var stage = new Konva.Stage({
-          container: 'container',
-          width: width,
-          height: height
-        });
-  
-        var layer = new Konva.Layer();
-        stage.add(layer);
-  
-        // then we are going to draw into special canvas element
-        var canvas = document.createElement('canvas');
-        canvas.width = stage.width();
-        canvas.height = stage.height();
-  
-        // created canvas we can add to layer as "Konva.Image" element
-        var image = new Konva.Image({
-          image: canvas,
-          x: 0,
-          y: 0
-        });
-        layer.add(image);
-        stage.draw();
-  
-        // Good. Now we need to get access to context element
-        var context = canvas.getContext('2d');
-        context.strokeStyle = '#df4b26';
-        context.lineJoin = 'round';
-        context.lineWidth = 5;
-  
-        var isPaint = false;
-        var lastPointerPosition;
-        var mode = 'brush';
-  
-        // now we need to bind some events
-        // we need to start drawing on mousedown
-        // and stop drawing on mouseup
-        image.on('mousedown touchstart', function() {
-          isPaint = true;
-          lastPointerPosition = stage.getPointerPosition();
-        });
-  
-        // will it be better to listen move/end events on the window?
-  
-        stage.on('mouseup touchend', function() {
-          isPaint = false;
-        });
-  
-        // and core function - drawing
-        stage.on('mousemove touchmove', function() {
-          if (!isPaint) {
-            return;
-          }
-  
-          if (mode === 'brush') {
-            context.globalCompositeOperation = 'source-over';
-            ctx.globalCompositeOperation = 'source-over';
-            canvas.isDrawingMode = true
-          }
-          if (mode === 'eraser') {
-            context.globalCompositeOperation = 'destination-out';
-            ctx.globalCompositeOperation = 'destination-out';
-            canvas.isDrawingMode = false
-
-            
-          }
-          context.beginPath();
-  
-          var localPos = {
-            x: lastPointerPosition.x - image.x(),
-            y: lastPointerPosition.y - image.y()
-          };
-          context.moveTo(localPos.x, localPos.y);
-          var pos = stage.getPointerPosition();
-          localPos = {
-            x: pos.x - image.x(),
-            y: pos.y - image.y()
-          };
-          context.lineTo(localPos.x, localPos.y);
-          context.closePath();
-          context.stroke();
-  
-          lastPointerPosition = pos;
-          layer.batchDraw();
-        });
-  
-        var select = document.getElementById('tool');
-        select.addEventListener('change', function() {
-          mode = select.value;
-        });
-      </script>
-
 </body>
 </html>
