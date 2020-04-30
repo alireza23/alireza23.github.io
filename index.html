@@ -20,10 +20,20 @@ Tool:
         <div class="pinch-zoom">
           
             <!-- <img src="frog.jpg"/> -->
-            <div id="container" style="width: 100%; background-color:aliceblue"></div>
+            <!-- <div id="container" style="width: 100%; background-color:aliceblue"></div> -->
+            <canvas id="myCanvas" width="200" height="100"
+style="border:1px solid #c3c3c3;">
+Your browser does not support the canvas element.
+</canvas>
+
         </div>
     </div>
-
+    <script>
+        var canvas = document.getElementById("myCanvas");
+        var ctx = canvas.getContext("2d");
+        ctx.fillStyle = "#FF0000";
+        ctx.fillRect(0,0,150,75);
+        </script>
     <script type="text/javascript">
       var el = document.querySelector('div.pinch-zoom');
       new PinchZoom.default(el, {draggableUnzoomed: false});
