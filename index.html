@@ -16,11 +16,11 @@ Tool:
       <option value="brush">Brush</option>
       <option value="eraser">Eraser</option>
     </select>
-    <div class="page2 pinch-zoom-parent2">
-        <div class="pinch-zoom2">
+    <div class="page pinch-zoom-parent">
+        <div class="pinch-zoom">
           
             <!-- <img src="frog.jpg"/> -->
-            <div id="container" style="width: 70%; background-color:aliceblue"></div>
+            <div id="container" style="width: 100%; background-color:aliceblue"></div>
         </div>
     </div>
 
@@ -46,17 +46,7 @@ Tool:
         var canvas = document.createElement('canvas');
         canvas.width = stage.width();
         canvas.height = stage.height();
-  var circle = new Konva.Circle({
-      stroke: 'black',
-      fill: 'red',
-      x:100,
-      y:100,
-      radius: 50,
-      strokeWidth: 2
-  })
-  layer.add(circle)
-  layer.draw();
-
+  
         // created canvas we can add to layer as "Konva.Image" element
         var image = new Konva.Image({
           image: canvas,
