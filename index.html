@@ -25,7 +25,7 @@ Tool:
             <!-- <div id="container" style="width: 100%; background-color:aliceblue"></div> -->
         </div>
     </div>
-    <!-- <script>
+    <script>
         var canvas = new fabric.Canvas('c', {
     isDrawingMode: true
   });
@@ -37,8 +37,8 @@ Tool:
             height:200
         })
         canvas.add(rect)
-    </script> -->
-    <script>
+    </script>
+    <!-- <script>
         (function() {
   var $ = function(id){return document.getElementById(id)};
 
@@ -219,7 +219,7 @@ Tool:
     });
   }
 })();
-    </script>
+    </script> -->
     <script type="text/javascript">
       var el = document.querySelector('div.pinch-zoom');
       new PinchZoom.default(el, {draggableUnzoomed: false});
@@ -289,6 +289,7 @@ Tool:
           if (mode === 'eraser') {
             context.globalCompositeOperation = 'destination-out';
             ctx.globalCompositeOperation = 'destination-out';
+            
           }
           context.beginPath();
   
