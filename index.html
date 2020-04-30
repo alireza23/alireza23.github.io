@@ -26,15 +26,25 @@ Tool:
         </div>
     </div>
     <script>
-        var canvas = new fabric.Canvas('c');
+        var canvas = new fabric.Canvas('c', {
+          backgroundColor: 'smocky'
+        });
         var rect = new fabric.Rect({
             left: 100,
             top: 100,
             fill : 'red',
             width:200,
-            height:200
+            height:200,
+            hasControls: false,
+            selectable: false
         })
         canvas.add(rect)
+        //canvas.item(0).hasControls =false
+        
+        // fabric.ActiveSelection({
+        //   hasControls:false,
+        //   hasRotatingPoint:false
+        // })
     </script>
     <!-- <script>
         (function() {
