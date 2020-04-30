@@ -92,68 +92,68 @@ ctx.globalCompositeOperation = "source-over"
 //e.touches[0].clientX, e.touches[0].clientY
 
   el.addEventListener("touchstart", startPosition);
-  // el.addEventListener("touchend", finishedPosition);
-  // el.addEventListener("touchmove", draw);
+  el.addEventListener("touchend", finishedPosition);
+  el.addEventListener("touchmove", draw);
 
 //
 function startPosition(e) {
     painting = true;
-  //  draw(e);
+    draw(e);
     console.log(e)
   }
   function finishedPosition() {
     painting = false;
     ctx.beginPath();
   }
-//   function draw(e) {
-//     if (!painting) return;
-//     if(mode=='brush') {
-//         ctx.globalCompositeOperation = 'source-over';
-//         ctx.strokeStyle = 'black';
-//         //ctx.lineWidth = 3;
-//     } else {
-//         ctx.globalCompositeOperation = 'destination-out';
-//        // ctx.lineWidth = 10;
-//     }
-//     console.log(e)
-//     console.log({'x': e.touches[0].clientX, 'y': e.touches[0].clientY})
-//     ctx.lineTo(e.touches[0].clientX, e.touches[0].clientY);
-//     ctx.stroke();
-//   }
-  // el.touchstart = function(e) {
-  //   console.log(e)
-  //   isDrawing = true;
-  //   lastPoint = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+  function draw(e) {
+    if (!painting) return;
+    if(mode=='brush') {
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.strokeStyle = 'black';
+        //ctx.lineWidth = 3;
+    } else {
+        ctx.globalCompositeOperation = 'destination-out';
+       // ctx.lineWidth = 10;
+    }
+    console.log(e)
+    console.log({'x': e.touches[0].clientX, 'y': e.touches[0].clientY})
+    ctx.lineTo(e.touches[0].clientX, e.touches[0].clientY);
+    ctx.stroke();
+  }
+  el.touchstart = function(e) {
+    console.log(e)
+    isDrawing = true;
+    lastPoint = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+  };
+
+  // el.touchmove = function(e) {
+  //   if (!isDrawing) return;
+
+  //   var currentPoint = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+  //   var dist = distanceBetween(lastPoint, currentPoint);
+  //   var angle = angleBetween(lastPoint, currentPoint);
+
+  //   for (var i = 0; i < dist; i+=5) {
+
+  //     x = lastPoint.x + (Math.sin(angle) * i);
+  //     y = lastPoint.y + (Math.cos(angle) * i);
+
+  //     var radgrad = ctx.createRadialGradient(x,y,10,x,y,20);
+
+  //     radgrad.addColorStop(0, '#000');
+  //     radgrad.addColorStop(0.5, 'rgba(0,0,0,0.5)');
+  //     radgrad.addColorStop(1, 'rgba(0,0,0,0)');
+
+  //     ctx.fillStyle = radgrad;
+  //      ctx.fillRect(x-20, y-20, 40, 40);
+  //   }
+
+  //   lastPoint = currentPoint;
   // };
 
-  el.touchmove = function(e) {
-    if (!isDrawing) return;
-
-    var currentPoint = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-    var dist = distanceBetween(lastPoint, currentPoint);
-    var angle = angleBetween(lastPoint, currentPoint);
-
-    for (var i = 0; i < dist; i+=5) {
-
-      x = lastPoint.x + (Math.sin(angle) * i);
-      y = lastPoint.y + (Math.cos(angle) * i);
-
-      var radgrad = ctx.createRadialGradient(x,y,10,x,y,20);
-
-      radgrad.addColorStop(0, '#000');
-      radgrad.addColorStop(0.5, 'rgba(0,0,0,0.5)');
-      radgrad.addColorStop(1, 'rgba(0,0,0,0)');
-
-      ctx.fillStyle = radgrad;
-       ctx.fillRect(x-20, y-20, 40, 40);
-    }
-
-    lastPoint = currentPoint;
-  };
-
-  el.touchend = function() {
-    isDrawing = false;
-  };
+  // el.touchend = function() {
+  //   isDrawing = false;
+  // };
 })
     </script>
 </body>
