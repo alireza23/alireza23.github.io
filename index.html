@@ -83,7 +83,7 @@ function distanceBetween(point1, point2) {
   el.width = window.innerWidth - 8;
   var ctx = el.getContext('2d');
 ctx.globalCompositeOperation = "source-over"
-
+let mode = 'brush'
   ctx.globalAlpha = 1;
   ctx.lineJoin = ctx.lineCap = 'round';
 
@@ -120,11 +120,15 @@ function startPosition(e) {
     ctx.lineTo(e.touches[0].clientX, e.touches[0].clientY);
     ctx.stroke();
   }
-  el.touchstart = function(e) {
-    console.log(e)
-    isDrawing = true;
-    lastPoint = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-  };
+  var select = document.getElementById("tool");
+  select.addEventListener("change", function () {
+    mode = select.value;
+  });
+  // el.touchstart = function(e) {
+  //   console.log(e)
+  //   isDrawing = true;
+  //   lastPoint = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+  // };
 
   // el.touchmove = function(e) {
   //   if (!isDrawing) return;
