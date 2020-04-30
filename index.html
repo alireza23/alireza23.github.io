@@ -97,28 +97,36 @@ let mode = 'brush'
 
 //
 function startPosition(e) {
-    painting = true;
-    draw(e);
-    console.log(e)
+     console.log(e)
+    isDrawing = true;
+    lastPoint = { x: e.touches[0].clientX, y: e.touches[0].clientY };
   }
   function finishedPosition() {
-    painting = false;
-    ctx.beginPath();
+    isDrawing = false;
   }
   function draw(e) {
-    if (!painting) return;
-    if(mode=='brush') {
-        ctx.globalCompositeOperation = 'source-over';
-        ctx.strokeStyle = 'black';
-        //ctx.lineWidth = 3;
-    } else {
-        ctx.globalCompositeOperation = 'destination-out';
-       // ctx.lineWidth = 10;
-    }
-    console.log(e)
-    console.log({'x': e.touches[0].clientX, 'y': e.touches[0].clientY})
-    ctx.lineTo(e.touches[0].clientX, e.touches[0].clientY);
-    ctx.stroke();
+    if (!isDrawing) return;
+
+  var currentPoint = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+  var dist = distanceBetween(lastPoint, currentPoint);
+  var angle = angleBetween(lastPoint, currentPoint);
+
+  for (var i = 0; i < dist; i+=5) {
+
+    x = lastPoint.x + (Math.sin(angle) * i);
+    y = lastPoint.y + (Math.cos(angle) * i);
+
+    var radgrad = ctx.createRadialGradient(x,y,10,x,y,20);
+
+    radgrad.addColorStop(0, '#000');
+    radgrad.addColorStop(0.5, 'rgba(0,0,0,0.5)');
+    radgrad.addColorStop(1, 'rgba(0,0,0,0)');
+
+    ctx.fillStyle = radgrad;
+     ctx.fillRect(x-20, y-20, 40, 40);
+  }
+
+  lastPoint = currentPoint;
   }
   var select = document.getElementById("tool");
   select.addEventListener("change", function () {
