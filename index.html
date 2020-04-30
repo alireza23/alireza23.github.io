@@ -4,8 +4,9 @@
     <title>Pinchzoom.js Demo</title>
     <script src="https://unpkg.com/konva@5.0.2/konva.min.js"></script>
     <link rel="stylesheet" href="./style.css" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes" />
+    <script src="./fabric3.6.min.js"></script>
 
     <script type="text/javascript" src="./pinch-zoom.umd.js"></script>
 </head>
@@ -16,16 +17,25 @@ Tool:
       <option value="brush">Brush</option>
       <option value="eraser">Eraser</option>
     </select>
-    <div id="container" style="width: 100%; background-color:aliceblue"></div>
-    <!-- <div class="page pinch-zoom-parent">
+    <div class="page pinch-zoom-parent">
         <div class="pinch-zoom">
+    <canvas id="c" width="800" height="600"></canvas>
           
             <!-- <img src="frog.jpg"/> -->
-            
-            
+            <!-- <div id="container" style="width: 100%; background-color:aliceblue"></div> -->
         </div>
-    </div> -->
-
+    </div>
+    <script>
+        var canvas = new fabric.Canvas('c');
+        var rect = new fabric.Rect({
+            left: 100,
+            top: 100,
+            fill : 'red',
+            width:200,
+            height:200
+        })
+        canvas.add(rect)
+    </script>
     <script type="text/javascript">
       var el = document.querySelector('div.pinch-zoom');
       new PinchZoom.default(el, {draggableUnzoomed: false});
