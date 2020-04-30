@@ -82,9 +82,9 @@ function distanceBetween(point1, point2) {
   el.height = window.innerHeight - 8;
   el.width = window.innerWidth - 8;
   var ctx = el.getContext('2d');
-//ctx.globalCompositeOperation = "source-over"
+ctx.globalCompositeOperation = "source-over"
 
-  //ctx.globalAlpha = 1;
+  ctx.globalAlpha = 1;
   ctx.lineJoin = ctx.lineCap = 'round';
 
   var isDrawing, lastPoint;
