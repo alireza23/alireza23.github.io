@@ -52,12 +52,13 @@
     if(mode=='brush') {
         ctx.globalCompositeOperation = 'source-over';
         ctx.strokeStyle = 'black';
-        ctx.lineWidth = 3;
+        //ctx.lineWidth = 3;
     } else {
         ctx.globalCompositeOperation = 'destination-out';
-        ctx.lineWidth = 10;
+       // ctx.lineWidth = 10;
     }
     console.log(e)
+    console.log({'x': e.touches[0].clientX, 'y': e.touches[0].clientY})
     ctx.lineTo(e.touches[0].clientX, e.touches[0].clientY);
     ctx.stroke();
   }
