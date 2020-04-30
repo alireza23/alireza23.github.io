@@ -27,7 +27,9 @@ Tool:
     </div>
     <script>
         var canvas = new fabric.Canvas('c', {
-          backgroundColor: 'smocky'
+          backgroundColor: 'white',
+          isDrawingMode: true
+         // selectionBackgroundColor: 'yellow'
         });
         var rect = new fabric.Rect({
             left: 100,
@@ -35,8 +37,19 @@ Tool:
             fill : 'red',
             width:200,
             height:200,
-            hasControls: false,
-            selectable: false
+           // hasControls: false,
+          //  selectable: false,
+            selectionBackgroundColor: 'white'
+        })
+        canvas.on('mouse:move', function( options ) {
+        console.log('dragging')
+        console.log(options)
+        this.remove(options.target)
+    
+});
+        rect.on('selected', function() {
+          canvas.remove(this)
+       //  canvas.isDrawingMode = false
         })
         canvas.add(rect)
         //canvas.item(0).hasControls =false
@@ -293,10 +306,13 @@ Tool:
           if (mode === 'brush') {
             context.globalCompositeOperation = 'source-over';
             ctx.globalCompositeOperation = 'source-over';
+            canvas.isDrawingMode = true
           }
           if (mode === 'eraser') {
             context.globalCompositeOperation = 'destination-out';
             ctx.globalCompositeOperation = 'destination-out';
+            canvas.isDrawingMode = false
+
             
           }
           context.beginPath();
