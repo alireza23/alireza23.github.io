@@ -284,9 +284,11 @@ Tool:
   
           if (mode === 'brush') {
             context.globalCompositeOperation = 'source-over';
+            ctx.globalCompositeOperation = 'source-over';
           }
           if (mode === 'eraser') {
             context.globalCompositeOperation = 'destination-out';
+            ctx.globalCompositeOperation = 'destination-out';
           }
           context.beginPath();
   
