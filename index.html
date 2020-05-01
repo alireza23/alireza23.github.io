@@ -120,7 +120,7 @@ function startPosition(e) {
     x = lastPoint.x + (Math.sin(angle) * i);
     y = lastPoint.y + (Math.cos(angle) * i);
 
-    var radgrad = ctx.createRadialGradient(x,y,3,x,y,6);
+    var radgrad = ctx.createRadialGradient(x,y,10,x,y,20);
 
     radgrad.addColorStop(0, '#000');
     radgrad.addColorStop(0.5, 'rgba(0,0,0,0.5)');
