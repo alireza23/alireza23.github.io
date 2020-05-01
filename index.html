@@ -63,7 +63,7 @@
     }
     console.log(e)
     console.log({'x': e.touches[0].clientX, 'y': e.touches[0].clientY})
-    ctx.lineTo(e.touches[0].clientX, e.touches[0].clientY + 17);
+    ctx.lineTo(e.touches[0].clientX, e.touches[0].clientY - 17.143);
     ctx.stroke();
   }
   canvas.addEventListener("touchstart", startPosition);
