@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      canvas {
+        border: 1px solid #ccc;
+      }
+    </style>
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+      }
+      #c2 {
+        position: absolute;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="c2" F></canvas>
+    <canvas id="c"></canvas>
+    Tool:
+    <select id="tool">
+      <option value="brush">Brush</option>
+      <option value="eraser">Eraser</option>
+    </select>
+    <script>
+      var mode = "brush";
+      function midPointBtw(p1, p2) {
+        return {
+          x: p1.x + (p2.x - p1.x) / 2,
+          y: p1.y + (p2.y - p1.y) / 2,
+        };
+      }
+
+      var el = document.getElementById("c");
+      el.height = window.innerHeight - 40;
+      el.width = window.innerWidth;
+      var ctx = el.getContext("2d");
+      var el2 = document.getElementById("c2");
+      el2.height = window.innerHeight - 40;
+      el2.width = window.innerWidth;
+      var ctx2 = el2.getContext("2d");
+
+      ctx.lineWidth = 10;
+      ctx.lineJoin = ctx.lineCap = "round";
+      ctx2.lineWidth = 10;
+      ctx2.lineJoin = ctx.lineCap = "round";
+      var isDrawing = false;
+      var isErasing = false;
+      var points = [];
+
+      el.onmousedown = function (e) {
+        isDrawing = true;
+        ctx.beginPath();
+        ctx.moveTo(e.clientX - 1, e.clientY);
+        ctx.lineTo(e.clientX - 0.5, e.clientY);
+        ctx.stroke();
+
+        points.push({ x: e.clientX, y: e.clientY });
+      };
+      el2.onmousedown = function (e) {
+        isErasing = true;
+        console.log(e);
+        ctx2.beginPath();
+        ctx2.moveTo(e.clientX, e.clientY);
+        ctx2.lineTo(e.clientX + 10, e.clientY);
+        ctx2.stroke();
+      };
+      el2.onmousemove = function (e) {
+        if (!isErasing) return;
+        ctx2.lineTo(e.clientX, e.clientY);
+        ctx2.stroke();
+        console.log(e);
+
+      }
+
+      el.onmousemove = function (e) {
+        if (!isDrawing) return;
+
+        points.push({ x: e.clientX, y: e.clientY });
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+        var p1 = points[0];
+        var p2 = points[1];
+
+        ctx.beginPath();
+        ctx.moveTo(p1.x, p1.y);
+
+        for (var i = 1, len = points.length; i < len; i++) {
+          // we pick the point between pi+1 & pi+2 as the
+          // end point and p1 as our control point
+          var midPoint = midPointBtw(p1, p2);
+          ctx.quadraticCurveTo(p1.x, p1.y, midPoint.x, midPoint.y);
+          p1 = points[i];
+          p2 = points[i + 1];
+        }
+        // Draw last line as a straight line while
+        // we wait for the next point to be able to calculate
+        // the bezier control point
+        ctx.lineTo(p1.x, p1.y);
+        ctx.stroke();
+      };
+
+      el.onmouseup = function () {
+        ctx2.drawImage(el, 0, 0);
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+        isDrawing = false;
+
+        points.length = 0;
+      };
+      el2.onmouseup = function () {
+        ctx2.beginPath()
+        isErasing = false
+      }
+      var select = document.getElementById("tool");
+      select.addEventListener("change", function () {
+        mode = select.value;
+        if (mode == "brush") {
+          ctx.globalCompositeOperation = "source-over";
+          ctx2.globalCompositeOperation = "source-over";
+          el2.style.pointerEvents = "none";
+        } else {
+          ctx.globalCompositeOperation = "destination-out";
+          ctx2.globalCompositeOperation = "destination-out";
+          el2.style.pointerEvents = "auto";
+        }
+      });
+    </script>
+  </body>
+</html>
