@@ -28,7 +28,9 @@
     <!-- <canvas id="c" width="500" height="300"></canvas> -->
     <!-- <script src="./canvas.js"></script> -->
     <script>
+      
   window.addEventListener("load", () => {
+    var topbarheight = document.getElementById('tool').innerHeight
   const canvas = document.getElementById("canvas");
   const ctx = canvas.getContext("2d");
   canvas.height = window.innerHeight - 8;
@@ -61,7 +63,7 @@
     }
     console.log(e)
     console.log({'x': e.touches[0].clientX, 'y': e.touches[0].clientY})
-    ctx.lineTo(e.touches[0].clientX, e.touches[0].clientY);
+    ctx.lineTo(e.touches[0].clientX, e.touches[0].clientY + topbarheight);
     ctx.stroke();
   }
   canvas.addEventListener("touchstart", startPosition);
