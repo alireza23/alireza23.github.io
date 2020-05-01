@@ -56,35 +56,35 @@
       var isErasing = false;
       var points = [];
 
-      el.ontouchstart = function (e) {
+      el.onmousedown = function (e) {
         isDrawing = true;
         ctx.beginPath();
-        ctx.moveTo(e.touches[0].clientX - 1, e.touches[0].clientY);
-        ctx.lineTo(e.touches[0].clientX - 0.5, e.touches[0].clientY);
+        ctx.moveTo(e.clientX - 1, e.clientY);
+        ctx.lineTo(e.clientX - 0.5, e.clientY);
         ctx.stroke();
 
-        points.push({ x: e.touches[0].clientX, y: e.touches[0].clientY });
+        points.push({ x: e.clientX, y: e.clientY });
       };
-      el2.ontouchstart = function (e) {
+      el2.onmousedown = function (e) {
         isErasing = true;
         console.log(e);
         ctx2.beginPath();
-        ctx2.moveTo(e.touches[0].clientX, e.touches[0].clientY);
-        ctx2.lineTo(e.touches[0].clientX + 10, e.touches[0].clientY);
+        ctx2.moveTo(e.clientX, e.clientY);
+        ctx2.lineTo(e.clientX + 10, e.clientY);
         ctx2.stroke();
       };
-      el2.ontouchmove = function (e) {
+      el2.onmousemove = function (e) {
         if (!isErasing) return;
-        ctx2.lineTo(e.touches[0].clientX, e.touches[0].clientY);
+        ctx2.lineTo(e.clientX, e.clientY);
         ctx2.stroke();
         console.log(e);
 
       }
 
-      el.ontouchmove = function (e) {
+      el.onmousemove = function (e) {
         if (!isDrawing) return;
 
-        points.push({ x: e.touches[0].clientX, y: e.touches[0].clientY });
+        points.push({ x: e.clientX, y: e.clientY });
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
         var p1 = points[0];
@@ -108,7 +108,7 @@
         ctx.stroke();
       };
 
-      el.ontouchend = function () {
+      el.onmouseup = function () {
         ctx2.drawImage(el, 0, 0);
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
@@ -116,7 +116,7 @@
 
         points.length = 0;
       };
-      el2.ontouchend = function () {
+      el2.onmouseup = function () {
         ctx2.beginPath()
         isErasing = false
       }
