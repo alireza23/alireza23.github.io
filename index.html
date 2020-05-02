@@ -15,6 +15,7 @@
   <script src="./js/konva.min.js"></script>
   <!-- <script src="konvaTest.js"></script> -->
   <script>
+    
     /* ---- Mode management ---- */
 let modeSelector = document.getElementById('mode-selector');
 let mode = modeSelector.value;
@@ -119,7 +120,7 @@ function getRelativePointerPosition(node) {
 function usePen () {
   let isDrawing = false;
   let currentLine;
-  stage.on('mousedown', (evt) => {
+  stage.on('touchstart', (evt) => {
     // Start drawing
     isDrawing = true;
     // Create new line object
@@ -132,7 +133,7 @@ function usePen () {
     drawLayer.add(currentLine);
   });
 
-  stage.on('mousemove', (evt) => {
+  stage.on('touchmove', (evt) => {
     if (!isDrawing) {
       return;
     }
@@ -144,22 +145,26 @@ function usePen () {
     drawLayer.batchDraw();
   });
 
-  stage.on('mouseup', (evt) => {
+  stage.on('touchend', (evt) => {
     // End drawing
     isDrawing = false;
   });
 }
 
 function endPen () {
-  stage.off('mousedown');
-  stage.off('mousemove');
-  stage.off('mouseup');
+  stage.off('touchstart');
+  stage.off('touchmove');
+  stage.off('touchend');
 }
 
 
 /* ---- Init ---- */
 useHand();
+
   </script>
   <!-- <script src="buggyPaper.js"></script> -->
+
+  <!-- <script src="./js/touch-emulator.js"></script> -->
+
 </body>
 </html>
