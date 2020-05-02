@@ -1,15 +1,10 @@
-
 <!DOCTYPE html>
 <html>
   <head>
     <script src="./js/konva.min.js"></script>
-    <!-- emulate touches on desktop -->
     <script src="./js/touch-emulator.js"></script>
-    <!-- 3-rd party library for gesture events -->
-    <script src="./js/hammer.for.konva.js"></script>
-
     <meta charset="utf-8" />
-    <title>Konva Touch Gestures Demo</title>
+    <title>Konva Multi-touch Scale Stage Demo</title>
     <style>
       body {
         margin: 0;
@@ -22,127 +17,95 @@
   <body>
     <div id="container"></div>
     <script>
-    //  TouchEmulator();
-      //Konva.hitOnDragEnabled = true;
-     // Konva.captureTouchEventsEnabled = true;
+      TouchEmulator();
+
+      // by default Konva prevent some events when node is dragging
+      // it improve the performance and work well for 95% of cases
+      // we need to enable all events on Konva, even when we are dragging a node
+      // so it triggers touchmove correctly
+      Konva.hitOnDragEnabled = true;
 
       var width = window.innerWidth;
       var height = window.innerHeight;
 
+      var lastDist = 0;
+      var startScale = 1;
+
+      function getDistance(p1, p2) {
+        return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
+      }
+
       var stage = new Konva.Stage({
         container: 'container',
         width: width,
-        height: height
+        height: height,
+        draggable: true,
+        x: width / 2,
+        y: height / 2,
+        offset: {
+          x: width / 2,
+          y: height / 2
+        }
       });
 
       var layer = new Konva.Layer();
-      stage.add(layer);
 
-      var originalAttrs = {
-        x: stage.width() / 2,
+      var triangle = new Konva.RegularPolygon({
+        x: 190,
         y: stage.height() / 2,
-        scaleX: 1,
-        scaleY: 1,
-        draggable: true,
-        rotation: 0
-      };
-
-      var group = new Konva.Group(originalAttrs);
-      layer.add(group);
-
-      var size = 200;
-
-      var rect = new Konva.Rect({
-        width: size,
-        height: size,
-        fill: 'yellow',
-        offsetX: size / 2,
-        offsetY: size / 2,
-        cornerRadius: 5,
-        shadowBlur: 10,
-        shadowColor: 'grey'
-      });
-      group.add(rect);
-
-      var defaultText = 'Try\ndrag, swipe, pinch zoom, rotate, press...';
-      var text = new Konva.Text({
-        text: defaultText,
-        x: -size / 2,
-        width: size,
-        align: 'center'
-      });
-      group.add(text);
-      layer.draw();
-
-      // attach modified version of Hammer.js
-      // "domEvents" property will allow triggering events on group
-      // instead of "hammertime" instance
-      var hammertime = new Hammer(group, { domEvents: true });
-
-      // add rotate gesture
-      hammertime.get('rotate').set({ enable: true });
-
-      // now attach all possible events
-      // group.on('swipe', function(ev) {
-      //   text.text('swiping');
-      //   group.to({
-      //     x: group.x() + ev.evt.gesture.deltaX,
-      //     y: group.y() + ev.evt.gesture.deltaY,
-
-      //     onFinish: function() {
-      //       group.to(Object.assign({}, originalAttrs));
-      //       text.text(defaultText);
-      //     }
-      //   });
-      // });
-
-      group.on('press', function(ev) {
-        text.text('Under press');
-        rect.to({
-          fill: 'green'
-        });
+        sides: 3,
+        radius: 80,
+        fill: 'green',
+        stroke: 'black',
+        strokeWidth: 4
       });
 
-      // group.on('touchend', function(ev) {
-      //   rect.to({
-      //     fill: 'yellow'
-      //   });
-
-      //   setTimeout(() => {
-      //     text.text(defaultText);
-      //     layer.batchDraw();
-      //   }, 300);
-      // });
-
-      group.on('dragend', () => {
-      //  group.to(Object.assign({}, originalAttrs));
+      var circle = new Konva.Circle({
+        x: 380,
+        y: stage.height() / 2,
+        radius: 70,
+        fill: 'red',
+        stroke: 'black',
+        strokeWidth: 4
       });
 
-      var oldRotation = 0;
-      var startScale = 0;
-      group.on('rotatestart', function(ev) {
-        oldRotation = ev.evt.gesture.rotation;
-        startScale = rect.scaleX();
-        group.stopDrag();
-        group.draggable(false);
-        text.text('rotating...');
+      stage.on('touchmove', function(e) {
+        e.evt.preventDefault();
+        var touch1 = e.evt.touches[0];
+        var touch2 = e.evt.touches[1];
+
+        if (touch1 && touch2) {
+          var dist = getDistance(
+            {
+              x: touch1.clientX,
+              y: touch1.clientY
+            },
+            {
+              x: touch2.clientX,
+              y: touch2.clientY
+            }
+          );
+
+          if (!lastDist) {
+            lastDist = dist;
+          }
+
+          var scale = (stage.scaleX() * dist) / lastDist;
+
+          stage.scaleX(scale);
+          stage.scaleY(scale);
+          stage.batchDraw();
+          lastDist = dist;
+        }
       });
 
-      group.on('rotate', function(ev) {
-        var delta = oldRotation - ev.evt.gesture.rotation;
-       // group.rotate(-delta);
-        oldRotation = ev.evt.gesture.rotation;
-        group.scaleX(startScale * ev.evt.gesture.scale);
-        group.scaleY(startScale * ev.evt.gesture.scale);
-        layer.batchDraw();
+      stage.on('touchend', function() {
+        lastDist = 0;
       });
 
-      group.on('rotateend rotatecancel', function(ev) {
-        //group.to(Object.assign({}, originalAttrs));
-        text.text(defaultText);
-        group.draggable(true);
-        layer.batchDraw();
-      });
+      layer.add(triangle);
+      layer.add(circle);
+      stage.add(layer);
     </script>
   </body>
 </html>
