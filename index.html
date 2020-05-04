@@ -1,261 +1,109 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>HammerJS Pinch Zoom and Drag</title>
-    <script src="./js/touch-emulator.js"></script>
-    <style type="text/css">
+    <script src="https://unpkg.com/konva@5.0.3/konva.min.js"></script>
+    <meta charset="utf-8" />
+    <title>Konva Multi-touch Scale Stage Demo</title>
+    <style>
       body {
         margin: 0;
         padding: 0;
-      }
-
-      #drag {
-        touch-action: auto;
-        width: 100%;
-        height: auto;
-
-        position: absolute;
-        left: 0;
-        top: 0;
+        overflow: hidden;
+       
       }
     </style>
   </head>
-
   <body>
-    <div id="drag">
-      <img src="./frog.jpg" style="width: 100%;" alt="" />
-    </div>
+    <div id="container"></div>
+    <script>
 
-    <script type="text/javascript" src="./js/hammer.js"></script>
-    <script type="text/javascript">
-      TouchEmulator();
-      var element = document.getElementById("drag");
-      var hammertime = new Hammer(element, {});
+      // by default Konva prevent some events when node is dragging
+      // it improve the performance and work well for 95% of cases
+      // we need to enable all events on Konva, even when we are dragging a node
+      // so it triggers touchmove correctly
+      Konva.hitOnDragEnabled = true;
 
-      hammertime.get("pinch").set({ enable: true });
-      hammertime.get("pan").set({ threshold: 0 });
+      var width = window.innerWidth;
+      var height = window.innerHeight;
 
-      var fixHammerjsDeltaIssue = undefined;
-      var pinchStart = { x: undefined, y: undefined };
-      var lastEvent = undefined;
+      var lastDist = 0;
+      var startScale = 1;
 
-      var originalSize = {
-        width: document.getElementById("drag").offsetWidth,
-        height: document.getElementById("drag").offsetHeight,
-      };
-      //console.log(originalSize)
-      var current = {
-        x: 0,
-        y: 0,
-        z: 1,
-        zooming: false,
-        width: originalSize.width * 1,
-        height: originalSize.height * 1,
-      };
-      update();
-      var last = {
-        x: current.x,
-        y: current.y,
-        z: current.z,
-      };
-
-      function getRelativePosition(element, point, originalSize, scale) {
-        var domCoords = getTopLeftCoordsOfDiv(element);
-
-        var elementX = point.x - domCoords.x;
-        var elementY = point.y - domCoords.y;
-
-        var relativeX = elementX / ((originalSize.width * scale) / 2) - 1;
-        var relativeY = elementY / ((originalSize.height * scale) / 2) - 1;
-        return { x: relativeX, y: relativeY };
+      function getDistance(p1, p2) {
+        return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
       }
 
-      function getTopLeftCoordsOfDiv(elem) {
-        // this simply return 'top' and 'left' position of top left corner of drag,
-        //nothing fancy or complicated
-        var box = elem.getBoundingClientRect();
-        //console.log({ box });
-        var body = document.body;
-        var docEl = document.documentElement;
-        var scrollTop = window.pageYOffset || docEl.scrollTop || body.scrollTop;
-        //console.log({ scrollTop });
-        var scrollLeft =
-          window.pageXOffset || docEl.scrollLeft || body.scrollLeft;
-        //console.log({ scrollLeft });
-        var clientTop = docEl.clientTop || body.clientTop || 0;
-        //console.log({ clientTop });
-        var clientLeft = docEl.clientLeft || body.clientLeft || 0;
-        //console.log({ clientLeft });
-        var top = box.top + scrollTop - clientTop;
-        //console.log({ top });
-        var left = box.left + scrollLeft - clientLeft;
-        //console.log({ left });
-        //console.log({ x: Math.round(left), y: Math.round(top) });
-
-        return { x: Math.round(left), y: Math.round(top) };
-      }
-
-      function scaleFrom(zoomOrigin, currentScale, newScale) {
-        var currentShift = getCoordinateShiftDueToScale(
-          originalSize,
-          currentScale
-        );
-        var newShift = getCoordinateShiftDueToScale(originalSize, newScale);
-
-        var zoomDistance = newScale - currentScale;
-
-        var shift = {
-          x: currentShift.x - newShift.x,
-          y: currentShift.y - newShift.y,
-        };
-
-        var output = {
-          x: zoomOrigin.x * shift.x,
-          y: zoomOrigin.y * shift.y,
-          z: zoomDistance,
-        };
-        return output;
-      }
-
-      function getCoordinateShiftDueToScale(size, scale) {
-        var newWidth = scale * size.width;
-        var newHeight = scale * size.height;
-        var dx = (newWidth - size.width) / 2;
-        var dy = (newHeight - size.height) / 2;
-        return {
-          x: dx,
-          y: dy,
-        };
-      }
-
-      hammertime.on("doubletap", function (e) {
-        var scaleFactor = 2;
-        if (current.zooming === false) {
-          current.zooming = true;
-        } else {
-          current.zooming = false;
-          scaleFactor = -scaleFactor;
+      var stage = new Konva.Stage({
+        container: 'container',
+        width: width,
+        height: height,
+        
+        draggable: true,
+        x: width / 2,
+        y: height / 2,
+        offset: {
+          x: width / 2,
+          y: height / 2
         }
-
-        element.style.transition = "0.3s";
-        setTimeout(function () {
-          element.style.transition = "none";
-        }, 300);
-
-        var zoomOrigin = getRelativePosition(
-          element,
-          { x: e.center.x, y: e.center.y },
-          originalSize,
-          current.z
-        );
-        var d = scaleFrom(zoomOrigin, current.z, current.z + scaleFactor);
-        current.x += d.x;
-        current.y += d.y;
-        current.z += d.z;
-
-        last.x = current.x;
-        last.y = current.y;
-        last.z = current.z;
-
-        update();
       });
 
-      hammertime.on("pan", function (e) {
-        console.log(lastEvent);
-        if (lastEvent !== "pan") {
-          // it is undefined if it is first pan ever or can be {pan, panend, pinch, pinchstart, pinchend}
-          fixHammerjsDeltaIssue = {
-            x: e.deltaX,
-            y: e.deltaY,
-          };
-          console.log(fixHammerjsDeltaIssue);
+      var layer = new Konva.Layer();
+var rect = new Konva.Rect({
+    x:0,
+    y:0,
+    width:width,
+    height:height,
+    fill: 'green'
+})
+   
+
+      var circle = new Konva.Circle({
+        x: 380,
+        y: stage.height() / 2,
+        radius: 70,
+        fill: 'red',
+        stroke: 'black',
+        strokeWidth: 4
+      });
+
+      stage.on('touchmove', function(e) {
+        e.evt.preventDefault();
+        var touch1 = e.evt.touches[0];
+        var touch2 = e.evt.touches[1];
+
+        if (touch1 && touch2) {
+          var dist = getDistance(
+            {
+              x: touch1.clientX,
+              y: touch1.clientY
+            },
+            {
+              x: touch2.clientX,
+              y: touch2.clientY
+            }
+          );
+
+          if (!lastDist) {
+            lastDist = dist;
+          }
+
+          var scale = (stage.scaleX() * dist) / lastDist;
+
+          stage.scaleX(scale);
+          stage.scaleY(scale);
+          stage.batchDraw();
+          lastDist = dist;
         }
-        console.log({ lastX: last.x });
-        console.log({ deltaX: e.deltaX });
-        console.log({ fix: fixHammerjsDeltaIssue.x });
-        //the very important thing we want calculate here is current.x and current.y
-        //currentX and currentY are not simply the left and top, when the scale is 1 they are simply left and top but when scale is not 1 ...
-        //deltax is not affected by scale
-        current.x = last.x + e.deltaX - fixHammerjsDeltaIssue.x;
-        current.y = last.y + e.deltaY - fixHammerjsDeltaIssue.y;
-        console.log({currentX: current.x})
-        console.log({currentY: current.x})
-        lastEvent = "pan";
-        update();
       });
 
-      hammertime.on("pinch", function (e) {
-        var d = scaleFrom(pinchZoomOrigin, last.z, last.z * e.scale);
-        current.x = d.x + last.x + e.deltaX;
-        current.y = d.y + last.y + e.deltaY;
-        current.z = d.z + last.z;
-        lastEvent = "pinch";
-        update();
+      stage.on('touchend', function() {
+        lastDist = 0;
       });
 
-      var pinchZoomOrigin = undefined;
-      hammertime.on("pinchstart", function (e) {
-        pinchStart.x = e.center.x;
-        pinchStart.y = e.center.y;
-        pinchZoomOrigin = getRelativePosition(
-          element,
-          { x: pinchStart.x, y: pinchStart.y },
-          originalSize,
-          current.z
-        );
-        lastEvent = "pinchstart";
-      });
-
-      hammertime.on("panend", function (e) {
-        last.x = current.x;
-        last.y = current.y;
-        lastEvent = "panend";
-      });
-
-      hammertime.on("pinchend", function (e) {
-        last.x = current.x;
-        last.y = current.y;
-        last.z = current.z;
-        lastEvent = "pinchend";
-      });
-
-      function update() {
-        current.height = originalSize.height * current.z;
-        current.width = originalSize.width * current.z;
-       console.log(current.width)
-       console.log(current.x)
-       console.log(current.z)
-
-
-        
-        // if(current.width - (current.x*2) - originalSize.width < 0){
-        //     console.log('zzzzzz')
-        //     current.x  = -(originalSize.width - current.width)/2
-        // }
-        // if(current.height - (current.y*2) - originalSize.height < 0){
-        //     console.log('zzzzzz')
-        //     current.y  = -(originalSize.height - current.height)/2
-        // }
-          
-        // if(current.width - (-current.x*2) - originalSize.width < 0){
-        //     console.log('hhhhhh')
-        //     current.x  = (originalSize.width - current.width)/2
-        // }
-        // if(current.height - (-current.y*2) - originalSize.height < 0){
-        //     console.log('hhhhgg')
-        //     current.y  = (originalSize.height - current.height)/2
-        // }
-        
-      // console.log(current.x)
-
-
-
-
-        
-        element.style.transform =  `translate3d(${current.x}px, ${current.y}px, 0) scale(${current.z})`;
-      } 
+    
+      layer.add(rect);
+      layer.add(circle);
+      stage.add(layer);
     </script>
   </body>
 </html>
