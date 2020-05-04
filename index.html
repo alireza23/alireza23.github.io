@@ -131,7 +131,7 @@
       }
 
       hammertime.on("doubletap", function (e) {
-        var scaleFactor = 6;
+        var scaleFactor = 2;
         if (current.zooming === false) {
           current.zooming = true;
         } else {
@@ -226,10 +226,11 @@
         current.width = originalSize.width * current.z;
        console.log(current.width)
        console.log(current.x)
-if(current.z < 2){
-    current.z =2
-}
-   
+       console.log(current.z)
+
+   if(current.z < 1){
+       current.z = 1
+   }
         
         // if(current.width - (current.x*2) - originalSize.width < 0){
         //     console.log('zzzzzz')
