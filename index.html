@@ -229,23 +229,23 @@
 
    
         
-        if(current.width - (current.x*2) - originalSize.width < 0){
-            console.log('zzzzzz')
-            current.x  = -(originalSize.width - current.width)/2
-        }
-        if(current.height - (current.y*2) - originalSize.height < 0){
-            console.log('zzzzzz')
-            current.y  = -(originalSize.height - current.height)/2
-        }
+        // if(current.width - (current.x*2) - originalSize.width < 0){
+        //     console.log('zzzzzz')
+        //     current.x  = -(originalSize.width - current.width)/2
+        // }
+        // if(current.height - (current.y*2) - originalSize.height < 0){
+        //     console.log('zzzzzz')
+        //     current.y  = -(originalSize.height - current.height)/2
+        // }
           
-        if(current.width - (-current.x*2) - originalSize.width < 0){
-            console.log('hhhhhh')
-            current.x  = (originalSize.width - current.width)/2
-        }
-        if(current.height - (-current.y*2) - originalSize.height < 0){
-            console.log('hhhhgg')
-            current.y  = (originalSize.height - current.height)/2
-        }
+        // if(current.width - (-current.x*2) - originalSize.width < 0){
+        //     console.log('hhhhhh')
+        //     current.x  = (originalSize.width - current.width)/2
+        // }
+        // if(current.height - (-current.y*2) - originalSize.height < 0){
+        //     console.log('hhhhgg')
+        //     current.y  = (originalSize.height - current.height)/2
+        // }
         
       // console.log(current.x)
 
@@ -254,7 +254,7 @@
 
         
         element.style.transform =  `translate3d(${current.x}px, ${current.y}px, 0) scale(${current.z})`;
-      }
+      } 
     </script>
   </body>
 </html>
