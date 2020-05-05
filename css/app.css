@@ -1,0 +1,15 @@
+*{margin: 0;
+padding: 0;
+}
+#myElement{
+    width: 400px;
+    height: 500px;
+    background-color: #7486d6;
+    border: blueviolet solid 2px;
+}
+p{
+    touch-action: none;
+    pointer-events: none;
+    user-select: none;
+}
+
