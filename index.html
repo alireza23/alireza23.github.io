@@ -88,13 +88,13 @@
             direction: Hammer.DIRECTION_ALL,
             threshold: 0
         });
-        var doubletap = new Hammer.Tap({
-            event: 'doubletap',
-            taps: 2
-        })
+        // var doubletap = new Hammer.Tap({
+        //     event: 'doubletap',
+        //     taps: 2
+        // })
         pinch.recognizeWith(pan)
-        pinch.requireFailure(doubletap);
-        pan.requireFailure(doubletap);
+        pan.recognizeWith(pinch)
+
         hammertime.add(pinch)
         hammertime.add(pan)
         hammertime.add(doubletap)
@@ -203,36 +203,36 @@
             }
         }
 
-        hammertime.on('doubletap', function(e) {
-            var scaleFactor = 1.7;
-            if (current.zooming === false) {
-                current.zooming = true;
-            } else {
-                current.zooming = false;
-                scaleFactor = -scaleFactor;
-            }
+        // hammertime.on('doubletap', function(e) {
+        //     var scaleFactor = 1.7;
+        //     if (current.zooming === false) {
+        //         current.zooming = true;
+        //     } else {
+        //         current.zooming = false;
+        //         scaleFactor = -scaleFactor;
+        //     }
 
-            element.style.transition = "0.3s";
-            setTimeout(function() {
-                element.style.transition = "none";
-            }, 300)
+        //     element.style.transition = "0.3s";
+        //     setTimeout(function() {
+        //         element.style.transition = "none";
+        //     }, 300)
 
-            var zoomOrigin = getRelativePosition(element, {
-                x: e.center.x,
-                y: e.center.y
-            }, originalSize, current.z);
-            var d = scaleFrom(zoomOrigin, current.z, current.z + scaleFactor)
-            current.x += d.x;
-            current.y += d.y;
-            current.z += d.z;
+        //     var zoomOrigin = getRelativePosition(element, {
+        //         x: e.center.x,
+        //         y: e.center.y
+        //     }, originalSize, current.z);
+        //     var d = scaleFrom(zoomOrigin, current.z, current.z + scaleFactor)
+        //     current.x += d.x;
+        //     current.y += d.y;
+        //     current.z += d.z;
 
-            last.x = current.x;
-            last.y = current.y;
-            last.z = current.z;
-            needsUpdate3 = true
-            console.log('doubleTap occured')
-            update();
-        })
+        //     last.x = current.x;
+        //     last.y = current.y;
+        //     last.z = current.z;
+        //     needsUpdate3 = true
+        //     console.log('doubleTap occured')
+        //     update();
+        // })
 
         hammertime.on('pan', function(e) {
 
