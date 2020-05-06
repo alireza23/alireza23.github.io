@@ -34,6 +34,7 @@
             width: 100%;
             position: absolute;
             left: 0;
+            transition-timing-function: ease-out
         }
         /* #toolbar {
             height: 56px;
@@ -51,10 +52,9 @@
     </div>
     <script type="text/javascript" src="./js/hammer.js"></script>
     <script type="text/javascript">
-        // // First we get the viewport height and we multiple it by 1% to get a value for a vh unit
-        // let vh = window.innerHeight * 0.01;
-        // // Then we set the value in the --vh custom property to the root of the document
-        // document.documentElement.style.setProperty('--vh', `${vh}px`);
+        window.addEventListener("orientationchange", function() {
+            console.log("the orientation of the device is now " + screen.orientation.angle);
+        });
         let needsUpdate3 = true;
 
         var element = document.getElementById('drag')
@@ -263,14 +263,15 @@
         })
 
         function update() {
-            if (current.z < .7) {
-                current.z = .8
+            if (current.z < .6) {
+                current.z = .9
             }
             current.height = originalSize.height * current.z;
             current.width = originalSize.width * current.z;
+            element.style.transition = "none";
 
             element.style.transform = "translate3d(" + current.x + "px, " + current.y + "px, 0) scale(" + current.z + ")";
-            console.log(current.y)
+            //  console.log(current.y)
             if (needsUpdate3) {
                 update3()
             }
@@ -297,31 +298,30 @@
             })
             if (current.width >= parentWidth) {
 
-                const rightBoundFix = -(current.width - parentWidth - (current.width - originalSize.width) / 2)
+                let rightBoundFix = -(current.width - parentWidth - (current.width - originalSize.width) / 2)
                 if (current.x < rightBoundFix) {
                     current.x = rightBoundFix
                 }
+
             } else {
 
-                const rightBoundFix = -(current.width - parentWidth - (current.width - originalSize.width) / 2) - (parentWidth - current.width) / 2
+                let rightBoundFix = -(current.width - parentWidth - (current.width - originalSize.width) / 2) - (parentWidth - current.width) / 2
 
                 current.x = rightBoundFix
             }
 
             if (current.height >= parentHeight) {
-                const bottomBoundFix = -(current.height - parentHeight - (current.height - originalSize.height) / 2)
+                let bottomBoundFix = -(current.height - parentHeight - (current.height - originalSize.height) / 2)
 
                 if (current.y < bottomBoundFix) {
                     current.y = bottomBoundFix
                 }
             } else {
-                const bottomBoundFix = -(current.height - parentHeight - (current.height - originalSize.height) / 2) - (parentHeight - current.height) / 2
+                let bottomBoundFix = -(current.height - parentHeight - (current.height - originalSize.height) / 2) - (parentHeight - current.height) / 2
                 current.y = bottomBoundFix
-                    //  current.y = (parentHeight - current.height) / 2
-
-                console.log(current.y)
-
             }
+            // element.style.transitionDuration = 1 + 's'
+            element.style.transition = "0.7s";
 
             element.style.transform = "translate3d(" + current.x + "px, " + current.y + "px, 0) scale(" + current.z + ")";
 
