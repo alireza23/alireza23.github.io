@@ -288,9 +288,11 @@
             parentHeight = parent.offsetHeight;
             if (current.x - (current.width - originalSize.width) / 2 > 0) {
                 current.x = (current.width - originalSize.width) / 2
+                last.x = current.x;
             }
             if (current.y - (current.height - originalSize.height) / 2 > 0) {
                 current.y = (current.height - originalSize.height) / 2
+                last.y = current.y;
             }
             console.log({
                 parentWidth,
@@ -304,6 +306,8 @@
                 let rightBoundFix = -(current.width - parentWidth - (current.width - originalSize.width) / 2)
                 if (current.x < rightBoundFix) {
                     current.x = rightBoundFix
+                    last.x = current.x;
+
                 }
 
             } else {
@@ -311,6 +315,8 @@
                 let rightBoundFix = -(current.width - parentWidth - (current.width - originalSize.width) / 2) - (parentWidth - current.width) / 2
 
                 current.x = rightBoundFix
+                last.x = current.x;
+
             }
 
             if (current.height >= parentHeight) {
@@ -318,10 +324,14 @@
 
                 if (current.y < bottomBoundFix) {
                     current.y = bottomBoundFix
+                    last.y = current.y;
+
                 }
             } else {
                 let bottomBoundFix = -(current.height - parentHeight - (current.height - originalSize.height) / 2) - (parentHeight - current.height) / 2
                 current.y = bottomBoundFix
+                last.y = current.y;
+
             }
             // element.style.transitionDuration = 1 + 's'
             element.style.transition = "0.7s";
