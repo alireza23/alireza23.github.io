@@ -81,10 +81,14 @@
         var hammertime = new Hammer(element, {});
 
         hammertime.get('pinch').set({
-            enable: true
+            enable: true,
+            event: 'multipinch',
+            pointers: 0,
+            threshold: 0
         });
         hammertime.get('pan').set({
-            threshold: 0
+            threshold: 0,
+            pointers: 2
         });
 
         var fixHammerjsDeltaIssue = undefined;
