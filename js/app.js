@@ -1,4 +1,52 @@
 //TouchEmulator();
+
+/* -------------------------------------------------------------------------- */
+/*                                  functions                                 */
+/* -------------------------------------------------------------------------- */
+var myElement = document.getElementById("myElement");
+
+var originalSize = {
+    width: myElement.offsetWidth,
+    height: myElement.offsetHeight
+}
+console.log(originalSize)
+
+function getCoords(element) { //gets the distnce between top left corner of elemnt and 0,0 point
+    var box = element.getBoundingClientRect();
+
+    var body = document.body;
+    var docEl = document.documentElement;
+
+    var scrollTop = window.pageYOffset || docEl.scrollTop || body.scrollTop;
+    var scrollLeft = window.pageXOffset || docEl.scrollLeft || body.scrollLeft;
+
+    var clientTop = docEl.clientTop || body.clientTop || 0;
+    var clientLeft = docEl.clientLeft || body.clientLeft || 0;
+
+    var top = box.top + scrollTop - clientTop;
+    var left = box.left + scrollLeft - clientLeft;
+    return { x: Math.round(left), y: Math.round(top) };
+}
+
+function getRelativePosition(element, point, originalSize, scale) {
+    var domCoords = getCoords(element);
+
+    console.log({ point })
+    console.log({ domCoords })
+
+    var elementX = point.x - domCoords.x;
+    var elementY = point.y - domCoords.y;
+    console.log({ elementX, elementY })
+    var relativeX = elementX / (originalSize.width * scale / 2) - 1;
+    var relativeY = elementY / (originalSize.height * scale / 2) - 1;
+    return { x: relativeX, y: relativeY }
+}
+
+
+/* -------------------------------------------------------------------------- */
+/*                                functions end                               */
+/* -------------------------------------------------------------------------- */
+
 var myElement = document.getElementById("myElement");
 
 // create a simple instance
@@ -82,7 +130,7 @@ hammertime.on("tap", function(ev) {
     const lastEvent = ev.type
     console.log(lastEvent)
         // console.log(ev);
-
+    console.log(getRelativePosition(myElement, { x: centerX, y: centerY }, originalSize, scale))
 
 });
 hammertime.on("pan", function(ev) {
