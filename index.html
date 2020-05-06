@@ -257,6 +257,9 @@
         })
 
         function update() {
+            if (current.z < 1) {
+                current.z = 1
+            }
             current.height = originalSize.height * current.z;
             current.width = originalSize.width * current.z;
 
