@@ -56,8 +56,9 @@
         let imageNaturalWidth = element.naturalWidth;
         let imageNaturalHeight = element.naturalHeight;
         var parent = document.getElementById('dragWrapper')
+        let windowInnerHeight = window.innerHeight - 56
         parent.style.width = window.innerWidth + 'px'
-        parent.style.height = window.innerHeight + 'px'
+        parent.style.height = windowInnerHeight + 'px'
         if (imageNaturalWidth > imageNaturalHeight) {
             //maybe imageWidth is bigger than image height but the calculated height is bigger than parent height
             //we should set imageheight as 100% and put imge at center of parent horizontally
@@ -67,8 +68,8 @@
 
         } else {
             //same problem here to solve
-            element.style.height = window.innerHeight + 'px'
-            scaledF = window.innerHeight / imageNaturalHeight
+            element.style.height = windowInnerHeight + 'px'
+            scaledF = windowInnerHeight / imageNaturalHeight
             element.style.width = imageNaturalWidth * scaledF + 'px'
         }
 
