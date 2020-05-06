@@ -86,8 +86,7 @@
         });
         var pan = new Hammer.Pan({
             direction: Hammer.DIRECTION_ALL,
-            threshold: 10,
-            pointers: 2
+            threshold: 0
         });
         pinch.recognizeWith(pan)
         hammertime.add(pinch)
