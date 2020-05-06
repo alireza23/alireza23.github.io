@@ -303,7 +303,7 @@
                 }
             } else {
                 //this needs to be fixed
-                const rightBoundFix = -(current.width - parentWidth - (current.width - originalSize.width) / 2)
+                const rightBoundFix = -(current.width - parentWidth - (current.width - originalSize.width) / 2) - (parentWidth - current.width) / 2
 
                 current.x = rightBoundFix
             }
