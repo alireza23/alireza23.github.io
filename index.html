@@ -93,8 +93,10 @@
             taps: 2
         })
         pinch.recognizeWith(pan)
-            // hammertime.add(pinch)
-            // hammertime.add(pan)
+        pinch.requireFailure(doubletap);
+        pan.requireFailure(doubletap);
+        hammertime.add(pinch)
+        hammertime.add(pan)
         hammertime.add(doubletap)
 
         // hammertime.get('pinch').set({
