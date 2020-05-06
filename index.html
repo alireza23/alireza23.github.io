@@ -30,15 +30,20 @@
         
         #drag {
             touch-action: auto;
-            height: 300px;
-            width: 500px;
+            height: auto;
+            width: 100%;
             position: absolute;
             left: 0;
         }
+        /* #toolbar {
+            height: 56px;
+            width: 100%;
+        } */
     </style>
 </head>
 
 <body>
+    <!-- <div id="toolbar"></div> -->
     <div id="dragWrapper">
 
         <img id="drag" src="./frog2.jpg" alt="">
@@ -176,7 +181,7 @@
         }
 
         hammertime.on('doubletap', function(e) {
-            var scaleFactor = 5;
+            var scaleFactor = 1.7;
             if (current.zooming === false) {
                 current.zooming = true;
             } else {
@@ -258,20 +263,21 @@
         })
 
         function update() {
-            if (current.z < 1) {
-                current.z = 1
-            }
+            // if (current.z < 1) {
+            //     current.z = 1
+            // }
             current.height = originalSize.height * current.z;
             current.width = originalSize.width * current.z;
 
             element.style.transform = "translate3d(" + current.x + "px, " + current.y + "px, 0) scale(" + current.z + ")";
+            console.log(current.y)
             if (needsUpdate3) {
                 update3()
             }
         }
 
         function update3() {
-
+            console.log('update3')
             current.height = originalSize.height * current.z;
             current.width = originalSize.width * current.z;
             parentWidth = parent.offsetWidth;
@@ -282,6 +288,13 @@
             if (current.y - (current.height - originalSize.height) / 2 > 0) {
                 current.y = (current.height - originalSize.height) / 2
             }
+            console.log({
+                parentWidth,
+                parentHeight,
+                currentHeight: current.height,
+                currentWidth: current.width,
+
+            })
             if (current.width >= parentWidth) {
 
                 const rightBoundFix = -(current.width - parentWidth - (current.width - originalSize.width) / 2)
@@ -289,7 +302,10 @@
                     current.x = rightBoundFix
                 }
             } else {
-                current.x = (parentWidth - current.width) / 2
+                //this needs to be fixed
+                const rightBoundFix = -(current.width - parentWidth - (current.width - originalSize.width) / 2)
+
+                current.x = rightBoundFix
             }
 
             if (current.height >= parentHeight) {
@@ -299,7 +315,11 @@
                     current.y = bottomBoundFix
                 }
             } else {
-                current.y = (parentHeight - current.height) / 2
+                const bottomBoundFix = -(current.height - parentHeight - (current.height - originalSize.height) / 2) - (parentHeight - current.height) / 2
+                current.y = bottomBoundFix
+                    //  current.y = (parentHeight - current.height) / 2
+
+                console.log(current.y)
 
             }
 
