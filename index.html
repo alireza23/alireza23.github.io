@@ -88,14 +88,14 @@
             direction: Hammer.DIRECTION_ALL,
             threshold: 0
         });
-        var tap = new Hammer.Tap({
+        var doubletap = new Hammer.Tap({
             event: 'doubletap',
             taps: 2
         })
         pinch.recognizeWith(pan)
         hammertime.add(pinch)
         hammertime.add(pan)
-        hammertime.add(tap)
+        hammertime.add(doubletap)
 
         // hammertime.get('pinch').set({
         //     enable: true,
