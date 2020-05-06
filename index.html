@@ -209,22 +209,25 @@
             last.y = current.y;
             last.z = current.z;
             needsUpdate3 = true
+            console.log('doubleTap occured')
             update();
         })
 
-        // hammertime.on('pan', function(e) {
-        //     if (lastEvent !== 'pan') {
-        //         fixHammerjsDeltaIssue = {
-        //             x: e.deltaX,
-        //             y: e.deltaY
-        //         }
-        //     }
+        hammertime.on('pan', function(e) {
+            if (lastEvent !== 'pan') {
+                fixHammerjsDeltaIssue = {
+                    x: e.deltaX,
+                    y: e.deltaY
+                }
+            }
 
-        //     current.x = last.x + e.deltaX - fixHammerjsDeltaIssue.x;
-        //     current.y = last.y + e.deltaY - fixHammerjsDeltaIssue.y;
-        //     lastEvent = 'pan';
-        //     update();
-        // })
+            current.x = last.x + e.deltaX - fixHammerjsDeltaIssue.x;
+            current.y = last.y + e.deltaY - fixHammerjsDeltaIssue.y;
+            lastEvent = 'pan';
+            console.log('pan occured')
+
+            update();
+        })
 
         hammertime.on('pinch', function(e) {
             var d = scaleFrom(pinchZoomOrigin, last.z, last.z * e.scale)
@@ -232,6 +235,8 @@
             current.y = d.y + last.y + e.deltaY;
             current.z = d.z + last.z;
             lastEvent = 'pinch';
+            console.log('pinch occured')
+
             update();
         })
 
@@ -244,15 +249,19 @@
                 y: pinchStart.y
             }, originalSize, current.z);
             lastEvent = 'pinchstart';
+            console.log('pinchstart occured')
+
         })
 
-        // hammertime.on('panend', function(e) {
-        //     last.x = current.x;
-        //     last.y = current.y;
-        //     lastEvent = 'panend';
-        //     needsUpdate3 = true;
-        //     update()
-        // })
+        hammertime.on('panend', function(e) {
+            last.x = current.x;
+            last.y = current.y;
+            lastEvent = 'panend';
+            needsUpdate3 = true;
+            console.log('panend occured')
+
+            update()
+        })
 
         hammertime.on('pinchend', function(e) {
             last.x = current.x;
@@ -260,8 +269,11 @@
             last.z = current.z;
             lastEvent = 'pinchend';
             needsUpdate3 = true
-                //i added this update there was not any update here
-            update()
+            console.log('pinchend occured')
+
+            //i added this update there was not any update here
+
+            //  update()
         })
 
         function update() {
