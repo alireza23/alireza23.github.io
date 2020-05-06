@@ -56,9 +56,9 @@
         let imageNaturalWidth = element.naturalWidth;
         let imageNaturalHeight = element.naturalHeight;
         var parent = document.getElementById('dragWrapper')
-        let windowInnerHeight = window.innerHeight - 56
+            // let windowInnerHeight = window.innerHeight - 56
         parent.style.width = window.innerWidth + 'px'
-        parent.style.height = windowInnerHeight + 'px'
+        parent.style.height = window.innerHeight + 'px'
         if (imageNaturalWidth > imageNaturalHeight) {
             //maybe imageWidth is bigger than image height but the calculated height is bigger than parent height
             //we should set imageheight as 100% and put imge at center of parent horizontally
@@ -311,52 +311,6 @@
             last.y = current.y;
             needsUpdate3 = false
         }
-
-        // function update2() {
-        //     element.style.transitionDuration = 10 + 's'
-        //     current.height = originalSize.height * current.z;
-        //     current.width = originalSize.width * current.z;
-        //     parentWidth = parent.offsetWidth;
-        //     parentHeight = parent.offsetHeight;
-
-        //     console.log(current.x - (current.width - originalSize.width) / 2)
-        //     if (current.x - (current.width - originalSize.width) / 2 > 0) {
-        //         current.x = (current.width - originalSize.width) / 2
-        //     }
-        //     if (current.y - (current.height - originalSize.height) / 2 > 0) {
-        //         current.y = (current.height - originalSize.height) / 2
-        //     }
-        //     element.style.transform = "translate3d(" + current.x + "px, " + current.y + "px, 0) scale(" + current.z + ")";
-        //     last.x = current.x;
-        //     last.y = current.y;
-        //     lastEvent = 'panend';
-        //     element.style.transitionDuration = 0 + 's'
-
-        // }
-
-
-        // function getScrollbarWidth() {
-
-        //     // Creating invisible container
-        //     const outer = document.createElement('div');
-        //     outer.style.visibility = 'hidden';
-        //     outer.style.overflow = 'scroll'; // forcing scrollbar to appear
-        //     outer.style.msOverflowStyle = 'scrollbar'; // needed for WinJS apps
-        //     document.body.appendChild(outer);
-
-        //     // Creating inner element and placing it in the container
-        //     const inner = document.createElement('div');
-        //     outer.appendChild(inner);
-
-        //     // Calculating difference between container's full width and the child width
-        //     const scrollbarWidth = (outer.offsetWidth - inner.offsetWidth);
-
-        //     // Removing temporary elements from the DOM
-        //     outer.parentNode.removeChild(outer);
-
-        //     return scrollbarWidth;
-
-        // }
     </script>
 </body>
 
