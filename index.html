@@ -265,6 +265,7 @@
         function update() {
             if (current.z < 1) {
                 current.z = 1;
+                last.z = current.z;
 
             }
             current.height = originalSize.height * current.z;
