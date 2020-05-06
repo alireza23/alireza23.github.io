@@ -18,6 +18,7 @@
             margin: 0;
             padding: 0;
             text-align: center;
+            background-color: red
         }
         
         #dragWrapper {
@@ -53,7 +54,29 @@
     <script type="text/javascript" src="./js/hammer.js"></script>
     <script type="text/javascript">
         window.addEventListener("orientationchange", function() {
-            console.log("the orientation of the device is now " + screen.orientation.angle);
+            let orientationChangeWidth;
+            let orientationChangeHeight;
+            if (screen.orientation.angle == 0) {
+                //portrait
+                console.log('portrait')
+                orientationChangeWidth = window.innerHeight;
+                orientationChangeHeight = window.innerWidth
+                console.log({
+                    orientationChangeWidth,
+                    orientationChangeHeight
+                })
+
+            } else {
+                //landscape
+                console.log('landscape')
+                orientationChangeWidth = window.innerWidth;
+                orientationChangeHeight = window.innerHeight
+                console.log({
+                    orientationChangeWidth,
+                    orientationChangeHeight
+                })
+            }
+
         });
         let needsUpdate3 = true;
 
@@ -237,7 +260,7 @@
         hammertime.on('pan', function(e) {
 
             let fingerCount = e.maxPointers
-            if (fingerCount > 1) {
+            if (fingerCount > 0) {
                 if (lastEvent !== 'pan') {
                     fixHammerjsDeltaIssue = {
                         x: e.deltaX,
@@ -281,7 +304,7 @@
 
         hammertime.on('panend', function(e) {
             let fingerCount = e.maxPointers
-            if (fingerCount > 1) {
+            if (fingerCount > 0) {
                 last.x = current.x;
                 last.y = current.y;
                 lastEvent = 'panend';
