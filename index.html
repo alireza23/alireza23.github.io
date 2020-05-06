@@ -23,7 +23,7 @@
         #dragWrapper {
             width: 100%;
             box-sizing: border-box;
-            height: 100vh;
+            height: calc(100vh - 56)
             /* height: calc(var(--vh, 1vh) * 100); */
             background-color: #91b376;
         }
@@ -56,8 +56,8 @@
         let imageNaturalWidth = element.naturalWidth;
         let imageNaturalHeight = element.naturalHeight;
         var parent = document.getElementById('dragWrapper')
-        parent.style.width = window.innerWidth + 'px'
-        parent.style.height = window.innerHeight + 'px'
+            // parent.style.width = window.innerWidth + 'px'
+            // parent.style.height = window.innerHeight + 'px'
         if (imageNaturalWidth > imageNaturalHeight) {
             //maybe imageWidth is bigger than image height but the calculated height is bigger than parent height
             //we should set imageheight as 100% and put imge at center of parent horizontally
