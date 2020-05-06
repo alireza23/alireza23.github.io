@@ -78,17 +78,31 @@
             element.style.width = imageNaturalWidth * scaledF + 'px'
         }
 
-        var hammertime = new Hammer(element, {});
-
-        hammertime.get('pinch').set({
+        var hammertime = new Hammer.Manager(element, {});
+        var pinch = new Hammer.Pinch({
             enable: true,
             pointers: 0,
             threshold: 0
         });
-        hammertime.get('pan').set({
-            threshold: 0,
+        var pan = new Hammer.Pan({
+            direction: Hammer.DIRECTION_ALL,
+            threshold: 0
         });
+        pinch.recognizeWith(pan)
+        hammertime.add(pinch)
+        hammertime.add(pan)
 
+        // hammertime.get('pinch').set({
+        //     enable: true,
+        //     pointers: 0,
+        //     threshold: 0
+        // });
+        // // hammertime.get('pan').set({
+        // //     threshold: 0,
+        // // });
+        // hammertime.get('pan').set({
+        //     direction: Hammer.DIRECTION_ALL
+        // });
         var fixHammerjsDeltaIssue = undefined;
         var pinchStart = {
             x: undefined,
@@ -273,7 +287,7 @@
 
             //i added this update there was not any update here
 
-            //  update()
+            update()
         })
 
         function update() {
