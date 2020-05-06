@@ -263,9 +263,9 @@
         })
 
         function update() {
-            // if (current.z < 1) {
-            //     current.z = 1
-            // }
+            if (current.z < .7) {
+                current.z = .8
+            }
             current.height = originalSize.height * current.z;
             current.width = originalSize.width * current.z;
 
@@ -302,7 +302,7 @@
                     current.x = rightBoundFix
                 }
             } else {
-                //this needs to be fixed
+
                 const rightBoundFix = -(current.width - parentWidth - (current.width - originalSize.width) / 2) - (parentWidth - current.width) / 2
 
                 current.x = rightBoundFix
