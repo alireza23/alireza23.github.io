@@ -359,13 +359,14 @@
         })
 
         hammertime.on('pinch', function(e) {
-            var d = scaleFrom(pinchZoomOrigin, last.z, last.z * 1)
+            var d = scaleFrom(pinchZoomOrigin, last.z, last.z * e.scale)
             current.x = d.x + last.x + e.deltaX;
             current.y = d.y + last.y + e.deltaY;
             current.z = d.z + last.z;
             lastEvent = 'pinch';
             // console.log('pinch occured')
             console.log(d.z)
+            console.log(e.scale)
 
             update();
         })
