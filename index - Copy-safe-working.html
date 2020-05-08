@@ -14,40 +14,28 @@
             display: none;
         }
         
-        * {
+        body {
             margin: 0;
             padding: 0;
-            top: 0;
-            left: 0;
-        }
-        
-        body {
-            background-color: red;
+            text-align: center;
+            background-color: red
         }
         
         #dragWrapper {
+            width: 100%;
             box-sizing: border-box;
-            position: absolute;
+            height: 100vh;
+            /* height: calc(var(--vh, 1vh) * 100); */
             background-color: #91b376;
-            top: 0;
-            left: 0;
         }
         
         #drag {
-            display: none;
             touch-action: auto;
-            position: absolute;
-            transition-timing-function: ease-out;
             height: auto;
-            width: auto;
-            /* object-fit: contain; */
-        }
-        
-        #canvas {
-            background-color: rgba(25, 212, 125, 0);
+            width: 100%;
             position: absolute;
-            touch-action: none;
-            pointer-events: none;
+            left: 0;
+            transition-timing-function: ease-out
         }
         /* #toolbar {
             height: 56px;
@@ -60,177 +48,59 @@
     <!-- <div id="toolbar"></div> -->
     <div id="dragWrapper">
 
-        <img id="drag" src="./wide.jpg" alt="">
-
+        <img id="drag" src="./frog2.jpg" alt="">
 
     </div>
-    <div id="canvas"></div>
     <script type="text/javascript" src="./js/hammer.js"></script>
     <script type="text/javascript">
-        var element = document.getElementById('drag')
-        var parent = document.getElementById('dragWrapper')
-        var canvas = document.getElementById('canvas')
-        const shortAxis = getsSmallestAxis().short
-        const longAxis = getsSmallestAxis().long
-        let finalWidth;
-        let finalHeight;
-        let transformScale;
-        let leftTranslate;
-        let topTranslate;
-        //excute on resize code at first load
-        resizeEnd()
-        var doIt;
-        window.onresize = function() {
-            clearTimeout(doIt)
-            doIt = setTimeout(resizeEnd, 10)
-        }
-
-        function getsSmallestAxis() {
-            const innerWidth = window.innerWidth
-            const innerHeight = window.innerHeight
-            return innerWidth >= innerHeight ? {
-                short: innerHeight,
-                long: innerWidth
-            } : {
-                short: innerWidth,
-                long: innerHeight
-            }
-        }
-
-        function resizeEnd() {
-            let isHeightEqual;
-            //we reset width and transform here ate each resize (and at first load too!)
-            element.style.transform = `scale(${1}, ${1}) translate(${0}px, ${0}px)`
-            canvas.style.transform = `scale(${1}, ${1}) translate(${0}px, ${0}px)`
-            canvas.style.width = '0px'
-            canvas.style.height = '0px'
-                //check orientation
+        window.addEventListener("orientationchange", function() {
+            let orientationChangeWidth;
+            let orientationChangeHeight;
             if (screen.orientation.angle == 0) {
-                isHeightEqual = false
-                element.style.height = 'none'
-                parent.style.width = shortAxis + 'px'
-                parent.style.height = longAxis + 'px'
-                element.style.height = 'auto'
-                element.style.width = shortAxis + 'px'
-                element.style.height = shortAxis * element.naturalHeight / element.naturalWidth + 'px'
-                element.style.display = 'block'
-                let currentHeight = window.getComputedStyle(element).height.replace(/px/, '')
-                let currentWidth = element.style.width.replace(/px/, '')
-                let isImageTaller = compareHeight(currentHeight, longAxis)
-                if (isImageTaller) {
-                    let scaledF = currentHeight / longAxis
-                    element.style.width = currentWidth / scaledF + 'px'
-                    element.style.height = currentHeight / scaledF + 'px'
-                    isHeightEqual = true
-                }
-                currentWidth = element.style.width.replace(/px/, '')
-                currentHeight = element.style.height.replace(/px/, '')
-                finalWidth = currentWidth
-                finalHeight = currentHeight
-                transformScale = 1;
-                leftTranslate = 0;
-                topTranslate = 0;
-                if (currentWidth < shortAxis) {
-                    let finalWidthAndHeight = makeWidth100Percent(currentWidth, shortAxis, currentHeight)
-                    console.log(finalWidthAndHeight)
-                    finalWidth = finalWidthAndHeight.finalWidth
-                    finalHeight = finalWidthAndHeight.finalHeight
-                    transformScale = finalWidthAndHeight.scaledF2
-                    leftTranslate = finalWidthAndHeight.leftTranslate
-                    topTranslate = finalWidthAndHeight.topTranslate
-
-                }
-
-                if (finalHeight < longAxis) {
-                    topTranslate = topTranslate + (longAxis - finalHeight) / 2
-                    element.style.transform = `scale(${transformScale}, ${transformScale}) translate(${leftTranslate}px, ${topTranslate}px)`
-
-                }
-                canvas.style.width = element.style.width
-                canvas.style.height = element.style.height
-                canvas.style.transform = element.style.transform
-
+                //portrait
+                console.log('portrait')
+                orientationChangeWidth = window.innerHeight;
+                orientationChangeHeight = window.innerWidth
+                console.log({
+                    orientationChangeWidth,
+                    orientationChangeHeight
+                })
 
             } else {
-                isHeightEqual = false
-                element.style.height = 'none'
-                parent.style.width = longAxis + 'px'
-                parent.style.height = shortAxis + 'px'
-                element.style.height = 'auto'
-                element.style.width = longAxis + 'px'
-                element.style.height = longAxis * element.naturalHeight / element.naturalWidth + 'px'
-                element.style.display = 'block'
-                let currentHeight = window.getComputedStyle(element).height.replace(/px/, '')
-                let currentWidth = element.style.width.replace(/px/, '')
-                let isImageTaller = compareHeight(currentHeight, shortAxis)
-                if (isImageTaller) {
-                    let scaledF = currentHeight / shortAxis
-                    element.style.width = currentWidth / scaledF + 'px'
-                    element.style.height = currentHeight / scaledF + 'px'
-                    isHeightEqual = true
-                }
-                currentWidth = element.style.width.replace(/px/, '')
-                currentHeight = element.style.height.replace(/px/, '')
-                finalWidth = currentWidth
-                finalHeight = currentHeight
-                transformScale = 1;
-                leftTranslate = 0;
-                topTranslate = 0;
-                if (currentWidth.replace(/px/, '') < longAxis) {
-                    let finalWidthAndHeight = makeWidth100Percent(currentWidth, longAxis, currentHeight)
-                    console.log(finalWidthAndHeight)
-                    console.log(finalWidthAndHeight)
-                    finalWidth = finalWidthAndHeight.finalWidth
-                    finalHeight = finalWidthAndHeight.finalHeight
-                    transformScale = finalWidthAndHeight.scaledF2
-                    leftTranslate = finalWidthAndHeight.leftTranslate
-                    topTranslate = finalWidthAndHeight.topTranslate
-                }
-
-                if (finalHeight < shortAxis) {
-                    console.log(longAxis)
-                    topTranslate = topTranslate + (shortAxis - finalHeight) / 2
-                    element.style.transform = `scale(${transformScale}, ${transformScale}) translate(${leftTranslate}px, ${topTranslate}px)`
-
-                }
-                canvas.style.width = element.style.width
-                canvas.style.height = element.style.height
-                canvas.style.transform = element.style.transform
-
+                //landscape
+                console.log('landscape')
+                orientationChangeWidth = window.innerHeight;
+                orientationChangeHeight = window.innerWidth
+                console.log({
+                    orientationChangeWidth,
+                    orientationChangeHeight
+                })
             }
-            console.log({
-                finalWidth,
-                finalHeight
-            })
-        }
 
-        function compareHeight(imageCurrentHeight, screenCurrentHeight) {
-            if (imageCurrentHeight >= screenCurrentHeight) {
-                return true
-            } else {
-                return false
-            }
-        }
-
-        function makeWidth100Percent(imageCurrentWidth, screenCurrentWidth, imageCurrentHeight) {
-            let scaledF2 = 1 / (imageCurrentWidth / screenCurrentWidth)
-            let scaledWidth = imageCurrentWidth * scaledF2
-            let scaledHight = imageCurrentHeight * scaledF2
-            let leftTranslate = ((scaledWidth - imageCurrentWidth) / 2) / scaledF2
-            let topTranslate = ((scaledHight - imageCurrentHeight) / 2) / scaledF2
-
-            element.style.transform = `scale(${scaledF2}, ${scaledF2}) translate(${leftTranslate}px, ${topTranslate}px)`
-            return {
-                finalWidth: scaledWidth,
-                finalHeight: scaledHight,
-                scaledF2,
-                leftTranslate,
-                topTranslate
-            }
-        }
-    </script>
-    <script>
+        });
         let needsUpdate3 = true;
+
+        var element = document.getElementById('drag')
+        let imageNaturalWidth = element.naturalWidth;
+        let imageNaturalHeight = element.naturalHeight;
+        var parent = document.getElementById('dragWrapper')
+            // let windowInnerHeight = window.innerHeight - 56
+        parent.style.width = window.innerWidth + 'px'
+        parent.style.height = window.innerHeight + 'px'
+        if (imageNaturalWidth > imageNaturalHeight) {
+            //maybe imageWidth is bigger than image height but the calculated height is bigger than parent height
+            //we should set imageheight as 100% and put imge at center of parent horizontally
+            element.style.width = window.innerWidth + 'px'
+            scaledF = window.innerWidth / imageNaturalWidth
+            element.style.height = imageNaturalHeight * scaledF + 'px'
+
+        } else {
+            //same problem here to solve
+            element.style.height = window.innerHeight + 'px'
+            scaledF = window.innerHeight / imageNaturalHeight
+            element.style.width = imageNaturalWidth * scaledF + 'px'
+        }
+
         var hammertime = new Hammer.Manager(element, {});
         var pinch = new Hammer.Pinch({
             enable: true,
@@ -241,14 +111,28 @@
             direction: Hammer.DIRECTION_ALL,
             threshold: 0
         });
-
+        // var doubletap = new Hammer.Tap({
+        //     event: 'doubletap',
+        //     taps: 2
+        // })
         pinch.recognizeWith(pan)
         pan.recognizeWith(pinch)
 
         hammertime.add(pinch)
         hammertime.add(pan)
+            // hammertime.add(doubletap)
 
-
+        // hammertime.get('pinch').set({
+        //     enable: true,
+        //     pointers: 0,
+        //     threshold: 0
+        // });
+        // // hammertime.get('pan').set({
+        // //     threshold: 0,
+        // // });
+        // hammertime.get('pan').set({
+        //     direction: Hammer.DIRECTION_ALL
+        // });
         var fixHammerjsDeltaIssue = undefined;
         var pinchStart = {
             x: undefined,
@@ -341,8 +225,40 @@
                 y: dy
             }
         }
+
+        // hammertime.on('doubletap', function(e) {
+        //     var scaleFactor = 1.7;
+        //     if (current.zooming === false) {
+        //         current.zooming = true;
+        //     } else {
+        //         current.zooming = false;
+        //         scaleFactor = -scaleFactor;
+        //     }
+
+        //     element.style.transition = "0.3s";
+        //     setTimeout(function() {
+        //         element.style.transition = "none";
+        //     }, 300)
+
+        //     var zoomOrigin = getRelativePosition(element, {
+        //         x: e.center.x,
+        //         y: e.center.y
+        //     }, originalSize, current.z);
+        //     var d = scaleFrom(zoomOrigin, current.z, current.z + scaleFactor)
+        //     current.x += d.x;
+        //     current.y += d.y;
+        //     current.z += d.z;
+
+        //     last.x = current.x;
+        //     last.y = current.y;
+        //     last.z = current.z;
+        //     needsUpdate3 = true
+        //     console.log('doubleTap occured')
+        //     update();
+        // })
+
         hammertime.on('pan', function(e) {
-            console.log('pan occurd')
+
             let fingerCount = e.maxPointers
             if (fingerCount > 0) {
                 if (lastEvent !== 'pan') {
@@ -498,5 +414,6 @@
             needsUpdate3 = false
         }
     </script>
+</body>
 
 </html>

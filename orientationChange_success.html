@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HammerJS Pinch Zoom and Drag</title>
+    <style type="text/css">
+        #dragWrapper::-webkit-scrollbar {
+            display: none;
+        }
+        
+        *::-webkit-scrollbar {
+            display: none;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            top: 0;
+            left: 0;
+        }
+        
+        body {
+            background-color: red;
+        }
+        
+        #dragWrapper {
+            box-sizing: border-box;
+            position: absolute;
+            background-color: #91b376;
+            top: 0;
+            left: 0;
+        }
+        
+        #drag {
+            display: none;
+            touch-action: auto;
+            position: absolute;
+            transition-timing-function: ease-out;
+            height: auto;
+            width: auto;
+            /* object-fit: contain; */
+        }
+        
+        #canvas {
+            background-color: rgba(25, 212, 125, 0.603);
+            position: absolute;
+        }
+        /* #toolbar {
+            height: 56px;
+            width: 100%;
+        } */
+    </style>
+</head>
+
+<body id="body">
+    <!-- <div id="toolbar"></div> -->
+    <div id="dragWrapper">
+
+        <img id="drag" src="./wide.jpg" alt="">
+
+
+    </div>
+    <div id="canvas"></div>
+    <script type="text/javascript" src="./js/hammer.js"></script>
+    <script type="text/javascript">
+        var body = document.getElementById('body')
+        var element = document.getElementById('drag')
+        var parent = document.getElementById('dragWrapper')
+        var canvas = document.getElementById('canvas')
+        const shortAxis = getsSmallestAxis().short
+        const longAxis = getsSmallestAxis().long
+            // console.log(shortAxis)
+
+
+        resizeEnd()
+
+        function getsSmallestAxis() {
+            const innerWidth = window.innerWidth
+            const innerHeight = window.innerHeight
+            return innerWidth >= innerHeight ? {
+                short: innerHeight,
+                long: innerWidth
+            } : {
+                short: innerWidth,
+                long: innerHeight
+            }
+        }
+
+        var doIt;
+        window.onresize = function() {
+            clearTimeout(doIt)
+            doIt = setTimeout(resizeEnd, 10)
+        }
+
+        function resizeEnd() {
+            let isHeightEqual;
+            element.style.transform = `scale(${1}, ${1}) translate(${0}px, ${0}px)`
+            canvas.style.transform = `scale(${1}, ${1}) translate(${0}px, ${0}px)`
+            canvas.style.width = '0px'
+            canvas.style.height = '0px'
+            if (screen.orientation.angle == 0) {
+                isHeightEqual = false
+                element.style.height = 'none'
+                parent.style.width = shortAxis + 'px'
+                parent.style.height = longAxis + 'px'
+                element.style.height = 'auto'
+                element.style.width = shortAxis + 'px'
+                element.style.height = shortAxis * element.naturalHeight / element.naturalWidth + 'px'
+                element.style.display = 'block'
+                let currentHeight = window.getComputedStyle(element).height.replace(/px/, '')
+                let currentWidth = element.style.width.replace(/px/, '')
+                let isImageTaller = compareHeight(currentHeight, longAxis)
+                if (isImageTaller) {
+                    let scaledF = currentHeight / longAxis
+                    element.style.width = currentWidth / scaledF + 'px'
+                    element.style.height = currentHeight / scaledF + 'px'
+                    isHeightEqual = true
+                }
+                currentWidth = element.style.width.replace(/px/, '')
+                currentHeight = element.style.height.replace(/px/, '')
+                let finalWidth = currentWidth
+                let finalHeight = currentHeight
+                let transformScale = 1;
+                let leftTranslate = 0;
+                let topTranslate = 0;
+                if (currentWidth < shortAxis) {
+                    let finalWidthAndHeight = makeWidth100Percent(currentWidth, shortAxis, currentHeight)
+                    console.log(finalWidthAndHeight)
+                    finalWidth = finalWidthAndHeight.finalWidth
+                    finalHeight = finalWidthAndHeight.finalHeight
+                    transformScale = finalWidthAndHeight.scaledF2
+                    leftTranslate = finalWidthAndHeight.leftTranslate
+                    topTranslate = finalWidthAndHeight.topTranslate
+
+                }
+
+                if (finalHeight < longAxis) {
+                    topTranslate = topTranslate + (longAxis - finalHeight) / 2
+                    element.style.transform = `scale(${transformScale}, ${transformScale}) translate(${leftTranslate}px, ${topTranslate}px)`
+
+                }
+                canvas.style.width = element.style.width
+                canvas.style.height = element.style.height
+                canvas.style.transform = element.style.transform
+
+
+            } else {
+                isHeightEqual = false
+                element.style.height = 'none'
+                parent.style.width = longAxis + 'px'
+                parent.style.height = shortAxis + 'px'
+                element.style.height = 'auto'
+                element.style.width = longAxis + 'px'
+                element.style.height = longAxis * element.naturalHeight / element.naturalWidth + 'px'
+                element.style.display = 'block'
+                let currentHeight = window.getComputedStyle(element).height.replace(/px/, '')
+                let currentWidth = element.style.width.replace(/px/, '')
+                let isImageTaller = compareHeight(currentHeight, shortAxis)
+
+
+                if (isImageTaller) {
+                    let scaledF = currentHeight / shortAxis
+                    element.style.width = currentWidth / scaledF + 'px'
+                    element.style.height = currentHeight / scaledF + 'px'
+                    isHeightEqual = true
+                }
+                currentWidth = element.style.width.replace(/px/, '')
+                currentHeight = element.style.height.replace(/px/, '')
+                let finalWidth = currentWidth
+                let finalHeight = currentHeight
+                let transformScale = 1;
+                let leftTranslate = 0;
+                let topTranslate = 0;
+                if (currentWidth.replace(/px/, '') < longAxis) {
+                    let finalWidthAndHeight = makeWidth100Percent(currentWidth, longAxis, currentHeight)
+                    console.log(finalWidthAndHeight)
+                    console.log(finalWidthAndHeight)
+                    finalWidth = finalWidthAndHeight.finalWidth
+                    finalHeight = finalWidthAndHeight.finalHeight
+                    transformScale = finalWidthAndHeight.scaledF2
+                    leftTranslate = finalWidthAndHeight.leftTranslate
+                    topTranslate = finalWidthAndHeight.topTranslate
+                }
+
+                if (finalHeight < shortAxis) {
+                    console.log(longAxis)
+                    topTranslate = topTranslate + (shortAxis - finalHeight) / 2
+                    element.style.transform = `scale(${transformScale}, ${transformScale}) translate(${leftTranslate}px, ${topTranslate}px)`
+
+                }
+                canvas.style.width = element.style.width
+                canvas.style.height = element.style.height
+                canvas.style.transform = element.style.transform
+                    // canvas.style.width = finalWidth + 'px'
+                    // canvas.style.height = finalHeight + 'px'
+                    // canvas.style.transform = `scale(${transformScale}, ${transformScale}) translate(${leftTranslate}px, ${topTranslate}px)`
+
+            }
+
+
+
+        }
+
+        function compareHeight(imageCurrentHeight, screenCurrentHeight) {
+            if (imageCurrentHeight >= screenCurrentHeight) {
+                return true
+            } else {
+                return false
+            }
+
+        }
+        // let scaledF2;
+        // let scaledWidth;
+        // let scaledHight;
+        // let leftTranslate;
+        // let topTranslate;
+
+        function makeWidth100Percent(imageCurrentWidth, screenCurrentWidth, imageCurrentHeight) {
+            let scaledF2 = 1 / (imageCurrentWidth / screenCurrentWidth)
+            let scaledWidth = imageCurrentWidth * scaledF2
+            let scaledHight = imageCurrentHeight * scaledF2
+            let leftTranslate = ((scaledWidth - imageCurrentWidth) / 2) / scaledF2
+            let topTranslate = ((scaledHight - imageCurrentHeight) / 2) / scaledF2
+
+            element.style.transform = `scale(${scaledF2}, ${scaledF2}) translate(${leftTranslate}px, ${topTranslate}px)`
+            return {
+                finalWidth: scaledWidth,
+                finalHeight: scaledHight,
+                scaledF2,
+                leftTranslate,
+                topTranslate
+            }
+        }
+    </script>
+
+</html>
