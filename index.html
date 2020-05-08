@@ -54,7 +54,7 @@
     </div>
     <script type="text/javascript" src="./js/hammer.js"></script>
     <script type="text/javascript">
-        var element = document.getElementById('drag')
+        let element = document.getElementById('drag')
         let imageNaturalWidth = element.naturalWidth;
         let imageNaturalHeight = element.naturalHeight;
         let parent = document.getElementById('dragWrapper')
@@ -65,10 +65,10 @@
 
         let fixHammerjsDeltaIssue;
         let pinchStart = {
-                x: undefined,
-                y: undefined
-            }
-            // let lastEvent;
+            x: undefined,
+            y: undefined
+        }
+        let lastEvent;
         let originalSize = {
             width: element.offsetWidth,
             height: element.offsetHeight
