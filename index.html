@@ -231,7 +231,7 @@
             hammertime.on('pan', function(e) {
 
                 let fingerCount = e.maxPointers
-                if (fingerCount > 0) {
+                if (fingerCount > 1) {
                     if (lastEvent !== 'pan') {
                         fixHammerjsDeltaIssue = {
                             x: e.deltaX,
@@ -275,7 +275,7 @@
 
             hammertime.on('panend', function(e) {
                 let fingerCount = e.maxPointers
-                if (fingerCount > 0) {
+                if (fingerCount > 1) {
                     last.x = current.x;
                     last.y = current.y;
                     lastEvent = 'panend';
