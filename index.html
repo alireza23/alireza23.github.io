@@ -174,17 +174,30 @@
             }
 
             current = {
-                x: 0,
-                y: 0,
-                z: 1,
-                zooming: false,
-                width: originalSize.width * 1,
-                height: originalSize.height * 1,
-            }
+                    x: 0,
+                    y: 0,
+                    z: 1,
+                    zooming: false,
+                    width: originalSize.width * 1,
+                    height: originalSize.height * 1,
+                }
+                // console.log({
+                //     current,
+                //     parentW: parent.style.width,
+                //     parentH: parent.style.height
+                // })
             console.log({
-                current,
-                parentW: parent.style.width,
-                parentH: parent.style.height
+                currentX: current.x,
+                currentY: current.y,
+                currentZ: current.z,
+                elementW: element.offsetWidth,
+                elementH: element.offsetHeight,
+                elementCurrentW: current.width,
+                elementCurrentH: current.height,
+                parentW: parent.offsetWidth,
+                parentH: parent.offsetHeight,
+                windowW: window.innerWidth,
+                windowH: window.innerHeight
             })
             last = {
                 x: current.x,
@@ -464,7 +477,15 @@
             console.log({
                 currentX: current.x,
                 currentY: current.y,
-                currentZ: current.z
+                currentZ: current.z,
+                elementW: element.offsetWidth,
+                elementH: element.offsetHeight,
+                elementCurrentW: current.width,
+                elementCurrentH: current.height,
+                parentW: parent.offsetWidth,
+                parentH: parent.offsetHeight,
+                windowW: window.innerWidth,
+                windowH: window.innerHeight
             })
             if (needsUpdate3) {
                 sUpdate3()
@@ -525,7 +546,19 @@
 
             element.style.transform = "translate3d(" + current.x + "px, " + current.y + "px, 0) scale(" + current.z + ")";
             console.log('sUpdate3 occured')
-
+            console.log({
+                currentX: current.x,
+                currentY: current.y,
+                currentZ: current.z,
+                elementW: element.offsetWidth,
+                elementH: element.offsetHeight,
+                elementCurrentW: current.width,
+                elementCurrentH: current.height,
+                parentW: parent.offsetWidth,
+                parentH: parent.offsetHeight,
+                windowW: window.innerWidth,
+                windowH: window.innerHeight
+            })
 
 
             last.x = current.x;
