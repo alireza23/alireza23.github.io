@@ -215,17 +215,24 @@
                 console.log('data restored')
                 console.log()
                     //translate3d(0px, 0px, 0px) scale(1)
-                last.x = parseFloat(portraitTransformData.replace('translate3d(', '').replace(/px(.*?)$/, ''))
-                last.y = parseFloat(portraitTransformData.replace(/^(.*?)px, /, '').replace(/px(.*?)$/, ''))
-                last.z = parseFloat(portraitTransformData.replace(/^(.*?)scale\(/, '').replace(/\)$/, ''))
+                current.x = parseFloat(portraitTransformData.replace('translate3d(', '').replace(/px(.*?)$/, ''))
+                current.y = parseFloat(portraitTransformData.replace(/^(.*?)px, /, '').replace(/px(.*?)$/, ''))
+                current.z = parseFloat(portraitTransformData.replace(/^(.*?)scale\(/, '').replace(/\)$/, ''))
+                last.x = current.x
+                last.y = current.y
+                last.z = current.z
+
                 console.log(last)
 
             } else if (screen.orientation.angle == 90 && landscapeTransformData !== undefined) {
                 element.style.transform = landscapeTransformData
                 console.log('data restored')
-                last.x = parseFloat(portraitTransformData.replace('translate3d(', '').replace(/px(.*?)$/, ''))
-                last.y = parseFloat(portraitTransformData.replace(/^(.*?)px, /, '').replace(/px(.*?)$/, ''))
-                last.z = parseFloat(portraitTransformData.replace(/^(.*?)scale\(/, '').replace(/\)$/, ''))
+                current.x = parseFloat(portraitTransformData.replace('translate3d(', '').replace(/px(.*?)$/, ''))
+                current.y = parseFloat(portraitTransformData.replace(/^(.*?)px, /, '').replace(/px(.*?)$/, ''))
+                current.z = parseFloat(portraitTransformData.replace(/^(.*?)scale\(/, '').replace(/\)$/, ''))
+                last.x = current.x
+                last.y = current.y
+                last.z = current.z
                 console.log(last)
 
             } else {
