@@ -54,9 +54,9 @@
     </div>
     <script type="text/javascript" src="./js/hammer.js"></script>
     <script type="text/javascript">
-        const shortAxis = gettAxis().short
-        const longAxis = gettAxis().long
-
+        // const shortAxis = gettAxis().short
+        // const longAxis = gettAxis().long
+        let zoomlock = true
         var doIt;
         window.onresize = function() {
             clearTimeout(doIt)
@@ -360,10 +360,10 @@
 
         hammertime.on('pinch', function(e) {
             let customScale;
-            if (e.scale <= .85 || e.scale >= 1.15) {
-                customScale = e.scale
-            } else {
+            if (zoomlock) {
                 customScale = 1
+            } else {
+                customScale = e.scale
             }
             var d = scaleFrom(pinchZoomOrigin, last.z, last.z * customScale)
             current.x = d.x + last.x + e.deltaX;
