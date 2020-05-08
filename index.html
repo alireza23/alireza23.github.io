@@ -209,6 +209,7 @@
                 y: current.y,
                 z: current.z
             }
+            console.log(last)
             if (screen.orientation.angle == 0 && portraitTransformData !== undefined) {
                 element.style.transform = portraitTransformData
                 console.log('data restored')
@@ -217,12 +218,15 @@
                 last.x = portraitTransformData.replace('translate3d(', '').replace(/px(.*?)$/, '')
                 last.y = portraitTransformData.replace(/^(.*?)px, /, '').replace(/px(.*?)$/, '');
                 last.z = portraitTransformData.replace(/^(.*?)scale\(/, '').replace(/\)$/, '')
+                console.log(last)
+
             } else if (screen.orientation.angle == 90 && landscapeTransformData !== undefined) {
                 element.style.transform = landscapeTransformData
                 console.log('data restored')
                 last.x = portraitTransformData.replace('translate3d(', '').replace(/px(.*?)$/, '')
                 last.y = portraitTransformData.replace(/^(.*?)px, /, '').replace(/px(.*?)$/, '');
                 last.z = portraitTransformData.replace(/^(.*?)scale\(/, '').replace(/\)$/, '')
+                console.log(last)
 
             } else {
                 sUpdate()
