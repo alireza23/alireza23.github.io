@@ -209,10 +209,10 @@
                 y: current.y,
                 z: current.z
             }
-            if (screen.orientation.angle == 0 && !portraitTransformData) {
+            if (screen.orientation.angle == 0 && portraitTransformData !== undefined) {
                 element.style.transform = portraitTransformData
                 console.log('data restored')
-            } else if (screen.orientation.angle == 90 && !landscapeTransformData) {
+            } else if (screen.orientation.angle == 90 && landscapeTransformData !== undefined) {
                 element.style.transform = landscapeTransformData
                 console.log('data restored')
 
@@ -321,7 +321,7 @@
         hammertime.on('pan', function(e) {
 
             let fingerCount = e.maxPointers
-            if (fingerCount > 1) {
+            if (fingerCount > 0) {
                 if (lastEvent !== 'pan') {
                     fixHammerjsDeltaIssue = {
                         x: e.deltaX,
@@ -365,7 +365,7 @@
 
         hammertime.on('panend', function(e) {
             let fingerCount = e.maxPointers
-            if (fingerCount > 1) {
+            if (fingerCount > 0) {
                 last.x = current.x;
                 last.y = current.y;
                 lastEvent = 'panend';
