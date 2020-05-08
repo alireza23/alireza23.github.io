@@ -30,6 +30,7 @@
         }
         
         #drag {
+            display: none;
             touch-action: auto;
             height: auto;
             width: 100%;
@@ -141,17 +142,19 @@
         resizeEnd()
 
         function resizeEnd() {
+            element.style.display = 'none'
             needsUpdate3 = true;
             pinchZoomOrigin = undefined;
 
             parent.style.width = '100%'
             parent.style.height = '100vh'
+            parent.style.width = window.innerWidth + 'px'
+            parent.style.height = window.innerHeight + 'px'
             element.style.width = '100%'
             element.style.height = 'auto'
             element.style.left = '0'
             element.style.transform = "none";
-            parent.style.width = window.innerWidth + 'px'
-            parent.style.height = window.innerHeight + 'px'
+            element.style.display = 'block'
                 // if (screen.orientation.angle == 0) {
                 //     parent.style.width = shortAxis + 'px'
                 //     parent.style.height = longAxis + 'px'
