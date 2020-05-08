@@ -57,25 +57,24 @@
         var element = document.getElementById('drag')
         let imageNaturalWidth = element.naturalWidth;
         let imageNaturalHeight = element.naturalHeight;
-        var parent = document.getElementById('dragWrapper')
+        let parent = document.getElementById('dragWrapper')
         const shortAxis = gettAxis().short
         const longAxis = gettAxis().long
-        var element = document.getElementById('drag')
-        const width = element.offsetWidth
+        let width = element.offsetWidth
         const height = element.offsetHeight
 
-        var fixHammerjsDeltaIssue = undefined;
-        var pinchStart = {
+        let fixHammerjsDeltaIssue = undefined;
+        let pinchStart = {
             x: undefined,
             y: undefined
         }
-        var lastEvent = undefined;
-        var originalSize = {
+        let lastEvent = undefined;
+        let originalSize = {
             width: element.offsetWidth,
             height: element.offsetHeight
         }
 
-        var current = {
+        let current = {
             x: 0,
             y: 0,
             z: 1,
@@ -84,7 +83,7 @@
             height: originalSize.height * 1,
         }
 
-        var last = {
+        let last = {
             x: current.x,
             y: current.y,
             z: current.z
@@ -178,7 +177,7 @@
                 height: originalSize.height * 1,
             }
 
-            var last = {
+            last = {
                 x: current.x,
                 y: current.y,
                 z: current.z
