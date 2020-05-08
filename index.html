@@ -142,21 +142,23 @@
 
         function resizeEnd() {
             needsUpdate3 = true;
+            pinchZoomOrigin = undefined;
+
             parent.style.width = '100%'
             parent.style.height = '100vh'
             element.style.width = '100%'
             element.style.height = 'auto'
             element.style.left = '0'
             element.style.transform = "none";
-            parent.style.width = window.innerWidth + 'px'
-            parent.style.height = window.innerHeight + 'px'
-                // if (screen.orientation.angle == 0) {
-                //     parent.style.width = shortAxis + 'px'
-                //     parent.style.height = longAxis + 'px'
-                // } else {
-                //     parent.style.width = longAxis + 'px'
-                //     parent.style.height = shortAxis + 'px'
-                // }
+            // parent.style.width = window.innerWidth + 'px'
+            // parent.style.height = window.innerHeight + 'px'
+            if (screen.orientation.angle == 0) {
+                parent.style.width = shortAxis + 'px'
+                parent.style.height = longAxis + 'px'
+            } else {
+                parent.style.width = longAxis + 'px'
+                parent.style.height = shortAxis + 'px'
+            }
 
 
             fixHammerjsDeltaIssue = undefined;
