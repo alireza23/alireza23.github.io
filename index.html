@@ -359,7 +359,13 @@
         })
 
         hammertime.on('pinch', function(e) {
-            var d = scaleFrom(pinchZoomOrigin, last.z, last.z * e.scale)
+            let customScale;
+            if (.95 <= e.scale <= 1.05) {
+                customScale = e.scale
+            } else {
+                e.scale = 1
+            }
+            var d = scaleFrom(pinchZoomOrigin, last.z, last.z * customScale)
             current.x = d.x + last.x + e.deltaX;
             current.y = d.y + last.y + e.deltaY;
             current.z = d.z + last.z;
