@@ -211,8 +211,10 @@
             }
             if (screen.orientation.angle == 0 && !portraitTransformData) {
                 element.style.transform = portraitTransformData
+                console.log('data restored')
             } else if (screen.orientation.angle == 90 && !landscapeTransformData) {
                 element.style.transform = landscapeTransformData
+                console.log('data restored')
 
             } else {
                 sUpdate()
@@ -402,9 +404,12 @@
             // console.log('update1 occured')
             if (screen.orientation.angle == 0) {
                 portraitTransformData = element.style.transform
+                console.log('data saved')
             } else {
                 landscapeTransformData = element.style.transform
+                console.log('data saved')
             }
+
             if (needsUpdate3) {
                 update3()
             }
@@ -478,8 +483,10 @@
             needsUpdate3 = false
             if (screen.orientation.angle == 0) {
                 portraitTransformData = element.style.transform
+                console.log('data saved')
             } else {
                 landscapeTransformData = element.style.transform
+                console.log('data saved')
             }
         }
 
