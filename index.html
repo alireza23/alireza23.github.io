@@ -304,7 +304,7 @@
                 current.x = last.x + e.deltaX - fixHammerjsDeltaIssue.x;
                 current.y = last.y + e.deltaY - fixHammerjsDeltaIssue.y;
                 lastEvent = 'pan';
-                console.log('pan occured')
+                //    console.log('pan occured')
 
                 update();
             }
@@ -317,7 +317,7 @@
             current.y = d.y + last.y + e.deltaY;
             current.z = d.z + last.z;
             lastEvent = 'pinch';
-            console.log('pinch occured')
+            // console.log('pinch occured')
 
             update();
         })
@@ -331,7 +331,7 @@
                 y: pinchStart.y
             }, originalSize, current.z);
             lastEvent = 'pinchstart';
-            console.log('pinchstart occured')
+            // console.log('pinchstart occured')
 
         })
 
@@ -342,7 +342,7 @@
                 last.y = current.y;
                 lastEvent = 'panend';
                 needsUpdate3 = true;
-                console.log('panend occured')
+                // console.log('panend occured')
 
                 update()
             }
@@ -354,7 +354,7 @@
             last.z = current.z;
             lastEvent = 'pinchend';
             needsUpdate3 = true
-            console.log('pinchend occured')
+                //  console.log('pinchend occured')
 
             //i added this update there was not any update here
 
@@ -373,7 +373,7 @@
 
             element.style.transform = "translate3d(" + current.x + "px, " + current.y + "px, 0) scale(" + current.z + ")";
             //  console.log(current.y)
-            console.log('update1 occured')
+            // console.log('update1 occured')
 
             if (needsUpdate3) {
                 update3()
@@ -438,7 +438,7 @@
             element.style.transition = "0.7s";
 
             element.style.transform = "translate3d(" + current.x + "px, " + current.y + "px, 0) scale(" + current.z + ")";
-            console.log('update3 occured')
+            //   console.log('update3 occured')
 
 
 
@@ -460,7 +460,7 @@
 
             element.style.transform = "translate3d(" + current.x + "px, " + current.y + "px, 0) scale(" + current.z + ")";
             //  console.log(current.y)
-            console.log('update1 occured')
+            console.log('sUpdate1 occured')
             console.log({
                 currentX: current.x,
                 currentY: current.y,
@@ -524,7 +524,7 @@
             element.style.transition = "0.7s";
 
             element.style.transform = "translate3d(" + current.x + "px, " + current.y + "px, 0) scale(" + current.z + ")";
-            console.log('update3 occured')
+            console.log('sUpdate3 occured')
 
 
 
