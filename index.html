@@ -363,7 +363,7 @@
             if (.95 <= e.scale <= 1.05) {
                 customScale = e.scale
             } else {
-                e.scale = 1
+                customScale = 1
             }
             var d = scaleFrom(pinchZoomOrigin, last.z, last.z * customScale)
             current.x = d.x + last.x + e.deltaX;
@@ -373,6 +373,7 @@
             // console.log('pinch occured')
             console.log(d.z)
             console.log(e.scale)
+            console.log(customScale)
 
             update();
         })
