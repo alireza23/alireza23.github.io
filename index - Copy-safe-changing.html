@@ -48,11 +48,36 @@
     <!-- <div id="toolbar"></div> -->
     <div id="dragWrapper">
 
-        <img id="drag" src="./superCompact.jpg" alt="">
+        <img id="drag" src="./frog2.jpg" alt="">
 
     </div>
     <script type="text/javascript" src="./js/hammer.js"></script>
     <script type="text/javascript">
+        window.addEventListener("orientationchange", function() {
+            let orientationChangeWidth;
+            let orientationChangeHeight;
+            if (screen.orientation.angle == 0) {
+                //portrait
+                console.log('portrait')
+                orientationChangeWidth = window.innerHeight;
+                orientationChangeHeight = window.innerWidth
+                console.log({
+                    orientationChangeWidth,
+                    orientationChangeHeight
+                })
+
+            } else {
+                //landscape
+                console.log('landscape')
+                orientationChangeWidth = window.innerHeight;
+                orientationChangeHeight = window.innerWidth
+                console.log({
+                    orientationChangeWidth,
+                    orientationChangeHeight
+                })
+            }
+
+        });
         let needsUpdate3 = true;
 
         var element = document.getElementById('drag')
@@ -62,7 +87,19 @@
             // let windowInnerHeight = window.innerHeight - 56
         parent.style.width = window.innerWidth + 'px'
         parent.style.height = window.innerHeight + 'px'
+        if (imageNaturalWidth > imageNaturalHeight) {
+            //maybe imageWidth is bigger than image height but the calculated height is bigger than parent height
+            //we should set imageheight as 100% and put imge at center of parent horizontally
+            element.style.width = window.innerWidth + 'px'
+            scaledF = window.innerWidth / imageNaturalWidth
+            element.style.height = imageNaturalHeight * scaledF + 'px'
 
+        } else {
+            //same problem here to solve
+            element.style.height = window.innerHeight + 'px'
+            scaledF = window.innerHeight / imageNaturalHeight
+            element.style.width = imageNaturalWidth * scaledF + 'px'
+        }
 
         var hammertime = new Hammer.Manager(element, {});
         var pinch = new Hammer.Pinch({
