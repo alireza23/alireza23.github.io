@@ -63,38 +63,7 @@
         var element = document.getElementById('drag')
         const width = element.offsetWidth
         const height = element.offsetHeight
-        var hammertime = new Hammer.Manager(element, {});
-        var pinch = new Hammer.Pinch({
-            enable: true,
-            pointers: 0,
-            threshold: 0
-        });
-        var pan = new Hammer.Pan({
-            direction: Hammer.DIRECTION_ALL,
-            threshold: 0
-        });
-        // var doubletap = new Hammer.Tap({
-        //     event: 'doubletap',
-        //     taps: 2
-        // })
-        pinch.recognizeWith(pan)
-        pan.recognizeWith(pinch)
 
-        hammertime.add(pinch)
-        hammertime.add(pan)
-            // hammertime.add(doubletap)
-
-        // hammertime.get('pinch').set({
-        //     enable: true,
-        //     pointers: 0,
-        //     threshold: 0
-        // });
-        // // hammertime.get('pan').set({
-        // //     threshold: 0,
-        // // });
-        // hammertime.get('pan').set({
-        //     direction: Hammer.DIRECTION_ALL
-        // });
         var fixHammerjsDeltaIssue = undefined;
         var pinchStart = {
             x: undefined,
@@ -153,7 +122,38 @@
                 parent.style.width = longAxis + 'px'
                 parent.style.height = shortAxis + 'px'
             }
+            var hammertime = new Hammer.Manager(element, {});
+            var pinch = new Hammer.Pinch({
+                enable: true,
+                pointers: 0,
+                threshold: 0
+            });
+            var pan = new Hammer.Pan({
+                direction: Hammer.DIRECTION_ALL,
+                threshold: 0
+            });
+            // var doubletap = new Hammer.Tap({
+            //     event: 'doubletap',
+            //     taps: 2
+            // })
+            pinch.recognizeWith(pan)
+            pan.recognizeWith(pinch)
 
+            hammertime.add(pinch)
+            hammertime.add(pan)
+                // hammertime.add(doubletap)
+
+            // hammertime.get('pinch').set({
+            //     enable: true,
+            //     pointers: 0,
+            //     threshold: 0
+            // });
+            // // hammertime.get('pan').set({
+            // //     threshold: 0,
+            // // });
+            // hammertime.get('pan').set({
+            //     direction: Hammer.DIRECTION_ALL
+            // });
 
 
 
