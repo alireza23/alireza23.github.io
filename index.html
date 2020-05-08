@@ -59,7 +59,7 @@
         var doIt;
         window.onresize = function() {
             clearTimeout(doIt)
-            doIt = setTimeout(resizeEnd, 100)
+            doIt = setTimeout(resizeEnd, 200)
         }
 
         function gettAxis() {
@@ -150,15 +150,15 @@
             element.style.height = 'auto'
             element.style.left = '0'
             element.style.transform = "none";
-            // parent.style.width = window.innerWidth + 'px'
-            // parent.style.height = window.innerHeight + 'px'
-            if (screen.orientation.angle == 0) {
-                parent.style.width = shortAxis + 'px'
-                parent.style.height = longAxis + 'px'
-            } else {
-                parent.style.width = longAxis + 'px'
-                parent.style.height = shortAxis + 'px'
-            }
+            parent.style.width = window.innerWidth + 'px'
+            parent.style.height = window.innerHeight + 'px'
+                // if (screen.orientation.angle == 0) {
+                //     parent.style.width = shortAxis + 'px'
+                //     parent.style.height = longAxis + 'px'
+                // } else {
+                //     parent.style.width = longAxis + 'px'
+                //     parent.style.height = shortAxis + 'px'
+                // }
 
 
             fixHammerjsDeltaIssue = undefined;
