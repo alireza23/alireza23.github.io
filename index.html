@@ -49,7 +49,7 @@
     <!-- <div id="toolbar"></div> -->
     <div id="dragWrapper">
 
-        <img id="drag" src="./frog2.jpg" alt="">
+        <img id="drag" src="./compact.jpg" alt="">
 
     </div>
     <script type="text/javascript" src="./js/hammer.js"></script>
@@ -60,7 +60,7 @@
         var doIt;
         window.onresize = function() {
             clearTimeout(doIt)
-            doIt = setTimeout(resizeEnd, 200)
+            doIt = setTimeout(resizeEnd, 10)
         }
 
         function gettAxis() {
