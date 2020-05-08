@@ -57,6 +57,7 @@
         // const shortAxis = gettAxis().short
         // const longAxis = gettAxis().long
         let zoomlock = true
+        let editLock = true
         var doIt;
         window.onresize = function() {
             clearTimeout(doIt)
@@ -340,7 +341,13 @@
         hammertime.on('pan', function(e) {
 
             let fingerCount = e.maxPointers
-            if (fingerCount > 1) {
+            let customFingers;
+            if (editLock) {
+                customFingers = 0
+            } else {
+                customFingers = 1
+            }
+            if (fingerCount > customFingers) {
                 if (lastEvent !== 'pan') {
                     fixHammerjsDeltaIssue = {
                         x: e.deltaX,
@@ -393,7 +400,13 @@
 
         hammertime.on('panend', function(e) {
             let fingerCount = e.maxPointers
-            if (fingerCount > 1) {
+            let customFingers;
+            if (editLock) {
+                customFingers = 0
+            } else {
+                customFingers = 1
+            }
+            if (fingerCount > customFingers) {
                 last.x = current.x;
                 last.y = current.y;
                 lastEvent = 'panend';
