@@ -368,9 +368,6 @@
             element.style.transition = "none";
 
             element.style.transform = "translate3d(" + current.x + "px, " + current.y + "px, 0) scale(" + current.z + ")";
-            last.x = current.x;
-            last.y = current.y;
-            last.z = current.z;
             //  console.log(current.y)
             console.log('update1 occured')
             console.log({
@@ -443,11 +440,7 @@
             element.style.transform = "translate3d(" + current.x + "px, " + current.y + "px, 0) scale(" + current.z + ")";
             console.log('update3 occured')
 
-            console.log({
-                currentX: current.x,
-                currentY: current.y,
-                currentZ: current.z
-            })
+
 
             last.x = current.x;
             last.y = current.y;
