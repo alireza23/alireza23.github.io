@@ -181,7 +181,11 @@
                 width: originalSize.width * 1,
                 height: originalSize.height * 1,
             }
-            console.log(current)
+            console.log({
+                current,
+                parentW: parent.style.width,
+                parentH: parent.scale.height
+            })
             last = {
                 x: current.x,
                 y: current.y,
