@@ -35,7 +35,8 @@
             width: 100%;
             position: absolute;
             left: 0;
-            transition-timing-function: ease-out
+            transition-timing-function: ease-out;
+            /* visibility: hidden; */
         }
         /* #toolbar {
             height: 56px;
@@ -53,11 +54,25 @@
     </div>
     <script type="text/javascript" src="./js/hammer.js"></script>
     <script type="text/javascript">
+        const shortAxis = gettAxis().short
+        const longAxis = gettAxis().long
+
+        function gettAxis() {
+            const innerWidth = window.innerWidth
+            const innerHeight = window.innerHeight
+            return innerWidth >= innerHeight ? {
+                short: innerHeight,
+                long: innerWidth
+            } : {
+                short: innerWidth,
+                long: innerHeight
+            }
+        }
         resizeEnd()
         var doIt;
         window.onresize = function() {
             clearTimeout(doIt)
-            doIt = setTimeout(resizeEnd, 10)
+            doIt = setTimeout(resizeEnd, 5)
         }
 
         function resizeEnd() {
@@ -68,8 +83,14 @@
             let imageNaturalHeight = element.naturalHeight;
             var parent = document.getElementById('dragWrapper')
                 // let windowInnerHeight = window.innerHeight - 56
-            parent.style.width = window.innerWidth + 'px'
-            parent.style.height = window.innerHeight + 'px'
+            if (screen.orientation.angle == 0) {
+                parent.style.width = shortAxis + 'px'
+                parent.style.height = longAxis + 'px'
+            } else {
+                parent.style.width = longAxis + 'px'
+                parent.style.height = shortAxis + 'px'
+            }
+
 
 
             var hammertime = new Hammer.Manager(element, {});

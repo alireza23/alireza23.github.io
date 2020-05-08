@@ -70,8 +70,8 @@
         var element = document.getElementById('drag')
         var parent = document.getElementById('dragWrapper')
         var canvas = document.getElementById('canvas')
-        const shortAxis = getsSmallestAxis().short
-        const longAxis = getsSmallestAxis().long
+        const shortAxis = gettAxis().short
+        const longAxis = gettAxis().long
         let finalWidth;
         let finalHeight;
         let transformScale;
@@ -85,7 +85,7 @@
             doIt = setTimeout(resizeEnd, 10)
         }
 
-        function getsSmallestAxis() {
+        function gettAxis() {
             const innerWidth = window.innerWidth
             const innerHeight = window.innerHeight
             return innerWidth >= innerHeight ? {
