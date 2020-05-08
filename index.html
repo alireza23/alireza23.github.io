@@ -191,7 +191,7 @@
                 y: current.y,
                 z: current.z
             }
-            update()
+            sUpdate()
         }
 
         function getRelativePosition(element, point, originalSize, scale) {
@@ -374,11 +374,7 @@
             element.style.transform = "translate3d(" + current.x + "px, " + current.y + "px, 0) scale(" + current.z + ")";
             //  console.log(current.y)
             console.log('update1 occured')
-            console.log({
-                currentX: current.x,
-                currentY: current.y,
-                currentZ: current.z
-            })
+
             if (needsUpdate3) {
                 update3()
             }
@@ -445,11 +441,93 @@
             console.log('update3 occured')
 
 
+
+            last.x = current.x;
+            last.y = current.y;
+            last.z = current.z;
+            needsUpdate3 = false
+        }
+
+        function sUpdate() {
+            if (current.z < 1) {
+                current.z = 1;
+                last.z = current.z;
+
+            }
+            current.height = originalSize.height * current.z;
+            current.width = originalSize.width * current.z;
+            element.style.transition = "none";
+
+            element.style.transform = "translate3d(" + current.x + "px, " + current.y + "px, 0) scale(" + current.z + ")";
+            //  console.log(current.y)
+            console.log('update1 occured')
             console.log({
                 currentX: current.x,
                 currentY: current.y,
                 currentZ: current.z
             })
+            if (needsUpdate3) {
+                //  sUpdate3()
+            }
+        }
+
+
+        function sUpdate3() {
+
+            // console.log('update3')
+            current.height = originalSize.height * current.z;
+            current.width = originalSize.width * current.z;
+            parentWidth = parent.offsetWidth;
+            parentHeight = parent.offsetHeight;
+            if (current.x - (current.width - originalSize.width) / 2 > 0) {
+                current.x = (current.width - originalSize.width) / 2
+                last.x = current.x;
+            }
+            if (current.y - (current.height - originalSize.height) / 2 > 0) {
+                current.y = (current.height - originalSize.height) / 2
+                last.y = current.y;
+            }
+
+            if (current.width >= parentWidth) {
+
+                let rightBoundFix = -(current.width - parentWidth - (current.width - originalSize.width) / 2)
+                if (current.x < rightBoundFix) {
+                    current.x = rightBoundFix
+                    last.x = current.x;
+
+                }
+
+            } else {
+
+                let rightBoundFix = -(current.width - parentWidth - (current.width - originalSize.width) / 2) - (parentWidth - current.width) / 2
+
+                current.x = rightBoundFix
+                last.x = current.x;
+
+            }
+
+            if (current.height >= parentHeight) {
+                let bottomBoundFix = -(current.height - parentHeight - (current.height - originalSize.height) / 2)
+
+                if (current.y < bottomBoundFix) {
+                    current.y = bottomBoundFix
+                    last.y = current.y;
+
+                }
+            } else {
+                let bottomBoundFix = -(current.height - parentHeight - (current.height - originalSize.height) / 2) - (parentHeight - current.height) / 2
+                current.y = bottomBoundFix
+                last.y = current.y;
+
+            }
+            // element.style.transitionDuration = 1 + 's'
+            element.style.transition = "0.7s";
+
+            element.style.transform = "translate3d(" + current.x + "px, " + current.y + "px, 0) scale(" + current.z + ")";
+            console.log('update3 occured')
+
+
+
             last.x = current.x;
             last.y = current.y;
             last.z = current.z;
