@@ -53,25 +53,6 @@
     </div>
     <script type="text/javascript" src="./js/hammer.js"></script>
     <script type="text/javascript">
-        var element = document.getElementById('drag')
-        let imageNaturalWidth = element.naturalWidth;
-        let imageNaturalHeight = element.naturalHeight;
-        var parent = document.getElementById('dragWrapper')
-        let needsUpdate3 = true;
-        const shortAxis = gettAxis().short
-        const longAxis = gettAxis().long
-
-        function gettAxis() {
-            const innerWidth = window.innerWidth
-            const innerHeight = window.innerHeight
-            return innerWidth >= innerHeight ? {
-                short: innerHeight,
-                long: innerWidth
-            } : {
-                short: innerWidth,
-                long: innerHeight
-            }
-        }
         resizeEnd()
         var doIt;
         window.onresize = function() {
@@ -80,31 +61,70 @@
         }
 
         function resizeEnd() {
+
+            let needsUpdate3 = true;
+            var element = document.getElementById('drag')
+            let imageNaturalWidth = element.naturalWidth;
+            let imageNaturalHeight = element.naturalHeight;
+            var parent = document.getElementById('dragWrapper')
+            parent.style.width = '100%'
+            parent.style.height = '100vh'
+            element.style.width = '100%'
+            element.style.height = 'auto'
+            element.style.left = '0'
             element.style.transform = "translate3d(" + 0 + "px, " + 0 + "px, 0) scale(" + 1 + ")";
 
-            needsUpdate3 = true;
-            console.log('hhh')
-            if (screen.orientation.angle == 0) {
-                parent.style.width = shortAxis + 'px'
-                parent.style.height = longAxis + 'px'
-            } else {
-                parent.style.width = longAxis + 'px'
-                parent.style.height = shortAxis + 'px'
-            }
 
-            fixHammerjsDeltaIssue = undefined;
-            pinchStart = {
+            // let windowInnerHeight = window.innerHeight - 56
+            parent.style.width = window.innerWidth + 'px'
+            parent.style.height = window.innerHeight + 'px'
+
+
+            var hammertime = new Hammer.Manager(element, {});
+            var pinch = new Hammer.Pinch({
+                enable: true,
+                pointers: 0,
+                threshold: 0
+            });
+            var pan = new Hammer.Pan({
+                direction: Hammer.DIRECTION_ALL,
+                threshold: 0
+            });
+            // var doubletap = new Hammer.Tap({
+            //     event: 'doubletap',
+            //     taps: 2
+            // })
+            pinch.recognizeWith(pan)
+            pan.recognizeWith(pinch)
+
+            hammertime.add(pinch)
+            hammertime.add(pan)
+                // hammertime.add(doubletap)
+
+            // hammertime.get('pinch').set({
+            //     enable: true,
+            //     pointers: 0,
+            //     threshold: 0
+            // });
+            // // hammertime.get('pan').set({
+            // //     threshold: 0,
+            // // });
+            // hammertime.get('pan').set({
+            //     direction: Hammer.DIRECTION_ALL
+            // });
+            var fixHammerjsDeltaIssue = undefined;
+            var pinchStart = {
                 x: undefined,
                 y: undefined
             }
-            lastEvent = undefined;
+            var lastEvent = undefined;
 
-            originalSize = {
+            var originalSize = {
                 width: element.offsetWidth,
                 height: element.offsetHeight
             }
 
-            current = {
+            var current = {
                 x: 0,
                 y: 0,
                 z: 1,
@@ -112,343 +132,266 @@
                 width: originalSize.width * 1,
                 height: originalSize.height * 1,
             }
-            console.log(current)
-            last = {
+
+            var last = {
                 x: current.x,
                 y: current.y,
                 z: current.z
             }
             update()
-        }
 
+            function getRelativePosition(element, point, originalSize, scale) {
+                var domCoords = getCoords(element);
 
-        // let windowInnerHeight = window.innerHeight - 56
+                var elementX = point.x - domCoords.x;
+                var elementY = point.y - domCoords.y;
 
-        // if (imageNaturalWidth > imageNaturalHeight) {
-        //     //maybe imageWidth is bigger than image height but the calculated height is bigger than parent height
-        //     //we should set imageheight as 100% and put imge at center of parent horizontally
-        //     element.style.width = window.innerWidth + 'px'
-        //     scaledF = window.innerWidth / imageNaturalWidth
-        //     element.style.height = imageNaturalHeight * scaledF + 'px'
-
-        // } else {
-        //     //same problem here to solve
-        //     element.style.height = window.innerHeight + 'px'
-        //     scaledF = window.innerHeight / imageNaturalHeight
-        //     element.style.width = imageNaturalWidth * scaledF + 'px'
-        // }
-
-        var hammertime = new Hammer.Manager(element, {});
-        var pinch = new Hammer.Pinch({
-            enable: true,
-            pointers: 0,
-            threshold: 0
-        });
-        var pan = new Hammer.Pan({
-            direction: Hammer.DIRECTION_ALL,
-            threshold: 0
-        });
-        // var doubletap = new Hammer.Tap({
-        //     event: 'doubletap',
-        //     taps: 2
-        // })
-        pinch.recognizeWith(pan)
-        pan.recognizeWith(pinch)
-
-        hammertime.add(pinch)
-        hammertime.add(pan)
-            // hammertime.add(doubletap)
-
-        // hammertime.get('pinch').set({
-        //     enable: true,
-        //     pointers: 0,
-        //     threshold: 0
-        // });
-        // // hammertime.get('pan').set({
-        // //     threshold: 0,
-        // // });
-        // hammertime.get('pan').set({
-        //     direction: Hammer.DIRECTION_ALL
-        // });
-        var fixHammerjsDeltaIssue = undefined;
-        var pinchStart = {
-            x: undefined,
-            y: undefined
-        }
-        var lastEvent = undefined;
-
-        var originalSize = {
-            width: element.offsetWidth,
-            height: element.offsetHeight
-        }
-
-        var current = {
-            x: 0,
-            y: 0,
-            z: 1,
-            zooming: false,
-            width: originalSize.width * 1,
-            height: originalSize.height * 1,
-        }
-
-        var last = {
-                x: current.x,
-                y: current.y,
-                z: current.z
-            }
-            //  update()
-
-        function getRelativePosition(element, point, originalSize, scale) {
-            var domCoords = getCoords(element);
-
-            var elementX = point.x - domCoords.x;
-            var elementY = point.y - domCoords.y;
-
-            var relativeX = elementX / (originalSize.width * scale / 2) - 1;
-            var relativeY = elementY / (originalSize.height * scale / 2) - 1;
-            return {
-                x: relativeX,
-                y: relativeY
-            }
-        }
-
-        function getCoords(elem) { // crossbrowser version
-            var box = elem.getBoundingClientRect();
-
-            var body = document.body;
-            var docEl = document.documentElement;
-
-            var scrollTop = window.pageYOffset || docEl.scrollTop || body.scrollTop;
-            var scrollLeft = window.pageXOffset || docEl.scrollLeft || body.scrollLeft;
-
-            var clientTop = docEl.clientTop || body.clientTop || 0;
-            var clientLeft = docEl.clientLeft || body.clientLeft || 0;
-
-            var top = box.top + scrollTop - clientTop;
-            var left = box.left + scrollLeft - clientLeft;
-
-            return {
-                x: Math.round(left),
-                y: Math.round(top)
-            };
-        }
-
-        function scaleFrom(zoomOrigin, currentScale, newScale) {
-            var currentShift = getCoordinateShiftDueToScale(originalSize, currentScale);
-            var newShift = getCoordinateShiftDueToScale(originalSize, newScale)
-
-            var zoomDistance = newScale - currentScale
-
-            var shift = {
-                x: currentShift.x - newShift.x,
-                y: currentShift.y - newShift.y,
+                var relativeX = elementX / (originalSize.width * scale / 2) - 1;
+                var relativeY = elementY / (originalSize.height * scale / 2) - 1;
+                return {
+                    x: relativeX,
+                    y: relativeY
+                }
             }
 
-            var output = {
-                x: zoomOrigin.x * shift.x,
-                y: zoomOrigin.y * shift.y,
-                z: zoomDistance
+            function getCoords(elem) { // crossbrowser version
+                var box = elem.getBoundingClientRect();
+
+                var body = document.body;
+                var docEl = document.documentElement;
+
+                var scrollTop = window.pageYOffset || docEl.scrollTop || body.scrollTop;
+                var scrollLeft = window.pageXOffset || docEl.scrollLeft || body.scrollLeft;
+
+                var clientTop = docEl.clientTop || body.clientTop || 0;
+                var clientLeft = docEl.clientLeft || body.clientLeft || 0;
+
+                var top = box.top + scrollTop - clientTop;
+                var left = box.left + scrollLeft - clientLeft;
+
+                return {
+                    x: Math.round(left),
+                    y: Math.round(top)
+                };
             }
-            return output
-        }
 
-        function getCoordinateShiftDueToScale(size, scale) {
-            var newWidth = scale * size.width;
-            var newHeight = scale * size.height;
-            var dx = (newWidth - size.width) / 2
-            var dy = (newHeight - size.height) / 2
-            return {
-                x: dx,
-                y: dy
-            }
-        }
+            function scaleFrom(zoomOrigin, currentScale, newScale) {
+                var currentShift = getCoordinateShiftDueToScale(originalSize, currentScale);
+                var newShift = getCoordinateShiftDueToScale(originalSize, newScale)
 
-        // hammertime.on('doubletap', function(e) {
-        //     var scaleFactor = 1.7;
-        //     if (current.zooming === false) {
-        //         current.zooming = true;
-        //     } else {
-        //         current.zooming = false;
-        //         scaleFactor = -scaleFactor;
-        //     }
+                var zoomDistance = newScale - currentScale
 
-        //     element.style.transition = "0.3s";
-        //     setTimeout(function() {
-        //         element.style.transition = "none";
-        //     }, 300)
-
-        //     var zoomOrigin = getRelativePosition(element, {
-        //         x: e.center.x,
-        //         y: e.center.y
-        //     }, originalSize, current.z);
-        //     var d = scaleFrom(zoomOrigin, current.z, current.z + scaleFactor)
-        //     current.x += d.x;
-        //     current.y += d.y;
-        //     current.z += d.z;
-
-        //     last.x = current.x;
-        //     last.y = current.y;
-        //     last.z = current.z;
-        //     needsUpdate3 = true
-        //     console.log('doubleTap occured')
-        //     update();
-        // })
-
-        hammertime.on('pan', function(e) {
-
-            let fingerCount = e.maxPointers
-            if (fingerCount > 0) {
-                if (lastEvent !== 'pan') {
-                    fixHammerjsDeltaIssue = {
-                        x: e.deltaX,
-                        y: e.deltaY
-                    }
+                var shift = {
+                    x: currentShift.x - newShift.x,
+                    y: currentShift.y - newShift.y,
                 }
 
-                current.x = last.x + e.deltaX - fixHammerjsDeltaIssue.x;
-                current.y = last.y + e.deltaY - fixHammerjsDeltaIssue.y;
-                lastEvent = 'pan';
-                console.log('pan occured')
+                var output = {
+                    x: zoomOrigin.x * shift.x,
+                    y: zoomOrigin.y * shift.y,
+                    z: zoomDistance
+                }
+                return output
+            }
+
+            function getCoordinateShiftDueToScale(size, scale) {
+                var newWidth = scale * size.width;
+                var newHeight = scale * size.height;
+                var dx = (newWidth - size.width) / 2
+                var dy = (newHeight - size.height) / 2
+                return {
+                    x: dx,
+                    y: dy
+                }
+            }
+
+            // hammertime.on('doubletap', function(e) {
+            //     var scaleFactor = 1.7;
+            //     if (current.zooming === false) {
+            //         current.zooming = true;
+            //     } else {
+            //         current.zooming = false;
+            //         scaleFactor = -scaleFactor;
+            //     }
+
+            //     element.style.transition = "0.3s";
+            //     setTimeout(function() {
+            //         element.style.transition = "none";
+            //     }, 300)
+
+            //     var zoomOrigin = getRelativePosition(element, {
+            //         x: e.center.x,
+            //         y: e.center.y
+            //     }, originalSize, current.z);
+            //     var d = scaleFrom(zoomOrigin, current.z, current.z + scaleFactor)
+            //     current.x += d.x;
+            //     current.y += d.y;
+            //     current.z += d.z;
+
+            //     last.x = current.x;
+            //     last.y = current.y;
+            //     last.z = current.z;
+            //     needsUpdate3 = true
+            //     console.log('doubleTap occured')
+            //     update();
+            // })
+
+            hammertime.on('pan', function(e) {
+
+                let fingerCount = e.maxPointers
+                if (fingerCount > 0) {
+                    if (lastEvent !== 'pan') {
+                        fixHammerjsDeltaIssue = {
+                            x: e.deltaX,
+                            y: e.deltaY
+                        }
+                    }
+
+                    current.x = last.x + e.deltaX - fixHammerjsDeltaIssue.x;
+                    current.y = last.y + e.deltaY - fixHammerjsDeltaIssue.y;
+                    lastEvent = 'pan';
+                    console.log('pan occured')
+
+                    update();
+                }
+
+            })
+
+            hammertime.on('pinch', function(e) {
+                var d = scaleFrom(pinchZoomOrigin, last.z, last.z * e.scale)
+                current.x = d.x + last.x + e.deltaX;
+                current.y = d.y + last.y + e.deltaY;
+                current.z = d.z + last.z;
+                lastEvent = 'pinch';
+                console.log('pinch occured')
 
                 update();
-            }
+            })
 
-        })
+            var pinchZoomOrigin = undefined;
+            hammertime.on('pinchstart', function(e) {
+                pinchStart.x = e.center.x;
+                pinchStart.y = e.center.y;
+                pinchZoomOrigin = getRelativePosition(element, {
+                    x: pinchStart.x,
+                    y: pinchStart.y
+                }, originalSize, current.z);
+                lastEvent = 'pinchstart';
+                console.log('pinchstart occured')
 
-        hammertime.on('pinch', function(e) {
-            var d = scaleFrom(pinchZoomOrigin, last.z, last.z * e.scale)
-            current.x = d.x + last.x + e.deltaX;
-            current.y = d.y + last.y + e.deltaY;
-            current.z = d.z + last.z;
-            lastEvent = 'pinch';
-            console.log('pinch occured')
+            })
 
-            update();
-        })
+            hammertime.on('panend', function(e) {
+                let fingerCount = e.maxPointers
+                if (fingerCount > 0) {
+                    last.x = current.x;
+                    last.y = current.y;
+                    lastEvent = 'panend';
+                    needsUpdate3 = true;
+                    console.log('panend occured')
 
-        var pinchZoomOrigin = undefined;
-        hammertime.on('pinchstart', function(e) {
-            pinchStart.x = e.center.x;
-            pinchStart.y = e.center.y;
-            pinchZoomOrigin = getRelativePosition(element, {
-                x: pinchStart.x,
-                y: pinchStart.y
-            }, originalSize, current.z);
-            lastEvent = 'pinchstart';
-            console.log('pinchstart occured')
+                    update()
+                }
+            })
 
-        })
-
-        hammertime.on('panend', function(e) {
-            let fingerCount = e.maxPointers
-            if (fingerCount > 0) {
+            hammertime.on('pinchend', function(e) {
                 last.x = current.x;
                 last.y = current.y;
-                lastEvent = 'panend';
-                needsUpdate3 = true;
-                console.log('panend occured')
+                last.z = current.z;
+                lastEvent = 'pinchend';
+                needsUpdate3 = true
+                console.log('pinchend occured')
+
+                //i added this update there was not any update here
 
                 update()
+            })
+
+            function update() {
+                if (current.z < 1) {
+                    current.z = 1;
+                    last.z = current.z;
+
+                }
+                current.height = originalSize.height * current.z;
+                current.width = originalSize.width * current.z;
+                element.style.transition = "none";
+
+                element.style.transform = "translate3d(" + current.x + "px, " + current.y + "px, 0) scale(" + current.z + ")";
+                //  console.log(current.y)
+                console.log('update1 occured')
+
+                if (needsUpdate3) {
+                    update3()
+                }
             }
-        })
 
-        hammertime.on('pinchend', function(e) {
-            last.x = current.x;
-            last.y = current.y;
-            last.z = current.z;
-            lastEvent = 'pinchend';
-            needsUpdate3 = true
-            console.log('pinchend occured')
+            function update3() {
 
-            //i added this update there was not any update here
+                // console.log('update3')
+                current.height = originalSize.height * current.z;
+                current.width = originalSize.width * current.z;
+                parentWidth = parent.offsetWidth;
+                parentHeight = parent.offsetHeight;
+                if (current.x - (current.width - originalSize.width) / 2 > 0) {
+                    current.x = (current.width - originalSize.width) / 2
+                    last.x = current.x;
+                }
+                if (current.y - (current.height - originalSize.height) / 2 > 0) {
+                    current.y = (current.height - originalSize.height) / 2
+                    last.y = current.y;
+                }
+                // console.log({
+                //     parentWidth,
+                //     parentHeight,
+                //     currentHeight: current.height,
+                //     currentWidth: current.width,
 
-            update()
-        })
+                // })
+                if (current.width >= parentWidth) {
 
-        function update() {
-            if (current.z < 1) {
-                current.z = 1;
-                last.z = current.z;
+                    let rightBoundFix = -(current.width - parentWidth - (current.width - originalSize.width) / 2)
+                    if (current.x < rightBoundFix) {
+                        current.x = rightBoundFix
+                        last.x = current.x;
 
-            }
-            current.height = originalSize.height * current.z;
-            current.width = originalSize.width * current.z;
-            element.style.transition = "none";
+                    }
 
-            element.style.transform = "translate3d(" + current.x + "px, " + current.y + "px, 0) scale(" + current.z + ")";
-            //  console.log(current.y)
-            console.log('update1 occured')
+                } else {
 
-            if (needsUpdate3) {
-                update3()
-            }
-        }
+                    let rightBoundFix = -(current.width - parentWidth - (current.width - originalSize.width) / 2) - (parentWidth - current.width) / 2
 
-        function update3() {
-
-            // console.log('update3')
-            current.height = originalSize.height * current.z;
-            current.width = originalSize.width * current.z;
-            parentWidth = parent.offsetWidth;
-            parentHeight = parent.offsetHeight;
-            if (current.x - (current.width - originalSize.width) / 2 > 0) {
-                current.x = (current.width - originalSize.width) / 2
-                last.x = current.x;
-            }
-            if (current.y - (current.height - originalSize.height) / 2 > 0) {
-                current.y = (current.height - originalSize.height) / 2
-                last.y = current.y;
-            }
-            // console.log({
-            //     parentWidth,
-            //     parentHeight,
-            //     currentHeight: current.height,
-            //     currentWidth: current.width,
-
-            // })
-            if (current.width >= parentWidth) {
-
-                let rightBoundFix = -(current.width - parentWidth - (current.width - originalSize.width) / 2)
-                if (current.x < rightBoundFix) {
                     current.x = rightBoundFix
                     last.x = current.x;
 
                 }
 
-            } else {
+                if (current.height >= parentHeight) {
+                    let bottomBoundFix = -(current.height - parentHeight - (current.height - originalSize.height) / 2)
 
-                let rightBoundFix = -(current.width - parentWidth - (current.width - originalSize.width) / 2) - (parentWidth - current.width) / 2
+                    if (current.y < bottomBoundFix) {
+                        current.y = bottomBoundFix
+                        last.y = current.y;
 
-                current.x = rightBoundFix
-                last.x = current.x;
-
-            }
-
-            if (current.height >= parentHeight) {
-                let bottomBoundFix = -(current.height - parentHeight - (current.height - originalSize.height) / 2)
-
-                if (current.y < bottomBoundFix) {
+                    }
+                } else {
+                    let bottomBoundFix = -(current.height - parentHeight - (current.height - originalSize.height) / 2) - (parentHeight - current.height) / 2
                     current.y = bottomBoundFix
                     last.y = current.y;
 
                 }
-            } else {
-                let bottomBoundFix = -(current.height - parentHeight - (current.height - originalSize.height) / 2) - (parentHeight - current.height) / 2
-                current.y = bottomBoundFix
+                // element.style.transitionDuration = 1 + 's'
+                element.style.transition = "0.7s";
+
+                element.style.transform = "translate3d(" + current.x + "px, " + current.y + "px, 0) scale(" + current.z + ")";
+                console.log('update3 occured')
+
+
+
+                last.x = current.x;
                 last.y = current.y;
-
+                needsUpdate3 = false
             }
-            // element.style.transitionDuration = 1 + 's'
-            element.style.transition = "0.7s";
-
-            element.style.transform = "translate3d(" + current.x + "px, " + current.y + "px, 0) scale(" + current.z + ")";
-            console.log('update3 occured')
-
-
-
-            last.x = current.x;
-            last.y = current.y;
-            needsUpdate3 = false
         }
     </script>
 </body>
