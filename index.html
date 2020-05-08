@@ -72,7 +72,7 @@
         var doIt;
         window.onresize = function() {
             clearTimeout(doIt)
-            doIt = setTimeout(resizeEnd, 5)
+            doIt = setTimeout(resizeEnd, 10)
         }
 
         function resizeEnd() {
@@ -131,7 +131,7 @@
                 y: undefined
             }
             var lastEvent = undefined;
-
+            console.log(element.offsetWidth)
             var originalSize = {
                 width: element.offsetWidth,
                 height: element.offsetHeight
@@ -151,6 +151,7 @@
                 y: current.y,
                 z: current.z
             }
+            console.log(current)
             update()
 
             function getRelativePosition(element, point, originalSize, scale) {
