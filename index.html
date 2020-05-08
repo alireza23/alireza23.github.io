@@ -70,6 +70,50 @@
         var element = document.getElementById('drag')
         var parent = document.getElementById('dragWrapper')
         var canvas = document.getElementById('canvas')
+        let needsUpdate3 = true;
+
+        var fixHammerjsDeltaIssue = undefined;
+        var pinchStart = {
+            x: undefined,
+            y: undefined
+        }
+        var lastEvent = undefined;
+
+        var originalSize = {
+            width: element.offsetWidth,
+            height: element.offsetHeight
+        }
+
+        var current = {
+            x: 0,
+            y: 0,
+            z: 1,
+            zooming: false,
+            width: originalSize.width * 1,
+            height: originalSize.height * 1,
+        }
+
+        var last = {
+            x: current.x,
+            y: current.y,
+            z: current.z
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         const shortAxis = getsSmallestAxis().short
         const longAxis = getsSmallestAxis().long
         let finalWidth;
@@ -199,9 +243,37 @@
 
             }
             console.log({
-                finalWidth,
-                finalHeight
-            })
+                    finalWidth,
+                    finalHeight
+                })
+                //
+            fixHammerjsDeltaIssue = undefined;
+            pinchStart = {
+                x: undefined,
+                y: undefined
+            }
+            lastEvent = undefined;
+
+            originalSize = {
+                width: element.offsetWidth,
+                height: element.offsetHeight
+            }
+
+            current = {
+                x: leftTranslate,
+                y: topTranslate,
+                z: transformScale,
+                zooming: false,
+                width: originalSize.width * 1,
+                height: originalSize.height * 1,
+            }
+
+            last = {
+                x: current.x,
+                y: current.y,
+                z: current.z
+            }
+            update()
         }
 
         function compareHeight(imageCurrentHeight, screenCurrentHeight) {
@@ -228,9 +300,7 @@
                 topTranslate
             }
         }
-    </script>
-    <script>
-        let needsUpdate3 = true;
+        //new script
         var hammertime = new Hammer.Manager(element, {});
         var pinch = new Hammer.Pinch({
             enable: true,
@@ -249,33 +319,33 @@
         hammertime.add(pan)
 
 
-        var fixHammerjsDeltaIssue = undefined;
-        var pinchStart = {
-            x: undefined,
-            y: undefined
-        }
-        var lastEvent = undefined;
+        // var fixHammerjsDeltaIssue = undefined;
+        // var pinchStart = {
+        //     x: undefined,
+        //     y: undefined
+        // }
+        // var lastEvent = undefined;
 
-        var originalSize = {
-            width: element.offsetWidth,
-            height: element.offsetHeight
-        }
+        // var originalSize = {
+        //     width: element.offsetWidth,
+        //     height: element.offsetHeight
+        // }
 
-        var current = {
-            x: 0,
-            y: 0,
-            z: 1,
-            zooming: false,
-            width: originalSize.width * 1,
-            height: originalSize.height * 1,
-        }
+        // var current = {
+        //     x: leftTranslate,
+        //     y: topTranslate,
+        //     z: transformScale,
+        //     zooming: false,
+        //     width: originalSize.width * 1,
+        //     height: originalSize.height * 1,
+        // }
 
-        var last = {
-            x: current.x,
-            y: current.y,
-            z: current.z
-        }
-        update()
+        // var last = {
+        //     x: current.x,
+        //     y: current.y,
+        //     z: current.z
+        // }
+        // update()
 
         function getRelativePosition(element, point, originalSize, scale) {
             var domCoords = getCoords(element);
@@ -418,11 +488,12 @@
                 last.z = current.z;
 
             }
+            //can i remove thease two lines?
             current.height = originalSize.height * current.z;
             current.width = originalSize.width * current.z;
             element.style.transition = "none";
 
-            element.style.transform = "translate3d(" + current.x + "px, " + current.y + "px, 0) scale(" + current.z + ")";
+            element.style.transform = "translate(" + current.x + "px, " + current.y + "px) scale(" + current.z + ")";
             //  console.log(current.y)
             console.log('update1 occured')
 
@@ -434,8 +505,8 @@
         function update3() {
 
             // console.log('update3')
-            current.height = originalSize.height * current.z;
-            current.width = originalSize.width * current.z;
+            current.height = finalHeight * current.z;
+            current.width = finalWidth * current.z;
             parentWidth = parent.offsetWidth;
             parentHeight = parent.offsetHeight;
             if (current.x - (current.width - originalSize.width) / 2 > 0) {
@@ -488,7 +559,7 @@
             // element.style.transitionDuration = 1 + 's'
             element.style.transition = "0.7s";
 
-            element.style.transform = "translate3d(" + current.x + "px, " + current.y + "px, 0) scale(" + current.z + ")";
+            element.style.transform = "translate(" + current.x + "px, " + current.y + "px) scale(" + current.z + ")";
             console.log('update3 occured')
 
 
