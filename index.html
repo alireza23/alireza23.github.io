@@ -54,8 +54,72 @@
     </div>
     <script type="text/javascript" src="./js/hammer.js"></script>
     <script type="text/javascript">
+        var element = document.getElementById('drag')
+        let imageNaturalWidth = element.naturalWidth;
+        let imageNaturalHeight = element.naturalHeight;
+        var parent = document.getElementById('dragWrapper')
         const shortAxis = gettAxis().short
         const longAxis = gettAxis().long
+        var element = document.getElementById('drag')
+        const width = element.offsetWidth
+        const height = element.offsetHeight
+        var hammertime = new Hammer.Manager(element, {});
+        var pinch = new Hammer.Pinch({
+            enable: true,
+            pointers: 0,
+            threshold: 0
+        });
+        var pan = new Hammer.Pan({
+            direction: Hammer.DIRECTION_ALL,
+            threshold: 0
+        });
+        // var doubletap = new Hammer.Tap({
+        //     event: 'doubletap',
+        //     taps: 2
+        // })
+        pinch.recognizeWith(pan)
+        pan.recognizeWith(pinch)
+
+        hammertime.add(pinch)
+        hammertime.add(pan)
+            // hammertime.add(doubletap)
+
+        // hammertime.get('pinch').set({
+        //     enable: true,
+        //     pointers: 0,
+        //     threshold: 0
+        // });
+        // // hammertime.get('pan').set({
+        // //     threshold: 0,
+        // // });
+        // hammertime.get('pan').set({
+        //     direction: Hammer.DIRECTION_ALL
+        // });
+        var fixHammerjsDeltaIssue = undefined;
+        var pinchStart = {
+            x: undefined,
+            y: undefined
+        }
+        var lastEvent = undefined;
+        var originalSize = {
+            width: element.offsetWidth,
+            height: element.offsetHeight
+        }
+
+        var current = {
+            x: 0,
+            y: 0,
+            z: 1,
+            zooming: false,
+            width: originalSize.width * 1,
+            height: originalSize.height * 1,
+        }
+
+        var last = {
+            x: current.x,
+            y: current.y,
+            z: current.z
+        }
 
         function gettAxis() {
             const innerWidth = window.innerWidth
@@ -68,6 +132,7 @@
                 long: innerHeight
             }
         }
+
         resizeEnd()
         var doIt;
         window.onresize = function() {
@@ -78,10 +143,8 @@
         function resizeEnd() {
             let needsUpdate3 = true;
 
-            var element = document.getElementById('drag')
-            let imageNaturalWidth = element.naturalWidth;
-            let imageNaturalHeight = element.naturalHeight;
-            var parent = document.getElementById('dragWrapper')
+
+            console.log(imageNaturalWidth)
                 // let windowInnerHeight = window.innerHeight - 56
             if (screen.orientation.angle == 0) {
                 parent.style.width = shortAxis + 'px'
@@ -93,51 +156,20 @@
 
 
 
-            var hammertime = new Hammer.Manager(element, {});
-            var pinch = new Hammer.Pinch({
-                enable: true,
-                pointers: 0,
-                threshold: 0
-            });
-            var pan = new Hammer.Pan({
-                direction: Hammer.DIRECTION_ALL,
-                threshold: 0
-            });
-            // var doubletap = new Hammer.Tap({
-            //     event: 'doubletap',
-            //     taps: 2
-            // })
-            pinch.recognizeWith(pan)
-            pan.recognizeWith(pinch)
 
-            hammertime.add(pinch)
-            hammertime.add(pan)
-                // hammertime.add(doubletap)
-
-            // hammertime.get('pinch').set({
-            //     enable: true,
-            //     pointers: 0,
-            //     threshold: 0
-            // });
-            // // hammertime.get('pan').set({
-            // //     threshold: 0,
-            // // });
-            // hammertime.get('pan').set({
-            //     direction: Hammer.DIRECTION_ALL
-            // });
-            var fixHammerjsDeltaIssue = undefined;
-            var pinchStart = {
+            fixHammerjsDeltaIssue = undefined;
+            pinchStart = {
                 x: undefined,
                 y: undefined
             }
-            var lastEvent = undefined;
-            console.log(element.offsetWidth)
-            var originalSize = {
+            lastEvent = undefined;
+            originalSize = {
                 width: element.offsetWidth,
                 height: element.offsetHeight
             }
 
-            var current = {
+
+            current = {
                 x: 0,
                 y: 0,
                 z: 1,
