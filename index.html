@@ -80,6 +80,8 @@
         }
 
         function resizeEnd() {
+            element.style.transform = "translate3d(" + 0 + "px, " + 0 + "px, 0) scale(" + 1 + ")";
+
             needsUpdate3 = true;
             console.log('hhh')
             if (screen.orientation.angle == 0) {
