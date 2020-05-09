@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+  </head>
+  <body>
+    Tool:
+    <select id="tool">
+      <option value="brush">Brush</option>
+      <option value="eraser">Eraser</option>
+    </select>
+    <canvas class="canC" id="canV"></canvas>
+
+    <script>
+      var mode = "brush";
+      var mouse = { x: 0, y: 0, mouseDown: false };
+      // get canvas set up mouse and do the other things
+      var canvas = document.getElementById("canV");
+      canvas.height = window.innerHeight;
+      canvas.width = window.innerWidth;
+      var ctx = canvas.getContext("2d");
+      canvas.addEventListener("mousemove", mouseMove);
+      canvas.addEventListener("mousedown", mouseMove);
+      canvas.addEventListener("mouseup", mouseMove);
+
+      function mouseMove(event) {
+        mouse.x = event.offsetX;
+        mouse.y = event.offsetY;
+
+        if (event.type === "mousedown") {
+          mouse.mouseDown = true;
+        } else if (event.type === "mouseup") {
+          mouse.mouseDown = false;
+        }
+        //event.preventDefault();
+      }
+
+      // create off screen layer that we will draw to
+      var layer1 = document.createElement("canvas");
+      layer1.width = canvas.width; // same size as the onscreen canvas
+      layer1.height = canvas.height;
+      var c = layer1.getContext("2d");
+      c.lineCap = "round";
+      c.lineJoin = "round";
+      c.lineWidth = 10;
+      c.strokeStyle = '"#F00"'
+      update();
+      // update on animation frame
+      function update() {
+        ctx.clearRect(0, 0, window.innerWidth, window.innerHeight); // clear onscreen
+        if (mouse.mouseDown) {
+           
+          // draw the dragged stroke to the offscreen layer
+          if (mode == "brush") {
+            c.globalCompositeOperation = "source-over";
+            c.lineWidth = 10;
+          } else {
+            c.globalCompositeOperation = "destination-out";
+            c.lineWidth = 20;
+          }
+          c.beginPath();
+          c.moveTo(mouse.lastx, mouse.lasty);
+          c.lineTo(mouse.x, mouse.y);
+          c.stroke();
+          mouse.lastx = mouse.x;
+          mouse.lasty = mouse.y;
+        } else {
+          mouse.lastx = undefined; // using this as a semaphore for drag start
+          ctx.fillStyle = "#F00"
+          ctx.globalAlpha = 0.6;
+        }
+        // draw the offscreen layer onto the onscreen canvas at the alpha wanted
+        ctx.drawImage(layer1, 0, 0);
+        requestAnimationFrame(update); // do it all again.
+      }
+      var select = document.getElementById("tool");
+      select.addEventListener("change", function () {
+        mode = select.value;
+      });
+    </script>
+  </body>
+</html>

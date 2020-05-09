@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HammerJS Pinch Zoom and Drag</title>
+    <style type="text/css">
+        #dragWrapper::-webkit-scrollbar {
+            display: none;
+        }
+        
+        *::-webkit-scrollbar {
+            display: none;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            /* background-color: red */
+        }
+        
+        #dragWrapper {
+            width: 100%;
+            box-sizing: border-box;
+            height: 100vh;
+            /* height: calc(var(--vh, 1vh) * 100); */
+            background-color: #91b376;
+        }
+        
+        #drag {
+            display: none;
+            touch-action: auto;
+            height: auto;
+            width: 100%;
+            position: absolute;
+            left: 0;
+            transition-timing-function: ease-out;
+            opacity: .2
+        }
+        
+        #container {
+            position: absolute;
+            top: 0;
+        }
+        /* #toolbar {
+            height: 56px;
+            width: 100%;
+        } */
+    </style>
+</head>
+
+<body>
+    <!-- <div id="toolbar"></div> -->
+    <div id="dragWrapper">
+
+        <img id="drag" src="./superCompact.jpg" alt="">
+        <div id="container"></div>
+    </div>
+
+    <script type="text/javascript" src="./js/hammer.js"></script>
+    <script type="text/javascript" src="./js/konva.min.js"></script>
+    <script type="text/javascript">
+        // const shortAxis = gettAxis().short
+        // const longAxis = gettAxis().long
+        //konva begins here
+
+
+        // first we need Konva core things: stage and layer
+        var stage = new Konva.Stage({
+            container: 'container',
+            width: 1,
+            height: 1
+        });
+
+        var layer = new Konva.Layer();
+        stage.add(layer);
+        //add image
+        var imageObj = new Image();
+        var frog;
+        imageObj.onload = function() {
+
+            frog = new Konva.Image({
+                x: 0,
+                y: 0,
+                image: imageObj,
+                width: 0,
+                height: 0,
+            });
+
+            // add the shape to the layer
+            layer.add(frog);
+            layer.batchDraw();
+            //rest of konva
+            var canvas = document.createElement('canvas');
+            canvas.width = stage.width();
+            canvas.height = stage.height();
+
+            // created canvas we can add to layer as "Konva.Image" element
+            var image = new Konva.Image({
+                image: canvas,
+                x: 0,
+                y: 0
+            });
+            layer.add(image);
+            stage.draw();
+
+            // Good. Now we need to get access to context element
+            var context = canvas.getContext('2d');
+            context.strokeStyle = '#df4b26';
+            context.lineJoin = 'round';
+            context.lineWidth = 5;
+
+            var isPaint = false;
+            var lastPointerPosition;
+            var mode = 'brush';
+
+            // now we need to bind some events
+            // we need to start drawing on mousedown
+            // and stop drawing on mouseup
+            image.on('mousedown touchstart', function() {
+                console.log('sss')
+                isPaint = true;
+                lastPointerPosition = stage.getPointerPosition();
+                context.beginPath();
+
+            });
+
+            // will it be better to listen move/end events on the window?
+
+            stage.on('mouseup touchend', function() {
+                isPaint = false;
+
+                context.moveTo(lastPointerPosition.x - image.x(), lastPointerPosition.y - image.y());
+                context.lineTo(lastPointerPosition.x - image.x(), lastPointerPosition.y - image.y());
+                context.closePath();
+                context.stroke();
+                layer.batchDraw();
+
+            });
+
+            // and core function - drawing
+            stage.on('mousemove touchmove', function() {
+                if (!isPaint) {
+                    return;
+                }
+
+                if (mode === 'brush') {
+                    context.globalCompositeOperation = 'source-over';
+                }
+                if (mode === 'eraser') {
+                    context.globalCompositeOperation = 'destination-out';
+                }
+                context.beginPath();
+
+                var localPos = {
+                    x: lastPointerPosition.x - image.x(),
+                    y: lastPointerPosition.y - image.y()
+                };
+                context.moveTo(localPos.x, localPos.y);
+                var pos = stage.getPointerPosition();
+                localPos = {
+                    x: pos.x - image.x(),
+                    y: pos.y - image.y()
+                };
+                context.lineTo(localPos.x, localPos.y);
+                context.closePath();
+                context.stroke();
+
+                lastPointerPosition = pos;
+                layer.batchDraw();
+            });
+            //rest of codes
+            var elementWidth;
+            var elementHight;
+            let zoomlock = false
+            let editLock = false
+            var doIt;
+            window.onresize = function() {
+                clearTimeout(doIt)
+                doIt = setTimeout(resizeEnd, 10)
+            }
+
+            function gettAxis() {
+                const innerWidth = window.innerWidth
+                const innerHeight = window.innerHeight
+                return innerWidth >= innerHeight ? {
+                    short: innerHeight,
+                    long: innerWidth
+                } : {
+                    short: innerWidth,
+                    long: innerHeight
+                }
+            }
+            var pinchZoomOrigin = undefined;
+            let needsUpdate3 = true;
+            var element = document.getElementById('drag')
+            let imageNaturalWidth = element.naturalWidth;
+            let imageNaturalHeight = element.naturalHeight;
+            var parent = document.getElementById('dragWrapper')
+            var canvasContainer = document.getElementById('container')
+                //we should use hammer on container itself
+            var hammertime = new Hammer.Manager(canvasContainer, {});
+            var pinch = new Hammer.Pinch({
+                enable: true,
+                pointers: 0,
+                threshold: 0
+            });
+            var pan = new Hammer.Pan({
+                direction: Hammer.DIRECTION_ALL,
+                threshold: 0
+            });
+            var tap = new Hammer.Tap({
+                pointers: 1,
+                taps: 2,
+                interval: 300,
+                time: 250,
+                threshold: 300,
+                posThreshold: 300
+            })
+            var swipe = new Hammer.Swipe({
+                direction: Hammer.DIRECTION_ALL,
+                velocity: 2,
+                threshold: 10,
+                pointers: 1
+            })
+            var portraitTransformData;
+            var landscapeTransformData;
+
+            // var doubletap = new Hammer.Tap({
+            //     event: 'doubletap',
+            //     taps: 2
+            // })
+            pinch.recognizeWith(pan)
+            pan.recognizeWith(pinch)
+            pan.recognizeWith(tap)
+            tap.recognizeWith(pan)
+            swipe.recognizeWith(pan);
+            // pan.recognizeWith(swipe);
+
+
+            hammertime.add(pinch)
+            hammertime.add(pan)
+            hammertime.add(tap)
+            hammertime.add(swipe)
+            hammertime.on('tap', function(e) {
+                console.log('tap occured')
+            })
+            hammertime.on('swipe', function(ev) {
+                console.log('swipe occured')
+                console.log(ev)
+                var direction = '';
+                switch (ev.direction) {
+                    case Hammer.DIRECTION_LEFT:
+                        direction = 'left';
+                        break;
+                    case Hammer.DIRECTION_RIGHT:
+                        direction = 'right';
+                        break;
+                    case Hammer.DIRECTION_UP:
+                        direction = 'up';
+                        break;
+                    case Hammer.DIRECTION_DOWN:
+                        direction = 'down';
+                        break;
+                }
+                console.log(direction)
+            })
+
+            var fixHammerjsDeltaIssue = undefined;
+            var pinchStart = {
+                x: undefined,
+                y: undefined
+            }
+            var lastEvent = undefined;
+
+            var originalSize = {
+                width: element.offsetWidth,
+                height: element.offsetHeight
+            }
+
+            var current = {
+                x: 0,
+                y: 0,
+                z: 1,
+                zooming: false,
+                width: originalSize.width * 1,
+                height: originalSize.height * 1,
+            }
+
+            var last = {
+                x: current.x,
+                y: current.y,
+                z: current.z
+            }
+
+            resizeEnd()
+
+            function resizeEnd() {
+                element.style.display = 'none'
+                needsUpdate3 = true;
+                pinchZoomOrigin = undefined;
+                parent.style.width = '100%'
+                parent.style.height = '100vh'
+                parent.style.width = window.innerWidth + 'px'
+                parent.style.height = window.innerHeight + 'px'
+                element.style.width = '100%'
+                element.style.height = 'auto'
+                element.style.left = '0'
+                element.style.transform = "none";
+                element.style.display = 'block'
+                elementWidth = window.getComputedStyle(element).width.replace(/px/, '');
+                elementHight = window.getComputedStyle(element).height.replace(/px/, '');
+
+                frog.attrs.width = elementWidth
+                frog.attrs.height = elementHight
+                console.log(canvas)
+                canvas.width = elementWidth
+                canvas.height = elementHight
+                    //need this to get brush color back
+                context.strokeStyle = '#000000';
+                context.lineJoin = 'round';
+                context.lineCap = 'round';
+                context.lineWidth = 5;
+
+                stage.setWidth(elementWidth)
+                stage.setHeight(elementHight)
+                layer.draw()
+                stage.draw()
+                    // console.log(frog)
+                    // if (screen.orientation.angle == 0) {
+                    //     parent.style.width = shortAxis + 'px'
+                    //     parent.style.height = longAxis + 'px'
+                    // } else {
+                    //     parent.style.width = longAxis + 'px'
+                    //     parent.style.height = shortAxis + 'px'
+                    // }
+
+
+                fixHammerjsDeltaIssue = undefined;
+                pinchStart = {
+                    x: undefined,
+                    y: undefined
+                }
+                lastEvent = undefined;
+
+                originalSize = {
+                    width: element.offsetWidth,
+                    height: element.offsetHeight
+                }
+
+                current = {
+                        x: 0,
+                        y: 0,
+                        z: 1,
+                        zooming: false,
+                        width: originalSize.width * 1,
+                        height: originalSize.height * 1,
+                    }
+                    // console.log({
+                    //     current,
+                    //     parentW: parent.style.width,
+                    //     parentH: parent.style.height
+                    // })
+                console.log({
+                    currentX: current.x,
+                    currentY: current.y,
+                    currentZ: current.z,
+                    elementW: element.offsetWidth,
+                    elementH: element.offsetHeight,
+                    elementCurrentW: current.width,
+                    elementCurrentH: current.height,
+                    parentW: parent.offsetWidth,
+                    parentH: parent.offsetHeight,
+                    windowW: window.innerWidth,
+                    windowH: window.innerHeight
+                })
+                last = {
+                    x: current.x,
+                    y: current.y,
+                    z: current.z
+                }
+                console.log(last)
+                if (screen.orientation.angle == 0 && portraitTransformData !== undefined) {
+                    element.style.transform = portraitTransformData
+                        // console.log('data restored')
+                        //translate3d(0px, 0px, 0px) scale(1)
+                    current.x = parseFloat(portraitTransformData.replace('translate3d(', '').replace(/px(.*?)$/, ''))
+                    current.y = parseFloat(portraitTransformData.replace(/^(.*?)px, /, '').replace(/px(.*?)$/, ''))
+                    current.z = parseFloat(portraitTransformData.replace(/^(.*?)scale\(/, '').replace(/\)$/, ''))
+                    last.x = current.x
+                    last.y = current.y
+                    last.z = current.z
+
+                    console.log(last)
+
+                } else if (screen.orientation.angle == 90 && landscapeTransformData !== undefined) {
+                    element.style.transform = landscapeTransformData
+                        // console.log('data restored')
+                    current.x = parseFloat(portraitTransformData.replace('translate3d(', '').replace(/px(.*?)$/, ''))
+                    current.y = parseFloat(portraitTransformData.replace(/^(.*?)px, /, '').replace(/px(.*?)$/, ''))
+                    current.z = parseFloat(portraitTransformData.replace(/^(.*?)scale\(/, '').replace(/\)$/, ''))
+                    last.x = current.x
+                    last.y = current.y
+                    last.z = current.z
+                    console.log(last)
+
+                } else {
+                    sUpdate()
+
+                }
+            }
+
+            function getRelativePosition(element, point, originalSize, scale) {
+                var domCoords = getCoords(element);
+
+                var elementX = point.x - domCoords.x;
+                var elementY = point.y - domCoords.y;
+
+                var relativeX = elementX / (originalSize.width * scale / 2) - 1;
+                var relativeY = elementY / (originalSize.height * scale / 2) - 1;
+                return {
+                    x: relativeX,
+                    y: relativeY
+                }
+            }
+
+            function getCoords(elem) { // crossbrowser version
+                var box = elem.getBoundingClientRect();
+
+                var body = document.body;
+                var docEl = document.documentElement;
+
+                var scrollTop = window.pageYOffset || docEl.scrollTop || body.scrollTop;
+                var scrollLeft = window.pageXOffset || docEl.scrollLeft || body.scrollLeft;
+
+                var clientTop = docEl.clientTop || body.clientTop || 0;
+                var clientLeft = docEl.clientLeft || body.clientLeft || 0;
+
+                var top = box.top + scrollTop - clientTop;
+                var left = box.left + scrollLeft - clientLeft;
+
+                return {
+                    x: Math.round(left),
+                    y: Math.round(top)
+                };
+            }
+
+            function scaleFrom(zoomOrigin, currentScale, newScale) {
+                var currentShift = getCoordinateShiftDueToScale(originalSize, currentScale);
+                var newShift = getCoordinateShiftDueToScale(originalSize, newScale)
+
+                var zoomDistance = newScale - currentScale
+
+                var shift = {
+                    x: currentShift.x - newShift.x,
+                    y: currentShift.y - newShift.y,
+                }
+
+                var output = {
+                    x: zoomOrigin.x * shift.x,
+                    y: zoomOrigin.y * shift.y,
+                    z: zoomDistance
+                }
+                return output
+            }
+
+            function getCoordinateShiftDueToScale(size, scale) {
+                var newWidth = scale * size.width;
+                var newHeight = scale * size.height;
+                var dx = (newWidth - size.width) / 2
+                var dy = (newHeight - size.height) / 2
+                return {
+                    x: dx,
+                    y: dy
+                }
+            }
+
+            // hammertime.on('doubletap', function(e) {
+            //     var scaleFactor = 1.7;
+            //     if (current.zooming === false) {
+            //         current.zooming = true;
+            //     } else {
+            //         current.zooming = false;
+            //         scaleFactor = -scaleFactor;
+            //     }
+
+            //     element.style.transition = "0.3s";
+            //     setTimeout(function() {
+            //         element.style.transition = "none";
+            //     }, 300)
+
+            //     var zoomOrigin = getRelativePosition(element, {
+            //         x: e.center.x,
+            //         y: e.center.y
+            //     }, originalSize, current.z);
+            //     var d = scaleFrom(zoomOrigin, current.z, current.z + scaleFactor)
+            //     current.x += d.x;
+            //     current.y += d.y;
+            //     current.z += d.z;
+
+            //     last.x = current.x;
+            //     last.y = current.y;
+            //     last.z = current.z;
+            //     needsUpdate3 = true
+            //     console.log('doubleTap occured')
+            //     update();
+            // })
+
+            hammertime.on('pan', function(e) {
+
+                let fingerCount = e.maxPointers
+                let customFingers;
+                if (editLock) {
+                    customFingers = 0
+                } else {
+                    customFingers = 1
+                }
+                if (fingerCount > customFingers) {
+                    if (lastEvent !== 'pan') {
+                        fixHammerjsDeltaIssue = {
+                            x: e.deltaX,
+                            y: e.deltaY
+                        }
+                    }
+
+                    current.x = last.x + e.deltaX - fixHammerjsDeltaIssue.x;
+                    current.y = last.y + e.deltaY - fixHammerjsDeltaIssue.y;
+                    lastEvent = 'pan';
+                    //    console.log('pan occured')
+
+                    update();
+                }
+
+            })
+
+            hammertime.on('pinch', function(e) {
+                let customScale;
+                if (zoomlock) {
+                    customScale = 1
+                } else {
+                    customScale = e.scale
+                }
+                var d = scaleFrom(pinchZoomOrigin, last.z, last.z * customScale)
+                current.x = d.x + last.x + e.deltaX;
+                current.y = d.y + last.y + e.deltaY;
+                current.z = d.z + last.z;
+                lastEvent = 'pinch';
+                // console.log('pinch occured')
+                console.log(d.z)
+                console.log(e.scale)
+                console.log(customScale)
+
+                update();
+            })
+
+
+            hammertime.on('pinchstart', function(e) {
+                pinchStart.x = e.center.x;
+                pinchStart.y = e.center.y;
+                pinchZoomOrigin = getRelativePosition(element, {
+                    x: pinchStart.x,
+                    y: pinchStart.y
+                }, originalSize, current.z);
+                lastEvent = 'pinchstart';
+                // console.log('pinchstart occured')
+
+            })
+
+            hammertime.on('panend', function(e) {
+                let fingerCount = e.maxPointers
+                let customFingers;
+                if (editLock) {
+                    customFingers = 0
+                } else {
+                    customFingers = 1
+                }
+                if (fingerCount > customFingers) {
+                    last.x = current.x;
+                    last.y = current.y;
+                    lastEvent = 'panend';
+                    needsUpdate3 = true;
+                    // console.log('panend occured')
+
+                    update()
+                }
+            })
+
+            hammertime.on('pinchend', function(e) {
+                last.x = current.x;
+                last.y = current.y;
+                last.z = current.z;
+                lastEvent = 'pinchend';
+                needsUpdate3 = true
+                    //  console.log('pinchend occured')
+
+                //i added this update there was not any update here
+
+                update()
+            })
+
+            function update() {
+                if (current.z < 1) {
+                    current.z = 1;
+                    last.z = current.z;
+
+                }
+                current.height = originalSize.height * current.z;
+                current.width = originalSize.width * current.z;
+                element.style.transition = "none";
+
+                element.style.transform = "translate3d(" + current.x + "px, " + current.y + "px, 0) scale(" + current.z + ")";
+                //  console.log(current.y)
+                // console.log('update1 occured')
+                if (screen.orientation.angle == 0) {
+                    portraitTransformData = element.style.transform
+                        //  console.log('data saved')
+                } else {
+                    landscapeTransformData = element.style.transform
+                        // console.log('data saved')
+                }
+
+                if (needsUpdate3) {
+                    update3()
+                }
+            }
+
+            function update3() {
+
+                // console.log('update3')
+                current.height = originalSize.height * current.z;
+                current.width = originalSize.width * current.z;
+                parentWidth = parent.offsetWidth;
+                parentHeight = parent.offsetHeight;
+                if (current.x - (current.width - originalSize.width) / 2 > 0) {
+                    current.x = (current.width - originalSize.width) / 2
+                    last.x = current.x;
+                }
+                if (current.y - (current.height - originalSize.height) / 2 > 0) {
+                    current.y = (current.height - originalSize.height) / 2
+                    last.y = current.y;
+                }
+                // console.log({
+                //     parentWidth,
+                //     parentHeight,
+                //     currentHeight: current.height,
+                //     currentWidth: current.width,
+
+                // })
+                if (current.width >= parentWidth) {
+
+                    let rightBoundFix = -(current.width - parentWidth - (current.width - originalSize.width) / 2)
+                    if (current.x < rightBoundFix) {
+                        current.x = rightBoundFix
+                        last.x = current.x;
+
+                    }
+
+                } else {
+
+                    let rightBoundFix = -(current.width - parentWidth - (current.width - originalSize.width) / 2) - (parentWidth - current.width) / 2
+
+                    current.x = rightBoundFix
+                    last.x = current.x;
+
+                }
+
+                if (current.height >= parentHeight) {
+                    let bottomBoundFix = -(current.height - parentHeight - (current.height - originalSize.height) / 2)
+
+                    if (current.y < bottomBoundFix) {
+                        current.y = bottomBoundFix
+                        last.y = current.y;
+
+                    }
+                } else {
+                    let bottomBoundFix = -(current.height - parentHeight - (current.height - originalSize.height) / 2) - (parentHeight - current.height) / 2
+                    current.y = bottomBoundFix
+                    last.y = current.y;
+
+                }
+                // element.style.transitionDuration = 1 + 's'
+                element.style.transition = "0.7s";
+
+                element.style.transform = "translate3d(" + current.x + "px, " + current.y + "px, 0) scale(" + current.z + ")";
+                //   console.log('update3 occured')
+
+
+
+                last.x = current.x;
+                last.y = current.y;
+                last.z = current.z;
+                needsUpdate3 = false
+                if (screen.orientation.angle == 0) {
+                    portraitTransformData = element.style.transform
+                        //  console.log('data saved')
+                } else {
+                    landscapeTransformData = element.style.transform
+                        //  console.log('data saved')
+                }
+            }
+
+            function sUpdate() {
+                if (current.z < 1) {
+                    current.z = 1;
+                    last.z = current.z;
+
+                }
+                current.height = originalSize.height * current.z;
+                current.width = originalSize.width * current.z;
+                element.style.transition = "none";
+
+                element.style.transform = "translate3d(" + current.x + "px, " + current.y + "px, 0) scale(" + current.z + ")";
+                //  console.log(current.y)
+                console.log('sUpdate1 occured')
+                console.log({
+                    currentX: current.x,
+                    currentY: current.y,
+                    currentZ: current.z,
+                    elementW: element.offsetWidth,
+                    elementH: element.offsetHeight,
+                    elementCurrentW: current.width,
+                    elementCurrentH: current.height,
+                    parentW: parent.offsetWidth,
+                    parentH: parent.offsetHeight,
+                    windowW: window.innerWidth,
+                    windowH: window.innerHeight
+                })
+
+                if (needsUpdate3) {
+                    sUpdate3()
+                }
+            }
+
+
+            function sUpdate3() {
+
+                // console.log('update3')
+                current.height = originalSize.height * current.z;
+                current.width = originalSize.width * current.z;
+                parentWidth = parent.offsetWidth;
+                parentHeight = parent.offsetHeight;
+                if (current.x - (current.width - originalSize.width) / 2 > 0) {
+                    current.x = (current.width - originalSize.width) / 2
+                    last.x = current.x;
+                }
+                if (current.y - (current.height - originalSize.height) / 2 > 0) {
+                    current.y = (current.height - originalSize.height) / 2
+                    last.y = current.y;
+                }
+
+                if (current.width >= parentWidth) {
+
+                    let rightBoundFix = -(current.width - parentWidth - (current.width - originalSize.width) / 2)
+                    if (current.x < rightBoundFix) {
+                        current.x = rightBoundFix
+                        last.x = current.x;
+
+                    }
+
+                } else {
+
+                    let rightBoundFix = -(current.width - parentWidth - (current.width - originalSize.width) / 2) - (parentWidth - current.width) / 2
+
+                    current.x = rightBoundFix
+                    last.x = current.x;
+
+                }
+
+                if (current.height >= parentHeight) {
+                    let bottomBoundFix = -(current.height - parentHeight - (current.height - originalSize.height) / 2)
+
+                    if (current.y < bottomBoundFix) {
+                        current.y = bottomBoundFix
+                        last.y = current.y;
+
+                    }
+                } else {
+                    let bottomBoundFix = -(current.height - parentHeight - (current.height - originalSize.height) / 2) - (parentHeight - current.height) / 2
+                    current.y = bottomBoundFix
+                    last.y = current.y;
+
+                }
+                // element.style.transitionDuration = 1 + 's'
+                element.style.transition = "0.7s";
+
+                element.style.transform = "translate3d(" + current.x + "px, " + current.y + "px, 0) scale(" + current.z + ")";
+                console.log('sUpdate3 occured')
+                console.log({
+                    currentX: current.x,
+                    currentY: current.y,
+                    currentZ: current.z,
+                    elementW: element.offsetWidth,
+                    elementH: element.offsetHeight,
+                    elementCurrentW: current.width,
+                    elementCurrentH: current.height,
+                    parentW: parent.offsetWidth,
+                    parentH: parent.offsetHeight,
+                    windowW: window.innerWidth,
+                    windowH: window.innerHeight
+                })
+
+
+                last.x = current.x;
+                last.y = current.y;
+                last.z = current.z;
+                needsUpdate3 = false
+            }
+
+
+            // then we are going to draw into special canvas element
+
+
+            // var select = document.getElementById('tool');
+            // select.addEventListener('change', function() {
+            //     mode = select.value;
+            // });
+
+        };
+        imageObj.src = './superCompact.jpg';
+        //konva ends here
+    </script>
+</body>
+
+</html>
