@@ -93,7 +93,7 @@
         });
         var tap = new Hammer.Tap({
             pointers: 1,
-            taps: 2,
+            taps: 1,
             interval: 300,
             time: 250,
             threshold: 10,
@@ -113,6 +113,8 @@
         // })
         pinch.recognizeWith(pan)
         pan.recognizeWith(pinch)
+        pan.recognizeWith(tap)
+        tap.recognizeWith(pan)
         swipe.recognizeWith(pan);
         // pan.recognizeWith(swipe);
 
