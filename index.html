@@ -107,8 +107,6 @@
         })
         var portraitTransformData;
         var landscapeTransformData;
-        var portraitLastEventData;
-        var landscapeLastEventData;
 
         // var doubletap = new Hammer.Tap({
         //     event: 'doubletap',
@@ -250,7 +248,6 @@
                 element.style.transform = portraitTransformData
                     // console.log('data restored')
                     //translate3d(0px, 0px, 0px) scale(1)
-                lastEvent = portraitLastEventData
                 current.x = parseFloat(portraitTransformData.replace('translate3d(', '').replace(/px(.*?)$/, ''))
                 current.y = parseFloat(portraitTransformData.replace(/^(.*?)px, /, '').replace(/px(.*?)$/, ''))
                 current.z = parseFloat(portraitTransformData.replace(/^(.*?)scale\(/, '').replace(/\)$/, ''))
@@ -263,7 +260,6 @@
             } else if (screen.orientation.angle == 90 && landscapeTransformData !== undefined) {
                 element.style.transform = landscapeTransformData
                     // console.log('data restored')
-                lastEvent = landscapeLastEventData
                 current.x = parseFloat(portraitTransformData.replace('translate3d(', '').replace(/px(.*?)$/, ''))
                 current.y = parseFloat(portraitTransformData.replace(/^(.*?)px, /, '').replace(/px(.*?)$/, ''))
                 current.z = parseFloat(portraitTransformData.replace(/^(.*?)scale\(/, '').replace(/\)$/, ''))
@@ -394,12 +390,6 @@
                 current.x = last.x + e.deltaX - fixHammerjsDeltaIssue.x;
                 current.y = last.y + e.deltaY - fixHammerjsDeltaIssue.y;
                 lastEvent = 'pan';
-                if (screen.orientation.angle == 0) {
-                    portraitLastEventData = lastEvent
-                } else {
-                    landscapeLastEventData = lastEvent
-
-                }
                 //    console.log('pan occured')
 
                 update();
@@ -419,12 +409,6 @@
             current.y = d.y + last.y + e.deltaY;
             current.z = d.z + last.z;
             lastEvent = 'pinch';
-            if (screen.orientation.angle == 0) {
-                portraitLastEventData = lastEvent
-            } else {
-                landscapeLastEventData = lastEvent
-
-            }
             // console.log('pinch occured')
             console.log(d.z)
             console.log(e.scale)
@@ -442,12 +426,6 @@
                 y: pinchStart.y
             }, originalSize, current.z);
             lastEvent = 'pinchstart';
-            if (screen.orientation.angle == 0) {
-                portraitLastEventData = lastEvent
-            } else {
-                landscapeLastEventData = lastEvent
-
-            }
             // console.log('pinchstart occured')
 
         })
@@ -464,12 +442,6 @@
                 last.x = current.x;
                 last.y = current.y;
                 lastEvent = 'panend';
-                if (screen.orientation.angle == 0) {
-                    portraitLastEventData = lastEvent
-                } else {
-                    landscapeLastEventData = lastEvent
-
-                }
                 needsUpdate3 = true;
                 // console.log('panend occured')
 
@@ -482,12 +454,6 @@
             last.y = current.y;
             last.z = current.z;
             lastEvent = 'pinchend';
-            if (screen.orientation.angle == 0) {
-                portraitLastEventData = lastEvent
-            } else {
-                landscapeLastEventData = lastEvent
-
-            }
             needsUpdate3 = true
                 //  console.log('pinchend occured')
 
