@@ -728,7 +728,7 @@
         var isErasing = false;
         var points = [];
 
-        el.onmousedown = function(e) {
+        el.ontouchstart = function(e) {
             isDrawing = true;
             ctx.beginPath();
             ctx.moveTo(e.clientX - 1, e.clientY);
@@ -740,7 +740,7 @@
                 y: e.clientY
             });
         };
-        el2.onmousedown = function(e) {
+        el2.ontouchstart = function(e) {
             isErasing = true;
             console.log(e);
             ctx2.beginPath();
@@ -748,7 +748,7 @@
             ctx2.lineTo(e.clientX + 10, e.clientY);
             ctx2.stroke();
         };
-        el2.onmousemove = function(e) {
+        el2.ontouchmove = function(e) {
             if (!isErasing) return;
             ctx2.lineTo(e.clientX, e.clientY);
             ctx2.stroke();
@@ -756,7 +756,7 @@
 
         }
 
-        el.onmousemove = function(e) {
+        el.ontouchmove = function(e) {
             if (!isDrawing) return;
 
             points.push({
@@ -786,7 +786,7 @@
             ctx.stroke();
         };
 
-        el.onmouseup = function() {
+        el.ontouchend = function() {
             ctx2.drawImage(el, 0, 0);
             ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
@@ -794,7 +794,7 @@
 
             points.length = 0;
         };
-        el2.onmouseup = function() {
+        el2.ontouchend = function() {
             ctx2.beginPath()
             isErasing = false
         }
