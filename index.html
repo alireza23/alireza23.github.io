@@ -5,23 +5,92 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <script src="./js/atrament.min.js"></script>
+    <script src="./js/fabric.min.js"></script>
+    <script src="./js/jquery.min.js"></script>
 </head>
 
 <body>
-    <canvas id="sketchpad" width="500" height="500"></canvas>
+    <canvas id="canvas" width="400" height="400" class="canvas"></canvas>
+    <canvas id="myCanvas" width="400" height="400" class="canvas"></canvas>
+    <button id="button1" onclick="myFunction()">to json</button>
 </body>
 <script>
-    const canvas = document.querySelector('#sketchpad');
-    const sketchpad = new Atrament(canvas, {
-        width: 500,
-        height: 500,
-        color: 'blue',
+    var x0, x1, x2, xe, y0, y1, y2, ye;
+    var canvas;
+    var c = document.getElementById("myCanvas");
+    var ctx = c.getContext("2d");
+    // ctx.fillStyle = '#ffffff';
+    // ctx.fillRect(0, 0, c.width, c.height);
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.lineWidth = 5;
+    ctx.strokeStyle = "#005e7a";
+    $(function() {
+        canvas = window._canvas = new fabric.Canvas('canvas');
+        canvas.backgroundColor = '#ffffff';
+        canvas.isDrawingMode = 1;
+        canvas.freeDrawingBrush.color = "#005e7a";
+        canvas.freeDrawingBrush.width = 5;
+        canvas.renderAll();
     });
-    sketchpad.weight = 2;
-    sketchpad.smoothing = 0;
-    // canvas.width = window.innerWidth
-    // canvas.height = window.innerHeight
+
+    function myFunction() {
+        //  console.log(JSON.stringify(canvas))
+        var json = JSON.parse(JSON.stringify(canvas))
+            //console.log(json.objects.length)
+        for (let i = 0; i < json.objects.length; i++) {
+            //console.log(json.objects[i].path.length)
+            var points = []
+            for (let j = 0; j < json.objects[i].path.length; j++) {
+
+
+                if (json.objects[i].path[j][0] == 'M') {
+                    x0 = json.objects[i].path[j][1]
+                    y0 = json.objects[i].path[j][2]
+                    points.push({
+                        x: x0,
+                        y: y0
+                    })
+
+                } else if (json.objects[i].path[j][0] == 'L') {
+                    xe = json.objects[i].path[j][1]
+                    ye = json.objects[i].path[j][2]
+                    points.push({
+                        x: xe,
+                        y: ye
+                    })
+                } else {
+                    x1 = json.objects[i].path[j][1]
+                    y1 = json.objects[i].path[j][2]
+                    x2 = json.objects[i].path[j][3]
+                    y2 = json.objects[i].path[j][4]
+                    points.push({
+                            x: x1,
+                            y: y1
+                        })
+                        // points.push({
+                        //     x: x2,
+                        //     y: y2
+                        // })
+                }
+
+
+
+
+
+
+            }
+            ctx.beginPath();
+            ctx.moveTo(points[0].x, points[0].y);
+            for (var k = 1; k < points.length; k++) {
+                ctx.lineTo(points[k].x, points[k].y);
+            }
+            ctx.stroke();
+            //console.log(points)
+
+        }
+
+    }
 </script>
 
 </html>
