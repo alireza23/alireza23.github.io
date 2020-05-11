@@ -37,14 +37,17 @@
 
         function touchstart() {
             console.log('start')
+            event.preventDefault();
         }
 
         function touchend() {
             console.log('end')
+            event.preventDefault();
         }
 
         function touchmove() {
             console.log('move')
+            event.preventDefault();
         }
 
         function mouseMove(event) {
@@ -68,8 +71,8 @@
         c.lineJoin = "round";
         c.lineWidth = 10;
         c.strokeStyle = '"#F00"'
-        update();
-        // update on animation frame
+            //   update();
+            // update on animation frame
         function update() {
             ctx.clearRect(0, 0, window.innerWidth, window.innerHeight); // clear onscreen
             if (mouse.mouseDown) {
