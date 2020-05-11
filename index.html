@@ -52,8 +52,8 @@
 
         function mouseMove(event) {
             console.log(event)
-            mouse.x = event.offsetX;
-            mouse.y = event.offsetY;
+            mouse.x = event.touches[0].clientX;
+            mouse.y = event.touches[0].clientY;
 
             if (event.type === "mousedown" || event.type === "touchstart") {
                 mouse.mouseDown = true;
