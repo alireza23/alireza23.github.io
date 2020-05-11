@@ -41,8 +41,6 @@
         
         #canvas {
             position: absolute;
-            top: 0;
-            left: 0;
         }
         /* #toolbar {
             height: 56px;
@@ -199,8 +197,8 @@
             element.style.left = '0'
             element.style.transform = "none";
             element.style.display = 'block'
-            canvas.width = window.getComputedStyle(element).width.replace(/px/, '')
-            canvas.height = window.getComputedStyle(element).height.replace(/px/, '')
+            canvas.style.width = window.getComputedStyle(element).width
+            canvas.style.height = window.getComputedStyle(element).height
                 // if (screen.orientation.angle == 0) {
                 //     parent.style.width = shortAxis + 'px'
                 //     parent.style.height = longAxis + 'px'
@@ -256,6 +254,7 @@
             console.log(last)
             if (screen.orientation.angle == 0 && portraitTransformData !== undefined) {
                 element.style.transform = portraitTransformData
+                canvas.style.transform = portraitTransformData
                     // console.log('data restored')
                     //translate3d(0px, 0px, 0px) scale(1)
                 current.x = parseFloat(portraitTransformData.replace('translate3d(', '').replace(/px(.*?)$/, ''))
@@ -269,7 +268,9 @@
 
             } else if (screen.orientation.angle == 90 && landscapeTransformData !== undefined) {
                 element.style.transform = landscapeTransformData
-                    // console.log('data restored')
+                canvas.style.transform = portraitTransformData
+
+                // console.log('data restored')
                 current.x = parseFloat(portraitTransformData.replace('translate3d(', '').replace(/px(.*?)$/, ''))
                 current.y = parseFloat(portraitTransformData.replace(/^(.*?)px, /, '').replace(/px(.*?)$/, ''))
                 current.z = parseFloat(portraitTransformData.replace(/^(.*?)scale\(/, '').replace(/\)$/, ''))
@@ -483,6 +484,7 @@
             element.style.transition = "none";
 
             element.style.transform = "translate3d(" + current.x + "px, " + current.y + "px, 0) scale(" + current.z + ")";
+            canvas.style.transform = "translate3d(" + current.x + "px, " + current.y + "px, 0) scale(" + current.z + ")";
             //  console.log(current.y)
             // console.log('update1 occured')
             if (screen.orientation.angle == 0) {
@@ -556,6 +558,7 @@
             element.style.transition = "0.7s";
 
             element.style.transform = "translate3d(" + current.x + "px, " + current.y + "px, 0) scale(" + current.z + ")";
+            canvas.style.transform = "translate3d(" + current.x + "px, " + current.y + "px, 0) scale(" + current.z + ")";
             //   console.log('update3 occured')
 
 
@@ -584,6 +587,7 @@
             element.style.transition = "none";
 
             element.style.transform = "translate3d(" + current.x + "px, " + current.y + "px, 0) scale(" + current.z + ")";
+            canvas.style.transform = "translate3d(" + current.x + "px, " + current.y + "px, 0) scale(" + current.z + ")";
             //  console.log(current.y)
             console.log('sUpdate1 occured')
             console.log({
@@ -658,6 +662,7 @@
             element.style.transition = "0.7s";
 
             element.style.transform = "translate3d(" + current.x + "px, " + current.y + "px, 0) scale(" + current.z + ")";
+            canvas.style.transform = "translate3d(" + current.x + "px, " + current.y + "px, 0) scale(" + current.z + ")";
             console.log('sUpdate3 occured')
             console.log({
                 currentX: current.x,
