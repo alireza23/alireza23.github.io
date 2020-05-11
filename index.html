@@ -185,6 +185,7 @@
         resizeEnd()
 
         function resizeEnd() {
+            console.log('resize')
             element.style.display = 'none'
             needsUpdate3 = true;
             pinchZoomOrigin = undefined;
@@ -198,6 +199,8 @@
             element.style.left = '0'
             element.style.transform = "none";
             element.style.display = 'block'
+            canvas.width = window.getComputedStyle(element).width.replace(/px/, '')
+            canvas.height = window.getComputedStyle(element).height.replace(/px/, '')
                 // if (screen.orientation.angle == 0) {
                 //     parent.style.width = shortAxis + 'px'
                 //     parent.style.height = longAxis + 'px'
@@ -680,10 +683,10 @@
             console.log('loded')
 
             var ctx = canvas.getContext('2d');
-            var width = window.innerWidth;
-            var height = window.innerHeight;
-            canvas.height = height;
-            canvas.width = width;
+            // var width = window.innerWidth;
+            // var height = window.innerHeight;
+            // canvas.height = height;
+            // canvas.width = width;
             ctx.lineCap = 'round';
             ctx.lineJoin = 'round';
             ctx.shadowBlur = 2;
