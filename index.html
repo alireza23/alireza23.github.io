@@ -13,6 +13,7 @@
     <canvas id="canvas" width="400" height="400" class="canvas"></canvas>
     <canvas id="myCanvas" width="400" height="400" class="canvas"></canvas>
     <button id="button1" onclick="myFunction()">to json</button>
+    <button id="button2" onclick="clera()">clear</button>
 </body>
 <script>
     var x0, x1, x2, xe, y0, y1, y2, ye;
@@ -25,6 +26,10 @@
     ctx.lineJoin = "round";
     ctx.lineWidth = 5;
     ctx.strokeStyle = "#005e7a";
+
+    function clear() {
+        canvas.clear()
+    }
     $(function() {
         canvas = window._canvas = new fabric.Canvas('canvas');
         canvas.backgroundColor = '#ffffff';
