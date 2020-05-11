@@ -1,95 +1,75 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <meta charset="utf-8" />
     <title>atrament.js ~ demo</title>
     <script src="./js/atrament.min.js"></script>
     <script defer src="demo.js"></script>
     <style>
-      canvas {
-        width: 100vw;
-        height: 100vh;
-        position: fixed;
-        top: 0;
-        left: 0;
-        z-index: 2;
-      }
-
-      form {
-        z-index: 3;
-        position: fixed;
-        top: 300;
-        left: 100;
-        background: rgba(0, 0, 0, 0.7);
-        padding: 1em;
-        color: white;
-        width: 16rem;
-      }
-
-      form * {
-        margin-bottom: 1em;
-      }
-
-      input[type='checkbox'] {
-        margin-right: 0.5rem;
-        display: inline-block;
-      }
-
-      @media (-webkit-min-device-pixel-ratio: 1.25), (min-resolution: 120dpi) {
-        form * {
-          font-size: 1.5em;
+        canvas {
+            width: 100vw;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 2;
         }
-      }
-
-      body {
-        background-image: url('img/bg.jpg');
-        font-family: sans-serif;
-        padding: 1em;
-      }
-
-      #clear {
-        display: none;
-      }
+        
+        form {
+            z-index: 3;
+            position: fixed;
+            top: 300;
+            left: 100;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 1em;
+            color: white;
+            width: 16rem;
+        }
+        
+        form * {
+            margin-bottom: 1em;
+        }
+        
+        input[type='checkbox'] {
+            margin-right: 0.5rem;
+            display: inline-block;
+        }
+        
+        @media (-webkit-min-device-pixel-ratio: 1.25),
+        (min-resolution: 120dpi) {
+            form * {
+                font-size: 1.5em;
+            }
+        }
+        
+        body {
+            background-image: url('img/bg.jpg');
+            font-family: sans-serif;
+            padding: 1em;
+        }
+        
+        #clear {
+            display: none;
+        }
     </style>
-  </head>
-  <body>
+</head>
+
+<body>
     <h1>atrament.js</h1>
     <form>
-      <button id="clear" onclick="event.preventDefault(); atrament.clear();">
+        <button id="clear" onclick="event.preventDefault(); atrament.clear();">
         clear
       </button>
-      <button id="simulate">Simulate Drawing</button>
-      <br />
-      <label>Thickness</label><br />
-      <input
-        type="range"
-        min="1"
-        max="40"
-        oninput="atrament.weight = parseFloat(event.target.value);"
-        value="2"
-        step="0.1"
-        autocomplete="off"
-      /><br />
-      <label for="smoothing">Smoothing</label><br />
-      <input
-        id="smoothing"
-        type="range"
-        min="0.1"
-        max="2"
-        onchange="atrament.smoothing = parseFloat(event.target.value);"
-        value="0.85"
-        step="0.05"
-        autocomplete="off"
-      /><br />
-      <input
-        id="adaptive"
-        type="checkbox"
-        onchange="atrament.adaptiveStroke = event.target.checked;"
-        checked
-        autocomplete="off"
-      /><label for="adaptive">Adaptive stroke</label><br />
-      <label>Mode</label>
-      <select onchange="atrament.mode = event.target.value;" autocomplete="off">
+        <button id="simulate">Simulate Drawing</button>
+        <br />
+        <label>Thickness</label><br />
+        <input type="range" min="1" max="80" oninput="atrament.weight = parseFloat(event.target.value);" value="2" step="0.1" autocomplete="off" /><br />
+        <label for="smoothing">Smoothing</label><br />
+        <input id="smoothing" type="range" min="0.1" max="2" onchange="atrament.smoothing = parseFloat(event.target.value);" value="0.85" step="0.05" autocomplete="off" /><br />
+        <input id="adaptive" type="checkbox" onchange="atrament.adaptiveStroke = event.target.checked;" checked autocomplete="off" /><label for="adaptive">Adaptive stroke</label><br />
+        <label>Mode</label>
+        <select onchange="atrament.mode = event.target.value;" autocomplete="off">
         <option value="draw" default>Draw</option>
         <option value="fill" default>Fill</option>
         <option value="erase" default>Erase</option> </select
