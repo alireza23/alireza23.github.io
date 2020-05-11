@@ -5,11 +5,22 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        
+        #tool {
+            position: absolute;
+            top: 0;
+            left: 0
+        }
+    </style>
 </head>
 
 <body>
-    Tool:
+
     <select id="tool">
       <option value="brush">Brush</option>
       <option value="eraser">Eraser</option>
@@ -84,7 +95,7 @@
                     // draw the dragged stroke to the offscreen layer
                 if (mode == "brush") {
                     c.globalCompositeOperation = "source-over";
-                    c.lineWidth = 10;
+                    c.lineWidth = 5;
                 } else {
                     c.globalCompositeOperation = "destination-out";
                     c.lineWidth = 20;
