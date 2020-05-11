@@ -2,117 +2,106 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <script src="./js/fabric.min.js"></script>
-    <script src="./js/jquery.min.js"></script>
+
 </head>
 
 <body>
-    <canvas id="canvas" width="400" height="400" class="canvas"></canvas>
-    <canvas id="myCanvas" width="400" height="400" class="canvas"></canvas>
-    <button id="button1" onclick="myFunction()">to json</button>
-    <button id="button2" onclick="clear()">clear</button>
-</body>
-<script>
-    var x0, x1, x2, xe, y0, y1, y2, ye;
-    var canvas;
-    var c = document.getElementById("myCanvas");
-    var ctx = c.getContext("2d");
-    // ctx.fillStyle = '#ffffff';
-    // ctx.fillRect(0, 0, c.width, c.height);
-    ctx.lineCap = "round";
-    ctx.lineJoin = "round";
-    ctx.lineWidth = 5;
-    ctx.strokeStyle = "#005e7a";
-    // ctx.shadowOffsetX = 1;
-    // ctx.shadowOffsetY = 1;
-    // ctx.shadowBlur = 1;
-    // ctx.shadowColor = "#005e7a";
+    Tool:
+    <select id="tool">
+      <option value="brush">Brush</option>
+      <option value="eraser">Eraser</option>
+    </select>
+    <canvas class="canC" id="canV"></canvas>
 
+    <script>
+        var mode = "brush";
+        var mouse = {
+            x: 0,
+            y: 0,
+            mouseDown: false
+        };
+        // get canvas set up mouse and do the other things
+        var canvas = document.getElementById("canV");
+        canvas.height = window.innerHeight;
+        canvas.width = window.innerWidth;
+        var ctx = canvas.getContext("2d");
+        canvas.addEventListener("mousemove", mouseMove);
+        canvas.addEventListener("mousedown", mouseMove);
+        canvas.addEventListener("mouseup", mouseMove);
+        canvas.addEventListener("touchmove", touchmove);
+        canvas.addEventListener("touchstart", touchstart);
+        canvas.addEventListener("touchend", touchend);
 
-    $(function() {
-        canvas = window._canvas = new fabric.Canvas('canvas');
-        canvas.backgroundColor = '#ffffff';
-        canvas.isDrawingMode = 1;
-        canvas.freeDrawingBrush.color = "#005e7a";
-        canvas.freeDrawingBrush.width = 5;
-        canvas.renderAll();
-    });
-
-    clearEl = $('#button2');
-
-    clearEl.onclick = function() {
-        canvas.clear()
-    };
-
-
-    function myFunction() {
-        console.log(JSON.parse(JSON.stringify(canvas)))
-        var json = JSON.parse(JSON.stringify(canvas))
-            //console.log(json.objects.length)
-        for (let i = 0; i < json.objects.length; i++) {
-            //console.log(json.objects[i].path.length)
-            var points = []
-            var firstPoint;
-            var lastPoint;
-            for (let j = 0; j < json.objects[i].path.length; j++) {
-
-
-                if (json.objects[i].path[j][0] == 'M') {
-                    x0 = json.objects[i].path[j][1]
-                    y0 = json.objects[i].path[j][2]
-                    firstPoint = {
-                        x: x0,
-                        y: y0
-                    }
-
-                } else if (json.objects[i].path[j][0] == 'L') {
-                    xe = json.objects[i].path[j][1]
-                    ye = json.objects[i].path[j][2]
-                    lastPoint = {
-                        x: xe,
-                        y: ye
-                    }
-                } else {
-                    x1 = json.objects[i].path[j][1]
-                    y1 = json.objects[i].path[j][2]
-                    x2 = json.objects[i].path[j][3]
-                    y2 = json.objects[i].path[j][4]
-                    points.push({
-                            x1: x1,
-                            y1: y1,
-                            x2: x2,
-                            y2: y2
-                        })
-                        // points.push({
-                        //     x: x2,
-                        //     y: y2
-                        // })
-                }
-
-
-
-
-
-
-            }
-            // console.log(points)
-            ctx.beginPath();
-            ctx.moveTo(firstPoint.x, firstPoint.y);
-            // ctx.quadraticCurveTo(points[10].x1, points[10].y1, points[10].x2, points[10].y2);
-            for (var k = 0; k < points.length; k++) {
-                // console.log(points[k])
-                ctx.quadraticCurveTo(points[k].x1, points[k].y1, points[k].x2, points[k].y2);
-            }
-            //ctx.lineTo(lastPoint.x, lastPoint.y)
-            ctx.stroke();
-            //console.log(points)
-
+        function touchstart() {
+            console.log('start')
         }
 
-    }
-</script>
+        function touchend() {
+            console.log('end')
+        }
+
+        function touchmove() {
+            console.log('move')
+        }
+
+        function mouseMove(event) {
+            mouse.x = event.offsetX;
+            mouse.y = event.offsetY;
+
+            if (event.type === "mousedown" || event.type === "touchstart") {
+                mouse.mouseDown = true;
+            } else if (event.type === "mouseup" || event.type === "touchend") {
+                mouse.mouseDown = false;
+            }
+            event.preventDefault();
+        }
+
+        // create off screen layer that we will draw to
+        var layer1 = document.createElement("canvas");
+        layer1.width = canvas.width; // same size as the onscreen canvas
+        layer1.height = canvas.height;
+        var c = layer1.getContext("2d");
+        c.lineCap = "round";
+        c.lineJoin = "round";
+        c.lineWidth = 10;
+        c.strokeStyle = '"#F00"'
+        update();
+        // update on animation frame
+        function update() {
+            ctx.clearRect(0, 0, window.innerWidth, window.innerHeight); // clear onscreen
+            if (mouse.mouseDown) {
+
+                // draw the dragged stroke to the offscreen layer
+                if (mode == "brush") {
+                    c.globalCompositeOperation = "source-over";
+                    c.lineWidth = 10;
+                } else {
+                    c.globalCompositeOperation = "destination-out";
+                    c.lineWidth = 20;
+                }
+                c.beginPath();
+                c.moveTo(mouse.lastx, mouse.lasty);
+                c.lineTo(mouse.x, mouse.y);
+                c.stroke();
+                mouse.lastx = mouse.x;
+                mouse.lasty = mouse.y;
+            } else {
+                mouse.lastx = undefined; // using this as a semaphore for drag start
+                ctx.fillStyle = "#F00"
+                ctx.globalAlpha = 0.6;
+            }
+            // draw the offscreen layer onto the onscreen canvas at the alpha wanted
+            ctx.drawImage(layer1, 0, 0);
+            requestAnimationFrame(update); // do it all again.
+        }
+        var select = document.getElementById("tool");
+        select.addEventListener("change", function() {
+            mode = select.value;
+        });
+    </script>
+</body>
 
 </html>
