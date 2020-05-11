@@ -13,7 +13,7 @@
     <canvas id="canvas" width="400" height="400" class="canvas"></canvas>
     <canvas id="myCanvas" width="400" height="400" class="canvas"></canvas>
     <button id="button1" onclick="myFunction()">to json</button>
-    <button id="button2" onclick="clera()">clear</button>
+    <button id="button2" onclick="clear()">clear</button>
 </body>
 <script>
     var x0, x1, x2, xe, y0, y1, y2, ye;
@@ -24,54 +24,67 @@
     // ctx.fillRect(0, 0, c.width, c.height);
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
-    ctx.lineWidth = 5;
+    ctx.lineWidth = 3;
     ctx.strokeStyle = "#005e7a";
+    ctx.shadowOffsetX = 1;
+    ctx.shadowOffsetY = 1;
+    ctx.shadowBlur = 1;
+    ctx.shadowColor = "#005e7a";
 
-    function clear() {
-        canvas.clear()
-    }
+
     $(function() {
         canvas = window._canvas = new fabric.Canvas('canvas');
         canvas.backgroundColor = '#ffffff';
         canvas.isDrawingMode = 1;
         canvas.freeDrawingBrush.color = "#005e7a";
-        canvas.freeDrawingBrush.width = 5;
+        canvas.freeDrawingBrush.width = 3;
         canvas.renderAll();
     });
 
+    clearEl = $('#button2');
+
+    clearEl.onclick = function() {
+        canvas.clear()
+    };
+
+
     function myFunction() {
-        //  console.log(JSON.stringify(canvas))
+        console.log(JSON.parse(JSON.stringify(canvas)))
         var json = JSON.parse(JSON.stringify(canvas))
             //console.log(json.objects.length)
         for (let i = 0; i < json.objects.length; i++) {
             //console.log(json.objects[i].path.length)
             var points = []
+            var firstPoint;
+            var lastPoint;
             for (let j = 0; j < json.objects[i].path.length; j++) {
 
 
                 if (json.objects[i].path[j][0] == 'M') {
                     x0 = json.objects[i].path[j][1]
                     y0 = json.objects[i].path[j][2]
-                    points.push({
+                    firstPoint = {
                         x: x0,
                         y: y0
-                    })
+                    }
 
                 } else if (json.objects[i].path[j][0] == 'L') {
                     xe = json.objects[i].path[j][1]
                     ye = json.objects[i].path[j][2]
-                    points.push({
+                    lastPoint = {
                         x: xe,
                         y: ye
-                    })
+                    }
                 } else {
                     x1 = json.objects[i].path[j][1]
                     y1 = json.objects[i].path[j][2]
                     x2 = json.objects[i].path[j][3]
                     y2 = json.objects[i].path[j][4]
                     points.push({
-                            x: x1,
-                            y: y1
+                            x1: x1,
+                            y1: y1,
+                            x2: x2,
+                            y2: y2
                         })
                         // points.push({
                         //     x: x2,
@@ -85,11 +98,15 @@
 
 
             }
+            // console.log(points)
             ctx.beginPath();
-            ctx.moveTo(points[0].x, points[0].y);
-            for (var k = 1; k < points.length; k++) {
-                ctx.lineTo(points[k].x, points[k].y);
+            ctx.moveTo(firstPoint.x, firstPoint.y);
+            // ctx.quadraticCurveTo(points[10].x1, points[10].y1, points[10].x2, points[10].y2);
+            for (var k = 0; k < points.length; k++) {
+                console.log(points[k])
+                ctx.quadraticCurveTo(points[k].x1, points[k].y1, points[k].x2, points[k].y2);
             }
+            ctx.lineTo(lastPoint.x, lastPoint.y)
             ctx.stroke();
             //console.log(points)
 
