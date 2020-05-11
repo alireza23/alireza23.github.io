@@ -18,7 +18,7 @@
 <body>
     <canvas id="canvas"></canvas>
     <script>
-        var isPen = false
+        var pointerType;
         window.onload = function() {
             var canvas = document.getElementById('canvas');
             var ctx = canvas.getContext('2d');
@@ -59,7 +59,7 @@
                 }
             }, 0);
             canvas.addEventListener('touchstart', function(e) {
-                console.log(e)
+                console.log(pointerType)
                 e.preventDefault()
                 this.down = true;
                 this.X = e.touches[0].pageX;
@@ -91,8 +91,9 @@
                 }
             }, 0);
 
-            canvas.addEventListener('pointerdown', function(event) {
-                console.log(event.pointerType)
+            canvas.addEventListener('pointerdown', function(e) {
+                // console.log(event.pointerType)
+                pointerType = e.pointerType
 
             })
         };
