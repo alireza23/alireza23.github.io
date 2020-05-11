@@ -103,10 +103,10 @@
             ctx.moveTo(firstPoint.x, firstPoint.y);
             // ctx.quadraticCurveTo(points[10].x1, points[10].y1, points[10].x2, points[10].y2);
             for (var k = 0; k < points.length; k++) {
-                console.log(points[k])
+                // console.log(points[k])
                 ctx.quadraticCurveTo(points[k].x1, points[k].y1, points[k].x2, points[k].y2);
             }
-            ctx.lineTo(lastPoint.x, lastPoint.y)
+            //ctx.lineTo(lastPoint.x, lastPoint.y)
             ctx.stroke();
             //console.log(points)
 
