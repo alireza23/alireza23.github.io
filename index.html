@@ -38,6 +38,12 @@
             left: 0;
             transition-timing-function: ease-out
         }
+        
+        #canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
         /* #toolbar {
             height: 56px;
             width: 100%;
@@ -48,14 +54,15 @@
 <body>
     <!-- <div id="toolbar"></div> -->
     <div id="dragWrapper">
-
         <img id="drag" src="./superCompact.jpg" alt="">
-
     </div>
+    <canvas id="canvas"></canvas>
     <script type="text/javascript" src="./js/hammer.js"></script>
     <script type="text/javascript">
         // const shortAxis = gettAxis().short
         // const longAxis = gettAxis().long
+        var pointerType;
+        var canvas = document.getElementById('canvas');
         let zoomlock = false
         let editLock = false
         var doIt;
@@ -669,6 +676,95 @@
             last.z = current.z;
             needsUpdate3 = false
         }
+        window.onload = function() {
+            console.log('loded')
+
+            var ctx = canvas.getContext('2d');
+            var width = window.innerWidth;
+            var height = window.innerHeight;
+            canvas.height = height;
+            canvas.width = width;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.shadowBlur = 2;
+            ctx.shadowOffsetX = 1;
+            ctx.shadowOffsetY = 1;
+            ctx.shadowColor = "#0d486e";
+            ctx.strokeStyle = '#186699';
+
+
+            canvas.addEventListener('mousedown', function(e) {
+                this.down = true;
+                this.X = e.pageX;
+                this.Y = e.pageY;
+                ctx.shadowBlur = 4;
+                ctx.shadowOffsetX = 2;
+                ctx.shadowOffsetY = 2;
+                ctx.shadowColor = "black";
+                ctx.beginPath();
+                ctx.moveTo(this.X, this.Y);
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+                ctx.lineWidth = 10;
+                ctx.strokeStyle = '#9b59b6';
+
+                // this.color = rgb();
+            }, 0);
+            canvas.addEventListener('mouseup', function() {
+                this.down = false;
+            }, 0);
+            canvas.addEventListener('mousemove', function(e) {
+                this.style.cursor = 'pointer';
+                if (this.down) {
+                    ctx.lineTo(e.pageX, e.pageY);
+                    ctx.stroke();
+                    this.X = e.pageX;
+                    this.Y = e.pageY;
+                }
+            }, 0);
+            canvas.addEventListener('touchstart', function(e) {
+                console.log(e)
+
+                this.down = true;
+                this.X = e.touches[0].pageX;
+                this.Y = e.touches[0].pageY;
+
+
+                if (pointerType == 'pen') {
+                    ctx.globalCompositeOperation = 'source-over'
+                    ctx.lineWidth = 5;
+                    e.preventDefault()
+                } else if (pointerType == 'touch' && e.touches.length == 1) {
+                    ctx.globalCompositeOperation = 'destination-out'
+                    ctx.lineWidth = 45;
+                    e.preventDefault()
+
+                }
+                ctx.beginPath();
+                ctx.moveTo(this.X, this.Y);
+
+            }, 0);
+            canvas.addEventListener('touchend', function(e) {
+                this.down = false;
+                e.preventDefault()
+            }, 0);
+            canvas.addEventListener('touchmove', function(e) {
+                this.style.cursor = 'pointer';
+                e.preventDefault()
+                if (this.down) {
+                    ctx.lineTo(e.touches[0].pageX, e.touches[0].pageY);
+                    ctx.stroke();
+                    this.X = e.touches[0].pageX;
+                    this.Y = e.touches[0].pageY;
+                }
+            }, 0);
+
+            canvas.addEventListener('pointerdown', function(e) {
+                console.log(e)
+                pointerType = e.pointerType
+
+            })
+        };
     </script>
 </body>
 
