@@ -32,6 +32,17 @@
                 this.down = true;
                 this.X = e.pageX;
                 this.Y = e.pageY;
+                ctx.shadowBlur = 4;
+                ctx.shadowOffsetX = 2;
+                ctx.shadowOffsetY = 2;
+                ctx.shadowColor = "black";
+                ctx.beginPath();
+                ctx.moveTo(this.X, this.Y);
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+                ctx.lineWidth = 10;
+                ctx.strokeStyle = '#9b59b6';
+
                 // this.color = rgb();
             }, 0);
             canvas.addEventListener('mouseup', function() {
@@ -40,15 +51,8 @@
             canvas.addEventListener('mousemove', function(e) {
                 this.style.cursor = 'pointer';
                 if (this.down) {
-                    ctx.beginPath();
-                    ctx.moveTo(this.X, this.Y);
-                    ctx.lineCap = 'round';
-                    ctx.lineJoin = 'round';
-                    ctx.lineWidth = 10;
                     ctx.lineTo(e.pageX, e.pageY);
-                    ctx.strokeStyle = '#9b59b6';
                     ctx.stroke();
-
                     this.X = e.pageX;
                     this.Y = e.pageY;
                 }
@@ -59,7 +63,17 @@
                 this.down = true;
                 this.X = e.touches[0].pageX;
                 this.Y = e.touches[0].pageY;
-                // this.color = rgb();
+                ctx.shadowBlur = 4;
+                ctx.shadowOffsetX = 2;
+                ctx.shadowOffsetY = 2;
+                ctx.shadowColor = "black";
+                ctx.beginPath();
+                ctx.moveTo(this.X, this.Y);
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+                ctx.lineWidth = 10;
+                ctx.strokeStyle = '#9b59b6';
+
             }, 0);
             canvas.addEventListener('touchend', function() {
                 this.down = false;
@@ -69,27 +83,12 @@
                 this.style.cursor = 'pointer';
                 e.preventDefault()
                 if (this.down) {
-                    ctx.beginPath();
-                    ctx.moveTo(this.X, this.Y);
-                    ctx.lineCap = 'round';
-                    ctx.lineJoin = 'round';
-                    ctx.lineWidth = 10;
                     ctx.lineTo(e.touches[0].pageX, e.touches[0].pageY);
-                    ctx.strokeStyle = '#9b59b6';
                     ctx.stroke();
-
                     this.X = e.touches[0].pageX;
                     this.Y = e.touches[0].pageY;
                 }
             }, 0);
-
-            // function rgb() {
-            //     color = 'rgb(';
-            //     for (var i = 0; i < 3; i++) {
-            //         color += Math.floor(Math.random() * 255) + ',';
-            //     }
-            //     return color.replace(/\,$/, ')');
-            // }
         };
     </script>
 </body>
