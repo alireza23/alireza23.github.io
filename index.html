@@ -60,7 +60,7 @@
             }, 0);
             canvas.addEventListener('touchstart', function(e) {
                 console.log(e)
-                e.preventDefault()
+
                 this.down = true;
                 this.X = e.touches[0].pageX;
                 this.Y = e.touches[0].pageY;
@@ -77,9 +77,11 @@
                 if (pointerType == 'pen') {
                     ctx.globalCompositeOperation = 'source-over'
                     ctx.lineWidth = 5;
-                } else if (pointerType == 'touch') {
+                    e.preventDefault()
+                } else if (pointerType == 'touch' && e.touches.length == 1) {
                     ctx.globalCompositeOperation = 'destination-out'
                     ctx.lineWidth = 45;
+                    e.preventDefault()
 
                 }
 
