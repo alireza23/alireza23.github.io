@@ -56,14 +56,14 @@
             canvas.addEventListener('touchstart', function(e) {
                 console.log(e)
                 this.down = true;
-                this.X = e.pageX;
-                this.Y = e.pageY;
+                this.X = e.touches[0].pageX;
+                this.Y = e.touches[0].pageY;
                 // this.color = rgb();
             }, 0);
-            canvas.addEventListener('mouseup', function() {
+            canvas.addEventListener('touchend', function() {
                 this.down = false;
             }, 0);
-            canvas.addEventListener('mousemove', function(e) {
+            canvas.addEventListener('touchmove', function(e) {
                 this.style.cursor = 'pointer';
                 if (this.down) {
                     ctx.beginPath();
@@ -71,12 +71,12 @@
                     ctx.lineCap = 'round';
                     ctx.lineJoin = 'round';
                     ctx.lineWidth = 10;
-                    ctx.lineTo(e.pageX, e.pageY);
+                    ctx.lineTo(e.touches[0].pageX, e.touches[0].pageY);
                     ctx.strokeStyle = '#9b59b6';
                     ctx.stroke();
 
-                    this.X = e.pageX;
-                    this.Y = e.pageY;
+                    this.X = e.touches[0].pageX;
+                    this.Y = e.touches[0].pageY;
                 }
             }, 0);
 
