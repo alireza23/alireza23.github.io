@@ -31,9 +31,9 @@
         canvas.addEventListener("mousemove", mouseMove);
         canvas.addEventListener("mousedown", mouseMove);
         canvas.addEventListener("mouseup", mouseMove);
-        canvas.addEventListener("touchmove", touchmove);
-        canvas.addEventListener("touchstart", touchstart);
-        canvas.addEventListener("touchend", touchend);
+        canvas.addEventListener("touchmove", mouseMove);
+        canvas.addEventListener("touchstart", mouseMove);
+        canvas.addEventListener("touchend", mouseMove);
 
         function touchstart() {
             console.log('start')
@@ -51,6 +51,7 @@
         }
 
         function mouseMove(event) {
+            console.log(event)
             mouse.x = event.offsetX;
             mouse.y = event.offsetY;
 
