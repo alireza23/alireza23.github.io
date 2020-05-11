@@ -51,9 +51,12 @@
         }
 
         function mouseMove(event) {
-            console.log(event)
-            mouse.x = event.touches[0].clientX;
-            mouse.y = event.touches[0].clientY;
+            if (event.touches.length == 1) {
+                mouse.x = event.touches[0].clientX;
+                mouse.y = event.touches[0].clientY;
+            }
+            console.log(event.type)
+
 
             if (event.type === "mousedown" || event.type === "touchstart") {
                 mouse.mouseDown = true;
@@ -71,14 +74,14 @@
         c.lineCap = "round";
         c.lineJoin = "round";
         c.lineWidth = 10;
-        c.strokeStyle = '"#F00"'
-            //   update();
-            // update on animation frame
+        //  c.strokeStyle = '"#F00"'
+        update();
+        // update on animation frame
         function update() {
             ctx.clearRect(0, 0, window.innerWidth, window.innerHeight); // clear onscreen
             if (mouse.mouseDown) {
-
-                // draw the dragged stroke to the offscreen layer
+                console.log('mouth down')
+                    // draw the dragged stroke to the offscreen layer
                 if (mode == "brush") {
                     c.globalCompositeOperation = "source-over";
                     c.lineWidth = 10;
@@ -94,7 +97,7 @@
                 mouse.lasty = mouse.y;
             } else {
                 mouse.lastx = undefined; // using this as a semaphore for drag start
-                ctx.fillStyle = "#F00"
+                // ctx.fillStyle = "#F00"
                 ctx.globalAlpha = 0.6;
             }
             // draw the offscreen layer onto the onscreen canvas at the alpha wanted
