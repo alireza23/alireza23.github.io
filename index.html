@@ -59,7 +59,7 @@
                 }
             }, 0);
             canvas.addEventListener('touchstart', function(e) {
-                console.log(pointerType)
+                console.log(e)
                 e.preventDefault()
                 this.down = true;
                 this.X = e.touches[0].pageX;
@@ -101,7 +101,7 @@
             }, 0);
 
             canvas.addEventListener('pointerdown', function(e) {
-                // console.log(event.pointerType)
+                console.log(e)
                 pointerType = e.pointerType
 
             })
