@@ -60,12 +60,6 @@
             }, 0);
             canvas.addEventListener('touchstart', function(e) {
                 console.log(pointerType)
-                if (pointerType == 'pen') {
-                    ctx.globalCompositeOperation = 'source-over'
-                } else if (pointerType == 'touch') {
-                    ctx.globalCompositeOperation = 'destination-out'
-
-                }
                 e.preventDefault()
                 this.down = true;
                 this.X = e.touches[0].pageX;
@@ -78,8 +72,17 @@
                 ctx.moveTo(this.X, this.Y);
                 ctx.lineCap = 'round';
                 ctx.lineJoin = 'round';
-                ctx.lineWidth = 5;
+
                 ctx.strokeStyle = '#186699';
+                if (pointerType == 'pen') {
+                    ctx.globalCompositeOperation = 'source-over'
+                    ctx.lineWidth = 5;
+                } else if (pointerType == 'touch') {
+                    ctx.globalCompositeOperation = 'destination-out'
+                    ctx.lineWidth = 25;
+
+                }
+
 
             }, 0);
             canvas.addEventListener('touchend', function(e) {
