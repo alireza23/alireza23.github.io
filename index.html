@@ -27,6 +27,7 @@
             height: 100vh;
             /* height: calc(var(--vh, 1vh) * 100); */
             background-color: #91b376;
+            z-index: 1;
         }
         
         #drag {
@@ -36,11 +37,13 @@
             width: 100%;
             position: absolute;
             left: 0;
-            transition-timing-function: ease-out
+            transition-timing-function: ease-out;
+            z-index: 2;
         }
         
         #canvas {
             position: absolute;
+            z-index: 10;
         }
         /* #toolbar {
             height: 56px;
@@ -52,9 +55,10 @@
 <body>
     <!-- <div id="toolbar"></div> -->
     <div id="dragWrapper">
-        <img id="drag" src="./superCompact.jpg" alt="">
+        <!-- <img id="drag" src="./superCompact.jpg" alt=""> -->
+        <canvas id="canvas"></canvas>
+
     </div>
-    <canvas id="canvas"></canvas>
     <script type="text/javascript" src="./js/hammer.js"></script>
     <script type="text/javascript">
         // const shortAxis = gettAxis().short
@@ -82,7 +86,7 @@
         }
         var pinchZoomOrigin = undefined;
         let needsUpdate3 = true;
-        var element = document.getElementById('drag')
+        var element = document.getElementById('canvas')
         let imageNaturalWidth = element.naturalWidth;
         let imageNaturalHeight = element.naturalHeight;
         var parent = document.getElementById('dragWrapper')
@@ -197,8 +201,8 @@
             element.style.left = '0'
             element.style.transform = "none";
             element.style.display = 'block'
-            canvas.style.width = window.getComputedStyle(element).width
-            canvas.style.height = window.getComputedStyle(element).height
+                // canvas.style.width = window.getComputedStyle(element).width
+                // canvas.style.height = window.getComputedStyle(element).height
                 // if (screen.orientation.angle == 0) {
                 //     parent.style.width = shortAxis + 'px'
                 //     parent.style.height = longAxis + 'px'
@@ -254,7 +258,7 @@
             console.log(last)
             if (screen.orientation.angle == 0 && portraitTransformData !== undefined) {
                 element.style.transform = portraitTransformData
-                canvas.style.transform = portraitTransformData
+                    // canvas.style.transform = portraitTransformData
                     // console.log('data restored')
                     //translate3d(0px, 0px, 0px) scale(1)
                 current.x = parseFloat(portraitTransformData.replace('translate3d(', '').replace(/px(.*?)$/, ''))
@@ -268,7 +272,7 @@
 
             } else if (screen.orientation.angle == 90 && landscapeTransformData !== undefined) {
                 element.style.transform = landscapeTransformData
-                canvas.style.transform = portraitTransformData
+                    // canvas.style.transform = portraitTransformData
 
                 // console.log('data restored')
                 current.x = parseFloat(portraitTransformData.replace('translate3d(', '').replace(/px(.*?)$/, ''))
@@ -484,7 +488,7 @@
             element.style.transition = "none";
 
             element.style.transform = "translate3d(" + current.x + "px, " + current.y + "px, 0) scale(" + current.z + ")";
-            canvas.style.transform = "translate3d(" + current.x + "px, " + current.y + "px, 0) scale(" + current.z + ")";
+            // canvas.style.transform = "translate3d(" + current.x + "px, " + current.y + "px, 0) scale(" + current.z + ")";
             //  console.log(current.y)
             // console.log('update1 occured')
             if (screen.orientation.angle == 0) {
@@ -558,7 +562,7 @@
             element.style.transition = "0.7s";
 
             element.style.transform = "translate3d(" + current.x + "px, " + current.y + "px, 0) scale(" + current.z + ")";
-            canvas.style.transform = "translate3d(" + current.x + "px, " + current.y + "px, 0) scale(" + current.z + ")";
+            // canvas.style.transform = "translate3d(" + current.x + "px, " + current.y + "px, 0) scale(" + current.z + ")";
             //   console.log('update3 occured')
 
 
@@ -587,7 +591,7 @@
             element.style.transition = "none";
 
             element.style.transform = "translate3d(" + current.x + "px, " + current.y + "px, 0) scale(" + current.z + ")";
-            canvas.style.transform = "translate3d(" + current.x + "px, " + current.y + "px, 0) scale(" + current.z + ")";
+            // canvas.style.transform = "translate3d(" + current.x + "px, " + current.y + "px, 0) scale(" + current.z + ")";
             //  console.log(current.y)
             console.log('sUpdate1 occured')
             console.log({
@@ -662,7 +666,7 @@
             element.style.transition = "0.7s";
 
             element.style.transform = "translate3d(" + current.x + "px, " + current.y + "px, 0) scale(" + current.z + ")";
-            canvas.style.transform = "translate3d(" + current.x + "px, " + current.y + "px, 0) scale(" + current.z + ")";
+            // canvas.style.transform = "translate3d(" + current.x + "px, " + current.y + "px, 0) scale(" + current.z + ")";
             console.log('sUpdate3 occured')
             console.log({
                 currentX: current.x,
