@@ -1,116 +1,125 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-    <script src="https://unpkg.com/konva@6.0.0/konva.min.js"></script>
+  <head>
     <meta charset="utf-8" />
-    <title>Konva Free Drawing Demo</title>
+    <title>atrament.js ~ demo</title>
+    <script src="./js/atrament.min.js"></script>
+    <script defer src="demo.js"></script>
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            background-color: #f0f0f0;
+      canvas {
+        width: 100vw;
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 2;
+      }
+
+      form {
+        z-index: 3;
+        position: fixed;
+        top: 300;
+        left: 100;
+        background: rgba(0, 0, 0, 0.7);
+        padding: 1em;
+        color: white;
+        width: 16rem;
+      }
+
+      form * {
+        margin-bottom: 1em;
+      }
+
+      input[type='checkbox'] {
+        margin-right: 0.5rem;
+        display: inline-block;
+      }
+
+      @media (-webkit-min-device-pixel-ratio: 1.25), (min-resolution: 120dpi) {
+        form * {
+          font-size: 1.5em;
         }
+      }
+
+      body {
+        background-image: url('img/bg.jpg');
+        font-family: sans-serif;
+        padding: 1em;
+      }
+
+      #clear {
+        display: none;
+      }
     </style>
-</head>
-
-<body>
-    Tool:
-    <select id="tool">
-      <option value="brush">Brush</option>
-      <option value="eraser">Eraser</option>
-    </select>
-    <div id="container"></div>
-    <script>
-        var width = window.innerWidth;
-        var height = window.innerHeight - 25;
-
-        // first we need Konva core things: stage and layer
-        var stage = new Konva.Stage({
-            container: 'container',
-            width: width,
-            height: height
-        });
-
-        var layer = new Konva.Layer();
-        stage.add(layer);
-
-        // then we are going to draw into special canvas element
-        var canvas = document.createElement('canvas');
-        canvas.width = stage.width();
-        canvas.height = stage.height();
-
-        // created canvas we can add to layer as "Konva.Image" element
-        var image = new Konva.Image({
-            image: canvas,
-            x: 0,
-            y: 0
-        });
-        layer.add(image);
-        stage.draw();
-
-        // Good. Now we need to get access to context element
-        var context = canvas.getContext('2d');
-        context.strokeStyle = '#df4b26';
-        context.lineJoin = 'round';
-        context.lineWidth = 5;
-
-        var isPaint = false;
-        var lastPointerPosition;
-        var mode = 'brush';
-
-        // now we need to bind some events
-        // we need to start drawing on mousedown
-        // and stop drawing on mouseup
-        image.on('mousedown touchstart', function() {
-            isPaint = true;
-            lastPointerPosition = stage.getPointerPosition();
-        });
-
-        // will it be better to listen move/end events on the window?
-
-        stage.on('mouseup touchend', function() {
-            isPaint = false;
-        });
-
-        // and core function - drawing
-        stage.on('mousemove touchmove', function() {
-            if (!isPaint) {
-                return;
-            }
-
-            if (mode === 'brush') {
-                context.globalCompositeOperation = 'source-over';
-            }
-            if (mode === 'eraser') {
-                context.globalCompositeOperation = 'destination-out';
-            }
-            context.beginPath();
-
-            var localPos = {
-                x: lastPointerPosition.x - image.x(),
-                y: lastPointerPosition.y - image.y()
-            };
-            context.moveTo(localPos.x, localPos.y);
-            var pos = stage.getPointerPosition();
-            localPos = {
-                x: pos.x - image.x(),
-                y: pos.y - image.y()
-            };
-            context.lineTo(localPos.x, localPos.y);
-            context.closePath();
-            context.stroke();
-
-            lastPointerPosition = pos;
-            layer.batchDraw();
-        });
-
-        var select = document.getElementById('tool');
-        select.addEventListener('change', function() {
-            mode = select.value;
-        });
-    </script>
-</body>
-
+  </head>
+  <body>
+    <h1>atrament.js</h1>
+    <form>
+      <button id="clear" onclick="event.preventDefault(); atrament.clear();">
+        clear
+      </button>
+      <button id="simulate">Simulate Drawing</button>
+      <br />
+      <label>Thickness</label><br />
+      <input
+        type="range"
+        min="1"
+        max="40"
+        oninput="atrament.weight = parseFloat(event.target.value);"
+        value="2"
+        step="0.1"
+        autocomplete="off"
+      /><br />
+      <label for="smoothing">Smoothing</label><br />
+      <input
+        id="smoothing"
+        type="range"
+        min="0.1"
+        max="2"
+        onchange="atrament.smoothing = parseFloat(event.target.value);"
+        value="0.85"
+        step="0.05"
+        autocomplete="off"
+      /><br />
+      <input
+        id="adaptive"
+        type="checkbox"
+        onchange="atrament.adaptiveStroke = event.target.checked;"
+        checked
+        autocomplete="off"
+      /><label for="adaptive">Adaptive stroke</label><br />
+      <label>Mode</label>
+      <select onchange="atrament.mode = event.target.value;" autocomplete="off">
+        <option value="draw" default>Draw</option>
+        <option value="fill" default>Fill</option>
+        <option value="erase" default>Erase</option> </select
+      ><br />
+      <label>Colour</label>
+      <input
+        type="color"
+        onchange="atrament.color = event.target.value;"
+        value="#000000"
+        autocomplete="off"
+      /><br />
+      <label>Opacity</label><br />
+      <input
+        type="range"
+        min="0"
+        max="1"
+        onchange="atrament.opacity = parseFloat(event.target.value);"
+        value="1"
+        step="0.05"
+        autocomplete="off"
+      />
+      <output><pre id="events"></pre></output>
+    </form>
+    <canvas id="sketcher"></canvas>
+    <a href="https://github.com/jakubfiala/atrament.js"
+      ><img
+        style="position: fixed; top: 0; right: 0; border: 0; z-index: 3;"
+        src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67"
+        alt="Fork me on GitHub"
+        data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"
+    /></a>
+  </body>
 </html>
