@@ -239,9 +239,9 @@
                 ctx.moveTo(globalStrokes[i].points[0].x * canvasWidth, globalStrokes[i].points[0].y * canvasHight);
                 for (var j = 1; j < globalStrokes[i].points.length; j++) {
                     ctx.lineTo(globalStrokes[i].points[j].x * canvasWidth, globalStrokes[i].points[j].y * canvasHight);
-                    ctx.stroke();
-                }
 
+                }
+                ctx.stroke();
 
             }
             // console.log(ctx)
