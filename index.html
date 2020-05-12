@@ -88,7 +88,16 @@
         // console.log(imageNaturalHeight)
         var parent = document.getElementById('dragWrapper')
         var canvas = document.getElementById('canvas')
-
+        var ctx = canvas.getContext('2d');
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.shadowBlur = 2;
+        ctx.shadowOffsetX = 1;
+        ctx.shadowOffsetY = 1;
+        ctx.lineWidth = 10;
+        ctx.shadowColor = "#0d486e";
+        ctx.strokeStyle = '#186699';
+        ctx.stroke()
 
 
         var hammertime = new Hammer.Manager(element, {});
@@ -208,16 +217,7 @@
             canvas.width = elementComputedWidth.replace(/px/, '')
             canvas.height = elementComputedHeight.replace(/px/, '')
             canvas.style.left = window.getComputedStyle(element).left
-            var ctx = canvas.getContext('2d');
-            ctx.lineCap = 'round';
-            ctx.lineJoin = 'round';
-            ctx.shadowBlur = 2;
-            ctx.shadowOffsetX = 1;
-            ctx.shadowOffsetY = 1;
-            ctx.lineWidth = 10;
-            ctx.shadowColor = "#0d486e";
-            ctx.strokeStyle = '#186699';
-            ctx.stroke()
+            console.log(ctx)
 
             // console.log(elementComputedHeight)
             // if (screen.orientation.angle == 0) {
@@ -741,16 +741,7 @@
             }, 0);
             canvas.addEventListener('touchstart', function(e) {
                 console.log(e)
-                var ctx = canvas.getContext('2d');
-                ctx.lineCap = 'round';
-                ctx.lineJoin = 'round';
-                ctx.shadowBlur = 2;
-                ctx.shadowOffsetX = 1;
-                ctx.shadowOffsetY = 1;
-                ctx.lineWidth = 10;
-                ctx.shadowColor = "#0d486e";
-                ctx.strokeStyle = '#186699';
-                ctx.stroke()
+
                 this.down = true;
                 this.X = e.touches[0].pageX;
                 this.Y = e.touches[0].pageY;
@@ -766,6 +757,14 @@
                     e.preventDefault()
 
                 }
+                ctx.shadowBlur = 4;
+                ctx.shadowOffsetX = 2;
+                ctx.shadowOffsetY = 2;
+                ctx.shadowColor = "black";
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+                ctx.lineWidth = 10;
+                ctx.strokeStyle = '#9b59b6';
                 ctx.beginPath();
                 ctx.moveTo(this.X, this.Y);
 
