@@ -60,6 +60,9 @@
     <script type="text/javascript">
         // const shortAxis = gettAxis().short
         // const longAxis = gettAxis().long
+        var currentStroke;
+        var currentStrokePoints = [];
+        var globalStrokes = []
         var pointerType;
         let zoomlock = false
         let editLock = false
@@ -767,11 +770,38 @@
                 ctx.strokeStyle = '#9b59b6';
                 ctx.beginPath();
                 ctx.moveTo(this.X, this.Y);
+                currentStrokePoints.push({
+                    x: this.X,
+                    y: this.Y
+                })
 
             }, 0);
             canvas.addEventListener('touchend', function(e) {
                 this.down = false;
                 e.preventDefault()
+                console.log(currentStrokePoints)
+                var canvasWidth = canvas.style.width
+                var canvasHight = canvas.style.height
+                currentStroke = {
+                    points: currentStrokePoints,
+                    canvasWidth,
+                    canvasHight,
+                    globalCompositeOperation: ctx.globalCompositeOperation,
+                    lineWidth: ctx.lineWidth,
+                    shadowBlur: ctx.shadowBlur,
+                    shadowOffsetX: ctx.shadowOffsetX,
+                    shadowOffsetY: ctx.shadowOffsetY,
+                    shadowColor: ctx.shadowColor,
+                    strokeStyle: ctx.strokeStyle,
+                }
+                console.log(currentStroke)
+
+                globalStrokes.push(currentStroke)
+                console.log(globalStrokes)
+
+                currentStroke = null
+                console.log(currentStroke)
+
             }, 0);
             canvas.addEventListener('touchmove', function(e) {
                 this.style.cursor = 'pointer';
@@ -781,6 +811,10 @@
                     ctx.stroke();
                     this.X = e.touches[0].pageX;
                     this.Y = e.touches[0].pageY;
+                    currentStrokePoints.push({
+                        x: this.X,
+                        y: this.Y
+                    })
                 }
             }, 0);
 
