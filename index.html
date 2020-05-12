@@ -40,11 +40,9 @@
             var img = document.getElementById("myImage");
             var canvas = document.getElementById('canvas');
             var ctx = canvas.getContext('2d');
-            var width = screen.width;
-            var height = screen.height;
+            var width = window.innerWidth;
+            var height = window.innerHeight;
             canvas.width = width;
-
-
             var imageNaturalWidth = img.naturalWidth
             var imageNaturalHeight = img.naturalHeight
             var desiredHeight = (width * imageNaturalHeight) / imageNaturalWidth;
