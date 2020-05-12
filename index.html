@@ -202,7 +202,7 @@
         resizeEnd()
 
         function resizeEnd() {
-            console.log('update4')
+            console.log('update5')
             canvas.width = 0
             canvas.height = 0
             canvas.style.left = 0
@@ -254,27 +254,27 @@
             // ctx.moveTo(0, 50)
             // ctx.lineTo(300, 50)
             // ctx.stroke();
-            for (var i = 0; i < globalStrokes.length; i++) {
-                ctx.shadowBlur = globalStrokes[i].shadowBlur * canvasWidth
-                ctx.shadowOffsetX = globalStrokes[i].shadowOffsetX * canvasWidth
-                ctx.shadowOffsetY = globalStrokes[i].shadowOffsetY * canvasWidth
-                ctx.shadowColor = globalStrokes[i].shadowColor
-                ctx.lineWidth = globalStrokes[i].lineWidth * canvasWidth
-                ctx.globalCompositeOperation = globalStrokes[i].globalCompositeOperation
-                ctx.strokeStyle = globalStrokes[i].strokeStyle
-                ctx.lineCap = 'round';
-                ctx.lineJoin = 'round';
-                console.log(ctx.globalCompositeOperation + '  ' + i)
-                ctx.beginPath();
-                ctx.moveTo(globalStrokes[i].points[0].x * canvasWidth, globalStrokes[i].points[0].y * canvasHeight);
-                for (var j = 1; j < globalStrokes[i].points.length; j++) {
-                    ctx.lineTo(globalStrokes[i].points[j].x * canvasWidth, globalStrokes[i].points[j].y * canvasHeight);
-                    ctx.stroke();
+            // for (var i = 0; i < globalStrokes.length; i++) {
+            //     ctx.shadowBlur = globalStrokes[i].shadowBlur * canvasWidth
+            //     ctx.shadowOffsetX = globalStrokes[i].shadowOffsetX * canvasWidth
+            //     ctx.shadowOffsetY = globalStrokes[i].shadowOffsetY * canvasWidth
+            //     ctx.shadowColor = globalStrokes[i].shadowColor
+            //     ctx.lineWidth = globalStrokes[i].lineWidth * canvasWidth
+            //     ctx.globalCompositeOperation = globalStrokes[i].globalCompositeOperation
+            //     ctx.strokeStyle = globalStrokes[i].strokeStyle
+            //     ctx.lineCap = 'round';
+            //     ctx.lineJoin = 'round';
+            //     console.log(ctx.globalCompositeOperation + '  ' + i)
+            //     ctx.beginPath();
+            //     ctx.moveTo(globalStrokes[i].points[0].x * canvasWidth, globalStrokes[i].points[0].y * canvasHeight);
+            //     for (var j = 1; j < globalStrokes[i].points.length; j++) {
+            //         ctx.lineTo(globalStrokes[i].points[j].x * canvasWidth, globalStrokes[i].points[j].y * canvasHeight);
 
-                }
+            //     }
 
+            //     ctx.stroke();
 
-            }
+            // }
             // console.log(ctx)
 
             // console.log(elementComputedHeight)
@@ -830,7 +830,7 @@
                     y: this.Y / canvasHight
                 })
 
-            }, 0);
+            }, true);
             canvas.addEventListener('touchend', function(e) {
                 this.down = false;
                 e.preventDefault()
@@ -855,7 +855,7 @@
                 currentStroke = null
                     // console.log(currentStroke)
 
-            }, 0);
+            }, true);
             canvas.addEventListener('touchmove', function(e) {
                 this.style.cursor = 'pointer';
                 e.preventDefault()
@@ -869,13 +869,13 @@
                         y: this.Y / canvasHight
                     })
                 }
-            }, 0);
+            }, true);
 
             canvas.addEventListener('pointerdown', function(e) {
                 // console.log(e)
                 pointerType = e.pointerType
 
-            })
+            }, true)
         };
     </script>
 </body>
