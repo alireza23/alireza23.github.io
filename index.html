@@ -60,6 +60,8 @@
     <script type="text/javascript">
         // const shortAxis = gettAxis().short
         // const longAxis = gettAxis().long
+        var canvasWidth
+        var canvasHight
         var currentStroke;
         var currentStrokePoints = [];
         var globalStrokes = []
@@ -220,6 +222,8 @@
             canvas.width = elementComputedWidth.replace(/px/, '')
             canvas.height = elementComputedHeight.replace(/px/, '')
             canvas.style.left = window.getComputedStyle(element).left
+            canvasWidth = canvas.width
+            canvasHight = canvas.height
                 // console.log(ctx)
 
             // console.log(elementComputedHeight)
@@ -771,37 +775,34 @@
                 ctx.beginPath();
                 ctx.moveTo(this.X, this.Y);
                 currentStrokePoints.push({
-                    x: this.X,
-                    y: this.Y
+                    x: this.X / canvasWidth,
+                    y: this.Y / canvasHight
                 })
 
             }, 0);
             canvas.addEventListener('touchend', function(e) {
                 this.down = false;
                 e.preventDefault()
-                console.log('touch end')
-                console.log(currentStrokePoints)
-                var canvasWidth = canvas.width
-                var canvasHight = canvas.height
+                    //  console.log('touch end')
+                    // console.log(currentStrokePoints)
+
                 currentStroke = {
-                    points: currentStrokePoints,
-                    canvasWidth,
-                    canvasHight,
-                    globalCompositeOperation: ctx.globalCompositeOperation,
-                    lineWidth: ctx.lineWidth,
-                    shadowBlur: ctx.shadowBlur,
-                    shadowOffsetX: ctx.shadowOffsetX,
-                    shadowOffsetY: ctx.shadowOffsetY,
-                    shadowColor: ctx.shadowColor,
-                    strokeStyle: ctx.strokeStyle,
-                }
-                console.log(currentStroke)
+                        points: currentStrokePoints,
+                        globalCompositeOperation: ctx.globalCompositeOperation,
+                        lineWidth: ctx.lineWidth / canvasWidth,
+                        shadowBlur: ctx.shadowBlur / canvasWidth,
+                        shadowOffsetX: ctx.shadowOffsetX / canvasWidth,
+                        shadowOffsetY: ctx.shadowOffsetY / canvasWidth,
+                        shadowColor: ctx.shadowColor,
+                        strokeStyle: ctx.strokeStyle,
+                    }
+                    // console.log(currentStroke)
 
                 globalStrokes.push(currentStroke)
                 console.log(globalStrokes)
 
                 currentStroke = null
-                console.log(currentStroke)
+                    // console.log(currentStroke)
 
             }, 0);
             canvas.addEventListener('touchmove', function(e) {
@@ -813,8 +814,8 @@
                     this.X = e.touches[0].pageX;
                     this.Y = e.touches[0].pageY;
                     currentStrokePoints.push({
-                        x: this.X,
-                        y: this.Y
+                        x: this.X / canvasWidth,
+                        y: this.Y / canvasHight
                     })
                 }
             }, 0);
