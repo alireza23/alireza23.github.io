@@ -8,8 +8,8 @@
 </head>
 
 <body>
-    <canvas id="myCanvas"></canvas>
-    <canvas id="myCanvas2"></canvas>
+    <canvas id="canvas"></canvas>
+
 </body>
 <script>
     function setupCanvas(canvas) {
@@ -25,23 +25,106 @@
         // Scale all drawing operations by the dpr, so you
         // don't have to worry about the difference.
         ctx.scale(dpr, dpr);
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.lineWidth = 3;
+        ctx.shadowBlur = 2;
+        ctx.shadowOffsetX = 1;
+        ctx.shadowOffsetY = 1;
+        ctx.shadowColor = "#0d486e";
+        ctx.strokeStyle = '#186699';
+
         return ctx;
     }
 
     // Now this line will be the same size on the page
     // but will look sharper on high-DPI devices!
-    var ctx2 = setupCanvas(document.getElementById('myCanvas2'));
-    ctx2.lineWidth = 5;
-    ctx2.beginPath();
-    ctx2.moveTo(100, 100);
-    ctx2.lineTo(200, 200);
-    ctx2.stroke();
-    var ctx = document.getElementById('myCanvas').getContext('2d');
-    ctx.lineWidth = 5;
-    ctx.beginPath();
-    ctx.moveTo(100, 100);
-    ctx.lineTo(200, 200);
-    ctx.stroke();
+    var pointerType;
+    window.onload = function() {
+        var canvas = document.getElementById('canvas')
+        var ctx = setupCanvas(canvas);
+
+
+
+
+
+
+
+        canvas.addEventListener('mousedown', function(e) {
+            ctx.globalCompositeOperation = 'source-over'
+            console.log('canvas mouse down')
+            this.down = true;
+            this.X = e.pageX;
+            this.Y = e.pageY;
+            // ctx.shadowBlur = 4;
+            // ctx.shadowOffsetX = 2;
+            // ctx.shadowOffsetY = 2;
+            // ctx.shadowColor = "black";
+            ctx.beginPath();
+            ctx.moveTo(this.X, this.Y);
+            // ctx.lineCap = 'round';
+            // ctx.lineJoin = 'round';
+            // ctx.lineWidth = 10;
+            // ctx.strokeStyle = '#9b59b6';
+
+            // this.color = rgb();
+        }, false);
+
+        canvas.addEventListener('mouseup', function() {
+            this.down = false;
+        }, 0);
+        canvas.addEventListener('mousemove', function(e) {
+            this.style.cursor = 'pointer';
+            if (this.down) {
+                ctx.lineTo(e.pageX, e.pageY);
+                ctx.stroke();
+                this.X = e.pageX;
+                this.Y = e.pageY;
+            }
+        }, 0);
+        canvas.addEventListener('touchstart', function(e) {
+            console.log(e)
+
+            this.down = true;
+            this.X = e.touches[0].pageX;
+            this.Y = e.touches[0].pageY;
+
+
+            if (pointerType == 'pen') {
+                ctx.globalCompositeOperation = 'source-over'
+                ctx.lineWidth = 5;
+                e.preventDefault()
+            } else if (pointerType == 'touch' && e.touches.length == 1) {
+                ctx.globalCompositeOperation = 'destination-out'
+                ctx.lineWidth = 45;
+                e.preventDefault()
+
+            }
+            ctx.beginPath();
+            ctx.moveTo(this.X, this.Y);
+
+        }, 0);
+        canvas.addEventListener('touchend', function(e) {
+            this.down = false;
+            e.preventDefault()
+        }, 0);
+        canvas.addEventListener('touchmove', function(e) {
+            this.style.cursor = 'pointer';
+            e.preventDefault()
+            if (this.down) {
+                ctx.lineTo(e.touches[0].pageX, e.touches[0].pageY);
+                ctx.stroke();
+                this.X = e.touches[0].pageX;
+                this.Y = e.touches[0].pageY;
+            }
+        }, 0);
+
+        canvas.addEventListener('pointerdown', function(e) {
+            console.log(e)
+            pointerType = e.pointerType
+
+        })
+    };
 </script>
 
 </html>
