@@ -202,7 +202,7 @@
         resizeEnd()
 
         function resizeEnd() {
-            console.log('update7')
+            console.log('update8')
             canvas.width = 0
             canvas.height = 0
             canvas.style.left = 0
@@ -807,8 +807,8 @@
                 console.log(e)
 
                 this.down = true;
-                this.X = e.touches[0].pageX;
-                this.Y = e.touches[0].pageY;
+                this.X = e.touches[0].clientX;
+                this.Y = e.touches[0].clientY;
 
 
                 if (pointerType == 'pen') {
@@ -868,8 +868,8 @@
                 if (this.down) {
                     ctx.lineTo(e.touches[0].pageX, e.touches[0].pageY);
                     ctx.stroke();
-                    this.X = e.touches[0].pageX;
-                    this.Y = e.touches[0].pageY;
+                    this.X = e.touches[0].clientY;
+                    this.Y = e.touches[0].clientY;
                     currentStrokePoints.push({
                         x: this.X / canvasWidth,
                         y: this.Y / canvasHight
