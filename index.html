@@ -94,8 +94,15 @@
         ctx.shadowBlur = 2;
         ctx.shadowOffsetX = 1;
         ctx.shadowOffsetY = 1;
+        ctx.lineWidth = 10;
         ctx.shadowColor = "#0d486e";
         ctx.strokeStyle = '#186699';
+        console.log(ctx)
+        ctx.moveTo(100, 100)
+        ctx.lineTo(300, 300)
+        ctx.stroke()
+
+
         var hammertime = new Hammer.Manager(element, {});
         var pinch = new Hammer.Pinch({
             enable: true,
@@ -193,8 +200,8 @@
         resizeEnd()
 
         function resizeEnd() {
-            canvas.style.width = 0
-            canvas.style.height = 0
+            canvas.width = 0
+            canvas.height = 0
             canvas.style.left = 0
             element.style.display = 'none'
             needsUpdate3 = true;
@@ -210,17 +217,19 @@
             element.style.display = 'block'
             elementComputedWidth = window.getComputedStyle(element).width
             elementComputedHeight = window.getComputedStyle(element).height
-            canvas.style.width = elementComputedWidth
-            canvas.style.height = elementComputedHeight
+            canvas.width = elementComputedWidth.replace(/px/, '')
+            canvas.height = elementComputedHeight.replace(/px/, '')
             canvas.style.left = window.getComputedStyle(element).left
-                // console.log(elementComputedHeight)
-                // if (screen.orientation.angle == 0) {
-                //     parent.style.width = shortAxis + 'px'
-                //     parent.style.height = longAxis + 'px'
-                // } else {
-                //     parent.style.width = longAxis + 'px'
-                //     parent.style.height = shortAxis + 'px'
-                // }
+            console.log(ctx)
+
+            // console.log(elementComputedHeight)
+            // if (screen.orientation.angle == 0) {
+            //     parent.style.width = shortAxis + 'px'
+            //     parent.style.height = longAxis + 'px'
+            // } else {
+            //     parent.style.width = longAxis + 'px'
+            //     parent.style.height = shortAxis + 'px'
+            // }
 
 
             fixHammerjsDeltaIssue = undefined;
@@ -692,85 +701,90 @@
             last.z = current.z;
             needsUpdate3 = false
         }
-        parent.addEventListener('mousedown', function(e) {
-            console.log('parent mouse down')
-        }, false)
+        window.onload = function() {
 
-        canvas.addEventListener('mousedown', function(e) {
-            ctx.globalCompositeOperation = 'source-over'
-            console.log('canvas mouse down')
-            this.down = true;
-            this.X = e.pageX;
-            this.Y = e.pageY;
-            ctx.shadowBlur = 4;
-            ctx.shadowOffsetX = 2;
-            ctx.shadowOffsetY = 2;
-            ctx.shadowColor = "black";
-            ctx.beginPath();
-            ctx.moveTo(this.X, this.Y);
-            ctx.lineCap = 'round';
-            ctx.lineJoin = 'round';
-            ctx.lineWidth = 10;
-            ctx.strokeStyle = '#9b59b6';
+            console.log('yes')
+            console.log(ctx)
 
-            // this.color = rgb();
-        }, false);
+            parent.addEventListener('mousedown', function(e) {
+                console.log('parent mouse down')
+            }, false)
 
-        canvas.addEventListener('mouseup', function() {
-            this.down = false;
-        }, 0);
-        canvas.addEventListener('mousemove', function(e) {
-            console.log(e.pageX)
-            this.style.cursor = 'pointer';
-            if (this.down) {
-                ctx.lineTo(e.pageX, e.pageY);
-                ctx.stroke();
+            canvas.addEventListener('mousedown', function(e) {
+                ctx.globalCompositeOperation = 'source-over'
+                console.log('canvas mouse down')
+                this.down = true;
                 this.X = e.pageX;
                 this.Y = e.pageY;
-            }
-        }, 0);
-        canvas.addEventListener('touchstart', function(e) {
-            console.log(e)
+                ctx.shadowBlur = 4;
+                ctx.shadowOffsetX = 2;
+                ctx.shadowOffsetY = 2;
+                ctx.shadowColor = "black";
+                ctx.beginPath();
+                ctx.moveTo(this.X, this.Y);
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+                ctx.lineWidth = 10;
+                ctx.strokeStyle = '#9b59b6';
 
-            this.down = true;
-            this.X = e.touches[0].pageX;
-            this.Y = e.touches[0].pageY;
+                // this.color = rgb();
+            }, false);
 
+            canvas.addEventListener('mouseup', function() {
+                this.down = false;
+            }, 0);
+            canvas.addEventListener('mousemove', function(e) {
+                this.style.cursor = 'pointer';
+                if (this.down) {
+                    ctx.lineTo(e.pageX, e.pageY);
+                    ctx.stroke();
+                    this.X = e.pageX;
+                    this.Y = e.pageY;
+                }
+            }, 0);
+            canvas.addEventListener('touchstart', function(e) {
+                console.log(e)
 
-            if (pointerType == 'pen') {
-                ctx.globalCompositeOperation = 'source-over'
-                ctx.lineWidth = 5;
-                e.preventDefault()
-            } else if (pointerType == 'touch' && e.touches.length == 1) {
-                ctx.globalCompositeOperation = 'destination-out'
-                ctx.lineWidth = 45;
-                e.preventDefault()
-
-            }
-            ctx.beginPath();
-            ctx.moveTo(this.X, this.Y);
-
-        }, 0);
-        canvas.addEventListener('touchend', function(e) {
-            this.down = false;
-            e.preventDefault()
-        }, 0);
-        canvas.addEventListener('touchmove', function(e) {
-            this.style.cursor = 'pointer';
-            e.preventDefault()
-            if (this.down) {
-                ctx.lineTo(e.touches[0].pageX, e.touches[0].pageY);
-                ctx.stroke();
+                this.down = true;
                 this.X = e.touches[0].pageX;
                 this.Y = e.touches[0].pageY;
-            }
-        }, 0);
 
-        canvas.addEventListener('pointerdown', function(e) {
-            console.log(e)
-            pointerType = e.pointerType
 
-        })
+                if (pointerType == 'pen') {
+                    ctx.globalCompositeOperation = 'source-over'
+                    ctx.lineWidth = 5;
+                    e.preventDefault()
+                } else if (pointerType == 'touch' && e.touches.length == 1) {
+                    ctx.globalCompositeOperation = 'destination-out'
+                    ctx.lineWidth = 45;
+                    e.preventDefault()
+
+                }
+                ctx.beginPath();
+                ctx.moveTo(this.X, this.Y);
+
+            }, 0);
+            canvas.addEventListener('touchend', function(e) {
+                this.down = false;
+                e.preventDefault()
+            }, 0);
+            canvas.addEventListener('touchmove', function(e) {
+                this.style.cursor = 'pointer';
+                e.preventDefault()
+                if (this.down) {
+                    ctx.lineTo(e.touches[0].pageX, e.touches[0].pageY);
+                    ctx.stroke();
+                    this.X = e.touches[0].pageX;
+                    this.Y = e.touches[0].pageY;
+                }
+            }, 0);
+
+            canvas.addEventListener('pointerdown', function(e) {
+                console.log(e)
+                pointerType = e.pointerType
+
+            })
+        };
     </script>
 </body>
 
