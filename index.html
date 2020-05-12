@@ -224,8 +224,36 @@
             canvas.height = elementComputedHeight.replace(/px/, '')
             canvas.style.left = window.getComputedStyle(element).left
             canvasWidth = canvas.width
-            canvasHight = canvas.height
+            canvasHeight = canvas.height
 
+            // ctx.shadowBlur = 2
+            // ctx.shadowOffsetX = 1
+            // ctx.shadowOffsetY = 1
+            // ctx.shadowColor = "#0d486e";
+            // ctx.lineCap = 'round';
+            // ctx.lineJoin = 'round';
+            // ctx.strokeStyle = '#9b59b6';
+
+            // ctx.lineWidth = 5
+            // ctx.globalCompositeOperation = 'source-over'
+            // console.log(globalStrokes)
+
+            //     ctx.beginPath();
+            //     ctx.moveTo(0, 0)
+            //     ctx.lineTo(50, 100)
+            //     ctx.lineTo(200, 50)
+            //     ctx.stroke();
+            //     ctx.beginPath();
+            //     ctx.moveTo(240, 0)
+            //     ctx.lineTo(240, 100)
+            //     ctx.lineTo(200, 150)
+            //     ctx.stroke();
+            //     ctx.globalCompositeOperation = 'destination-out'
+
+            // ctx.beginPath();
+            // ctx.moveTo(0, 50)
+            // ctx.lineTo(300, 50)
+            // ctx.stroke();
             for (var i = 0; i < globalStrokes.length; i++) {
                 ctx.shadowBlur = globalStrokes[i].shadowBlur * canvasWidth
                 ctx.shadowOffsetX = globalStrokes[i].shadowOffsetX * canvasWidth
@@ -238,15 +266,14 @@
                 ctx.lineJoin = 'round';
                 console.log(ctx.globalCompositeOperation + '  ' + i)
                 ctx.beginPath();
-                ctx.moveTo(globalStrokes[i].points[0].x * canvasWidth, globalStrokes[i].points[0].y * canvasHight);
+                ctx.moveTo(globalStrokes[i].points[0].x * canvasWidth, globalStrokes[i].points[0].y * canvasHeight);
                 for (var j = 1; j < globalStrokes[i].points.length; j++) {
-                    ctx.lineTo(globalStrokes[i].points[j].x * canvasWidth, globalStrokes[i].points[j].y * canvasHight);
+                    ctx.lineTo(globalStrokes[i].points[j].x * canvasWidth, globalStrokes[i].points[j].y * canvasHeight);
+                    ctx.stroke();
 
                 }
 
-                ctx.stroke();
-                ctx.beginPath();
-                ctx.moveTo(globalStrokes[i + 1].points[0].x * canvasWidth, globalStrokes[i + 1].points[0].y * canvasHight);
+
             }
             // console.log(ctx)
 
