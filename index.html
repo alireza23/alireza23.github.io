@@ -5,7 +5,7 @@
     <!-- <script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script> -->
     <meta charset=utf-8 />
     <title>Avinash</title>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <style>
         body {
             margin: 0px;
@@ -34,16 +34,22 @@
     </div>
 
     <script>
-        var width = window.innerWidth;
-        var height = window.innerHeight;
-        var pointerType;
-        window.onload = function() {
+        $(document).ready(function() {
+
+            console.log([$(document).width(),
+                $(document).height(),
+                $(window).width(),
+                $(window).height()
+            ])
+            var width = window.innerWidth;
+            var height = window.innerHeight;
+            var pointerType;
             var parent = document.getElementById("dragWrapper");
             var img = document.getElementById("myImage");
             var canvas = document.getElementById('canvas');
             var ctx = canvas.getContext('2d');
 
-            console.log(width)
+            //console.log(width)
             canvas.style.width = width + 'px';
             var imageNaturalWidth = img.naturalWidth
             var imageNaturalHeight = img.naturalHeight
@@ -141,6 +147,10 @@
                 pointerType = e.pointerType
 
             })
+        });
+
+        window.onload = function() {
+
         };
     </script>
 </body>
