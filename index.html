@@ -214,8 +214,8 @@
             element.style.display = 'block'
             elementComputedWidth = window.getComputedStyle(element).width
             elementComputedHeight = window.getComputedStyle(element).height
-            canvas.width = elementComputedWidth.replace(/px/, '')
-            canvas.height = elementComputedHeight.replace(/px/, '')
+            canvas.style.width = elementComputedWidth //.replace(/px/, '')
+            canvas.style.height = elementComputedHeight //.replace(/px/, '')
             canvas.style.left = window.getComputedStyle(element).left
             console.log(ctx)
 
