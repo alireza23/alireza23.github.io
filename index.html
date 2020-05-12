@@ -805,8 +805,9 @@
             }, 0);
             canvas.addEventListener('touchstart', function(e) {
                 console.log(e)
-
+                    //translate3d(2.97354px, 36.4285px, 0px) scale(1.3739)
                 this.down = true;
+                // this.X = (e.touches[0].clientX - canvas.style.transform.replace(/translate3d\(/, '').replace(/px(.*?)$/, '')) / canvas.style.transform.replace(/^(.*?)scale\(/g, '').replace(/\)$/, '');
                 this.X = e.touches[0].clientX;
                 this.Y = e.touches[0].clientY;
 
@@ -866,7 +867,7 @@
                 this.style.cursor = 'pointer';
                 e.preventDefault()
                 if (this.down) {
-                    ctx.lineTo(e.touches[0].pageX, e.touches[0].pageY);
+                    ctx.lineTo(e.touches[0].clientY, e.touches[0].clientY);
                     ctx.stroke();
                     this.X = e.touches[0].clientY;
                     this.Y = e.touches[0].clientY;
