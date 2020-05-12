@@ -29,7 +29,8 @@
 
     // Now this line will be the same size on the page
     // but will look sharper on high-DPI devices!
-    var ctx = setupCanvas(document.getElementById('myCanvas'));
+    // var ctx = setupCanvas(document.getElementById('myCanvas'));
+    var ctx = document.getElementById('myCanvas').getContext('2d');
     ctx.lineWidth = 5;
     ctx.beginPath();
     ctx.moveTo(100, 100);
