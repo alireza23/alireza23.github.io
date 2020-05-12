@@ -220,7 +220,7 @@
             canvas.width = elementComputedWidth.replace(/px/, '')
             canvas.height = elementComputedHeight.replace(/px/, '')
             canvas.style.left = window.getComputedStyle(element).left
-            console.log(ctx)
+                // console.log(ctx)
 
             // console.log(elementComputedHeight)
             // if (screen.orientation.angle == 0) {
@@ -257,19 +257,19 @@
                 //     parentW: parent.style.width,
                 //     parentH: parent.style.height
                 // })
-            console.log({
-                currentX: current.x,
-                currentY: current.y,
-                currentZ: current.z,
-                elementW: element.offsetWidth,
-                elementH: element.offsetHeight,
-                elementCurrentW: current.width,
-                elementCurrentH: current.height,
-                parentW: parent.offsetWidth,
-                parentH: parent.offsetHeight,
-                windowW: window.innerWidth,
-                windowH: window.innerHeight
-            })
+                // console.log({
+                //     currentX: current.x,
+                //     currentY: current.y,
+                //     currentZ: current.z,
+                //     elementW: element.offsetWidth,
+                //     elementH: element.offsetHeight,
+                //     elementCurrentW: current.width,
+                //     elementCurrentH: current.height,
+                //     parentW: parent.offsetWidth,
+                //     parentH: parent.offsetHeight,
+                //     windowW: window.innerWidth,
+                //     windowH: window.innerHeight
+                // })
             last = {
                 x: current.x,
                 y: current.y,
@@ -703,7 +703,7 @@
         }
         window.onload = function() {
 
-            console.log('yes')
+            // console.log('yes')
 
 
             parent.addEventListener('mousedown', function(e) {
@@ -779,6 +779,7 @@
             canvas.addEventListener('touchend', function(e) {
                 this.down = false;
                 e.preventDefault()
+                console.log('touch end')
                 console.log(currentStrokePoints)
                 var canvasWidth = canvas.style.width
                 var canvasHight = canvas.style.height
@@ -819,7 +820,7 @@
             }, 0);
 
             canvas.addEventListener('pointerdown', function(e) {
-                console.log(e)
+                // console.log(e)
                 pointerType = e.pointerType
 
             })
