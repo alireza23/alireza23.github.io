@@ -236,6 +236,7 @@
                 ctx.strokeStyle = globalStrokes[i].strokeStyle
                 ctx.lineCap = 'round';
                 ctx.lineJoin = 'round';
+                console.log(ctx.globalCompositeOperation + '  ' + i)
                 ctx.beginPath();
                 ctx.moveTo(globalStrokes[i].points[0].x * canvasWidth, globalStrokes[i].points[0].y * canvasHight);
                 for (var j = 1; j < globalStrokes[i].points.length; j++) {
