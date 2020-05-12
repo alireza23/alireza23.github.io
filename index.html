@@ -333,6 +333,7 @@
             console.log(last)
             if (screen.orientation.angle == 0 && portraitTransformData !== undefined) {
                 element.style.transform = portraitTransformData
+                canvas.style.transform = portraitTransformData
                     // console.log('data restored')
                     //translate3d(0px, 0px, 0px) scale(1)
                 current.x = parseFloat(portraitTransformData.replace('translate3d(', '').replace(/px(.*?)$/, ''))
@@ -346,6 +347,7 @@
 
             } else if (screen.orientation.angle == 90 && landscapeTransformData !== undefined) {
                 element.style.transform = landscapeTransformData
+                canvas.style.transform = landscapeTransformData
                     // console.log('data restored')
                 current.x = parseFloat(portraitTransformData.replace('translate3d(', '').replace(/px(.*?)$/, ''))
                 current.y = parseFloat(portraitTransformData.replace(/^(.*?)px, /, '').replace(/px(.*?)$/, ''))
@@ -558,8 +560,10 @@
             current.height = originalSize.height * current.z;
             current.width = originalSize.width * current.z;
             element.style.transition = "none";
+            canvas.style.transition = "none";
 
             element.style.transform = "translate3d(" + current.x + "px, " + current.y + "px, 0) scale(" + current.z + ")";
+            canvas.style.transform = "translate3d(" + current.x + "px, " + current.y + "px, 0) scale(" + current.z + ")";
             //  console.log(current.y)
             // console.log('update1 occured')
             if (screen.orientation.angle == 0) {
@@ -631,8 +635,10 @@
             }
             // element.style.transitionDuration = 1 + 's'
             element.style.transition = "0.7s";
+            canvas.style.transition = "0.7s";
 
             element.style.transform = "translate3d(" + current.x + "px, " + current.y + "px, 0) scale(" + current.z + ")";
+            canvas.style.transform = "translate3d(" + current.x + "px, " + current.y + "px, 0) scale(" + current.z + ")";
             //   console.log('update3 occured')
 
 
