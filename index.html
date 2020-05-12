@@ -34,14 +34,15 @@
     </div>
 
     <script>
+        var width = window.innerWidth;
+        var height = window.innerHeight;
         var pointerType;
         window.onload = function() {
             var parent = document.getElementById("dragWrapper");
             var img = document.getElementById("myImage");
             var canvas = document.getElementById('canvas');
             var ctx = canvas.getContext('2d');
-            var width = window.innerWidth;
-            var height = window.innerHeight;
+
             console.log(width)
             canvas.style.width = width + 'px';
             var imageNaturalWidth = img.naturalWidth
