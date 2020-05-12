@@ -720,6 +720,7 @@
             this.down = false;
         }, 0);
         canvas.addEventListener('mousemove', function(e) {
+            console.log(e.pageX)
             this.style.cursor = 'pointer';
             if (this.down) {
                 ctx.lineTo(e.pageX, e.pageY);
