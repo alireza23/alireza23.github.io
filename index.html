@@ -9,6 +9,7 @@
 
 <body>
     <canvas id="myCanvas"></canvas>
+    <canvas id="myCanvas2"></canvas>
 </body>
 <script>
     function setupCanvas(canvas) {
@@ -29,7 +30,12 @@
 
     // Now this line will be the same size on the page
     // but will look sharper on high-DPI devices!
-    // var ctx = setupCanvas(document.getElementById('myCanvas'));
+    var ctx2 = setupCanvas(document.getElementById('myCanvas2'));
+    ctx2.lineWidth = 5;
+    ctx2.beginPath();
+    ctx2.moveTo(100, 100);
+    ctx2.lineTo(200, 200);
+    ctx2.stroke();
     var ctx = document.getElementById('myCanvas').getContext('2d');
     ctx.lineWidth = 5;
     ctx.beginPath();
