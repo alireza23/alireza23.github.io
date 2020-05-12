@@ -225,6 +225,7 @@
             canvas.style.left = window.getComputedStyle(element).left
             canvasWidth = canvas.width
             canvasHight = canvas.height
+
             for (var i = 0; i < globalStrokes.length; i++) {
                 ctx.shadowBlur = globalStrokes[i].shadowBlur * canvasWidth
                 ctx.shadowOffsetX = globalStrokes[i].shadowOffsetX * canvasWidth
@@ -805,7 +806,7 @@
                 e.preventDefault()
                     //  console.log('touch end')
                     // console.log(currentStrokePoints)
-
+                console.log(ctx.globalCompositeOperation)
                 currentStroke = {
                         points: currentStrokePoints,
                         globalCompositeOperation: ctx.globalCompositeOperation,
