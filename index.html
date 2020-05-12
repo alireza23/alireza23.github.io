@@ -243,8 +243,10 @@
                     ctx.lineTo(globalStrokes[i].points[j].x * canvasWidth, globalStrokes[i].points[j].y * canvasHight);
 
                 }
+
                 ctx.stroke();
                 ctx.beginPath();
+                ctx.moveTo(globalStrokes[i + 1].points[0].x * canvasWidth, globalStrokes[i + 1].points[0].y * canvasHight);
             }
             // console.log(ctx)
 
