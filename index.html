@@ -42,11 +42,12 @@
             var ctx = canvas.getContext('2d');
             var width = window.innerWidth;
             var height = window.innerHeight;
-            canvas.width = width;
+            console.log(width)
+            canvas.style.width = width + 'px';
             var imageNaturalWidth = img.naturalWidth
             var imageNaturalHeight = img.naturalHeight
             var desiredHeight = (width * imageNaturalHeight) / imageNaturalWidth;
-            canvas.height = desiredHeight;
+            canvas.style.height = desiredHeight + 'px';
             img.style.width = window.innerWidth + 'px';
             img.style.height = desiredHeight + 'px';
             img.style.display = 'block'
