@@ -12,9 +12,11 @@
 
 </body>
 <script>
+    var dpr = window.devicePixelRatio || 1;
+
     function setupCanvas(canvas) {
         // Get the device pixel ratio, falling back to 1.
-        var dpr = window.devicePixelRatio || 1;
+        //var dpr = window.devicePixelRatio || 1;
         // Get the size of the canvas in CSS pixels.
         var rect = canvas.getBoundingClientRect();
         // Give the canvas pixel dimensions of their CSS
@@ -27,8 +29,8 @@
         ctx.scale(dpr, dpr);
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
-        ctx.lineWidth = 5;
-        ctx.shadowBlur = 2;
+        ctx.lineWidth = 2;
+        ctx.shadowBlur = .5;
         // ctx.shadowOffsetX = 5;
         // ctx.shadowOffsetY = 5;
         ctx.shadowColor = "#186699";
@@ -93,16 +95,16 @@
 
             if (pointerType == 'pen') {
                 ctx.globalCompositeOperation = 'source-over'
-                ctx.lineWidth = 5;
+                ctx.lineWidth = 2;
                 e.preventDefault()
             } else if (pointerType == 'touch' && e.touches.length == 1) {
                 ctx.globalCompositeOperation = 'destination-out'
-                ctx.lineWidth = 45;
+                ctx.lineWidth = 25;
                 e.preventDefault()
 
             }
             ctx.beginPath();
-            ctx.moveTo(this.X, this.Y);
+            ctx.moveTo(this.X / dpr, this.Y / dpr);
 
         }, 0);
         canvas.addEventListener('touchend', function(e) {
@@ -113,10 +115,10 @@
             this.style.cursor = 'pointer';
             e.preventDefault()
             if (this.down) {
-                ctx.lineTo(e.touches[0].pageX, e.touches[0].pageY);
+                ctx.lineTo(e.touches[0].pageX / dpr, e.touches[0].pageY / dpr);
                 ctx.stroke();
-                this.X = e.touches[0].pageX;
-                this.Y = e.touches[0].pageY;
+                this.X = e.touches[0].pageX / dpr;
+                this.Y = e.touches[0].pageY / dpr;
             }
         }, 0);
 
