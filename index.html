@@ -1,133 +1,97 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <!-- downloaded frm: https://jsbin.com/ateho3/344/edit?html,js,output -->
+    <!-- <script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script> -->
+    <meta charset=utf-8 />
+    <title>Avinash</title>
+
+    <style>
+        body {
+            margin: 0px;
+            padding: 0px;
+            /* overflow: hidden; */
+        }
+    </style>
 </head>
 
 <body>
     <canvas id="canvas"></canvas>
+    <script>
+        console.log(window.devicePixelRatio)
+        window.onload = function() {
+            var canvas = document.getElementById('canvas');
+            var width = window.innerWidth;
+            var height = window.innerHeight;
+            canvas.height = height;
+            canvas.width = width;
+            var ctx = canvas.getContext('2d');
+            // ctx.globalAlpha = 0.2;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.shadowBlur = 2;
+            ctx.shadowOffsetX = 1;
+            ctx.shadowOffsetY = 1;
+            ctx.shadowColor = "#0d486e";
 
-</body>
-<script>
-    var dpr = window.devicePixelRatio || 1;
+            ctx.lineWidth = 5;
+            ctx.strokeStyle = '#186699';
 
-    function setupCanvas(canvas) {
-        // Get the device pixel ratio, falling back to 1.
-        //var dpr = window.devicePixelRatio || 1;
-        // Get the size of the canvas in CSS pixels.
-        var rect = canvas.getBoundingClientRect();
-        // Give the canvas pixel dimensions of their CSS
-        // size * the device pixel ratio.
-        canvas.width = rect.width * dpr;
-        canvas.height = rect.height * dpr;
-        var ctx = canvas.getContext('2d');
-        // Scale all drawing operations by the dpr, so you
-        // don't have to worry about the difference.
-        ctx.scale(dpr, dpr);
-        ctx.lineCap = 'round';
-        ctx.lineJoin = 'round';
-        ctx.lineWidth = 2;
-        ctx.shadowBlur = .5;
-        // ctx.shadowOffsetX = 5;
-        // ctx.shadowOffsetY = 5;
-        ctx.shadowColor = "#186699";
-        ctx.strokeStyle = '#186699';
-        ctx.translate(0.5, 0.5);
-
-        return ctx;
-    }
-
-    // Now this line will be the same size on the page
-    // but will look sharper on high-DPI devices!
-    var pointerType;
-    window.onload = function() {
-        var canvas = document.getElementById('canvas')
-        var ctx = setupCanvas(canvas);
-
-
-
-
-
-
-
-        canvas.addEventListener('mousedown', function(e) {
-            ctx.globalCompositeOperation = 'source-over'
-            console.log('canvas mouse down')
-            this.down = true;
-            this.X = e.pageX;
-            this.Y = e.pageY;
-            // ctx.shadowBlur = 4;
-            // ctx.shadowOffsetX = 2;
-            // ctx.shadowOffsetY = 2;
-            // ctx.shadowColor = "black";
-            ctx.beginPath();
-            ctx.moveTo(this.X, this.Y);
-            // ctx.lineCap = 'round';
-            // ctx.lineJoin = 'round';
-            // ctx.lineWidth = 10;
-            // ctx.strokeStyle = '#9b59b6';
-
-            // this.color = rgb();
-        }, false);
-
-        canvas.addEventListener('mouseup', function() {
-            this.down = false;
-        }, 0);
-        canvas.addEventListener('mousemove', function(e) {
-            this.style.cursor = 'pointer';
-            if (this.down) {
-                ctx.lineTo(e.pageX, e.pageY);
-                ctx.stroke();
+            canvas.addEventListener('mousedown', function(e) {
+                this.down = true;
                 this.X = e.pageX;
                 this.Y = e.pageY;
-            }
-        }, 0);
-        canvas.addEventListener('touchstart', function(e) {
-            console.log(e)
 
-            this.down = true;
-            this.X = e.touches[0].pageX;
-            this.Y = e.touches[0].pageY;
+                ctx.beginPath();
+                ctx.moveTo(this.X, this.Y);
+                // ctx.lineCap = 'round';
+                // ctx.lineJoin = 'round';
 
-
-            if (pointerType == 'pen') {
-                ctx.globalCompositeOperation = 'source-over'
-                ctx.lineWidth = 2;
+                // this.color = rgb();
+            }, 0);
+            canvas.addEventListener('mouseup', function() {
+                this.down = false;
+            }, 0);
+            canvas.addEventListener('mousemove', function(e) {
+                this.style.cursor = 'pointer';
+                if (this.down) {
+                    ctx.lineTo(e.pageX, e.pageY);
+                    ctx.stroke();
+                    this.X = e.pageX;
+                    this.Y = e.pageY;
+                }
+            }, 0);
+            canvas.addEventListener('touchstart', function(e) {
+                console.log(e)
                 e.preventDefault()
-            } else if (pointerType == 'touch' && e.touches.length == 1) {
-                ctx.globalCompositeOperation = 'destination-out'
-                ctx.lineWidth = 25;
+                this.down = true;
+                this.X = e.touches[0].pageX;
+                this.Y = e.touches[0].pageY;
+
+                ctx.beginPath();
+                ctx.moveTo(this.X, this.Y);
+                // ctx.lineCap = 'round';
+                // ctx.lineJoin = 'round';
+
+
+            }, 0);
+            canvas.addEventListener('touchend', function(e) {
+                this.down = false;
                 e.preventDefault()
-
-            }
-            ctx.beginPath();
-            ctx.moveTo(this.X / dpr, this.Y / dpr);
-
-        }, 0);
-        canvas.addEventListener('touchend', function(e) {
-            this.down = false;
-            e.preventDefault()
-        }, 0);
-        canvas.addEventListener('touchmove', function(e) {
-            this.style.cursor = 'pointer';
-            e.preventDefault()
-            if (this.down) {
-                ctx.lineTo(e.touches[0].pageX / dpr, e.touches[0].pageY / dpr);
-                ctx.stroke();
-                this.X = e.touches[0].pageX / dpr;
-                this.Y = e.touches[0].pageY / dpr;
-            }
-        }, 0);
-
-        canvas.addEventListener('pointerdown', function(e) {
-            console.log(e)
-            pointerType = e.pointerType
-
-        })
-    };
-</script>
+            }, 0);
+            canvas.addEventListener('touchmove', function(e) {
+                this.style.cursor = 'pointer';
+                e.preventDefault()
+                if (this.down) {
+                    ctx.lineTo(e.touches[0].pageX, e.touches[0].pageY);
+                    ctx.stroke();
+                    this.X = e.touches[0].pageX;
+                    this.Y = e.touches[0].pageY;
+                }
+            }, 0);
+        };
+    </script>
+</body>
 
 </html>
