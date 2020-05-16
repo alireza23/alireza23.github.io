@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <title>Freehand drawing</title>
 
-    <script src="./d3.min.js></script>
+    <script src="./d3.min.js"></script>
     <style>
         #canvas {
             background: oldlace;
@@ -73,10 +73,10 @@
             }).y(function(d) {
                 return d[1];
             }).interpolate('basis');
-
+            //index
             drawing_data = {
                 lines: [{
-                    color : "#1b9e77 ",
+                    color: "#1b9e77",
                     points: [
                         [451, 448],
                         [447, 447],
@@ -84,7 +84,7 @@
                         [430, 440],
                         [417, 433],
                         [411, 429],
-                        [40 5, 424],
+                        [405, 424],
                         [398, 420],
                         [385, 410],
                         [372, 398],
@@ -93,13 +93,13 @@
                         [354, 378],
                         [348, 370],
                         [343, 362],
-                        [338 , 354],  
+                        [338, 354],
                         [333, 346],
                         [329, 337],
-                        [326, 328],          
+                        [326, 328],
                         [322, 318],
                         [319, 309],
-                         [316, 299],
+                        [316, 299],
                         [314, 289],
                         [313, 279],
                         [312, 269],
@@ -108,7 +108,7 @@
                         [316, 228],
                         [317, 218],
                         [319, 209],
-                         [322, 199],
+                        [322, 199],
                         [326, 190],
                         [330, 181],
                         [334, 172],
@@ -165,7 +165,7 @@
                         [655, 320],
                         [650, 326],
                         [638, 338],
-                         [631, 344],
+                        [631, 344],
                         [624, 349],
                         [609, 359],
                         [593, 367],
@@ -280,7 +280,7 @@
 
             active_line = null;
 
-            active_color = "#333333 ";
+            active_color = "#333333";
 
             canvas = d3.select('#canvas');
 
@@ -289,13 +289,13 @@
             ui = d3.select('#ui');
 
             palette = ui.append('g').attr({
-                transform: "translate( " + (4 + SWATCH_D / 2) + ", " + (4 + SWATCH_D / 2) + ") "
+                transform: "translate(" + (4 + SWATCH_D / 2) + "," + (4 + SWATCH_D / 2) + ")"
             });
 
-            swatches = palette.selectAll('swatch').data(["#333333 ", "#ffffff ", "#1b9e77 ", "#d95f02 ", "#7570b3 ", "#e7298a ", "#66a61e ", "#e6ab02 ", "#a6761d ", "#666666 "]);
+            swatches = palette.selectAll('swatch').data(["#333333", "#ffffff", "#1b9e77", "#d95f02", "#7570b3", "#e7298a", "#66a61e", "#e6ab02", "#a6761d", "#666666"]);
 
             trash_btn = ui.append('text').html('&#xf1f8;').attr({
-                "class ": 'btn',
+                "class": 'btn',
                 dy: '0.35em',
                 transform: 'translate(940,20)'
             }).on('click', function() {
@@ -304,7 +304,7 @@
             });
 
             swatches.enter().append('circle').attr({
-                "class ": 'swatch',
+                "class": 'swatch',
                 cx: function(d, i) {
                     return i * (SWATCH_D + 4) / 2;
                 },
@@ -361,7 +361,7 @@
                 var lines;
                 lines = lines_layer.selectAll('.line').data(drawing_data.lines);
                 lines.enter().append('path').attr({
-                    "class ": 'line',
+                    "class": 'line',
                     stroke: function(d) {
                         return d.color;
                     }
