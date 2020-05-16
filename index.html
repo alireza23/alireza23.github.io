@@ -1,5 +1,11 @@
 <!DOCTYPE html>
 <html>
+<style>
+    * {
+        padding: 0;
+        margin: 0;
+    }
+</style>
 
 <head>
     <title>SVG.js</title>
@@ -15,7 +21,7 @@
     //P = (1−t)2P1 + 2(1−t)tP2 + t2P3
     const canvas = d3.select('#svgCanvas')
     const svg = canvas.append('svg')
-        .attr('height', 1000)
+        .attr('height', '100vh')
         .attr('width', '100%')
     console.log(canvas)
     let lastPoint = {}
@@ -85,68 +91,68 @@
 
     //touch
 
-    body.addEventListener('touchStart', (e) => {
+    body.addEventListener('touchstart', (e) => {
 
         console.log('touch start')
         isDrawing = true
-        lastPoint = {
-            'X': e.touches[0].clientX,
-            'Y': e.touches[0].clientY
-        }
-        if (isDrawing == true) {
-            svg.append('circle').attr('cx', e.touches[0].clientX).attr('cy', e.touches[0].clientY).attr('r', 5).attr('fill', 'black')
+            // lastPoint = {
+            //     'X': e.touches[0].clientX,
+            //     'Y': e.touches[0].clientY
+            // }
+            // if (isDrawing == true) {
+            //     svg.append('circle').attr('cx', e.touches[0].clientX).attr('cy', e.touches[0].clientY).attr('r', 5).attr('fill', 'black')
 
-        }
+        // }
     })
 
     body.addEventListener('touchmove', (e) => {
+        console.log('touch move')
 
 
-        if (isDrawing == true) {
-            console.log('touch move')
+        // if (isDrawing == true) {
 
-            if (Math.abs(lastPoint.X - e.touches[0].clientX) > 1 || Math.abs(lastPoint.Y - e.touches[0].clientY) > 1) {
+        //     if (Math.abs(lastPoint.X - e.touches[0].clientX) > 1 || Math.abs(lastPoint.Y - e.touches[0].clientY) > 1) {
 
-                const distance = Math.ceil(Math.sqrt(Math.pow(Math.abs(lastPoint.X - e.touches[0].clientX), 2) + Math.pow(Math.abs(lastPoint.Y - e.touches[0].clientY), 2)))
-                    //P = (1−t)2P1 + 2(1−t)tP2 + t2P3
-                console.log(distance)
-                    //  var d = 30
-                for (var i = 1; i < distance + 1; i++) {
-                    var t = (1 / distance) * i
-                    var Px = Math.pow(1 - t, 2) * lastPoint.X + 2 * (1 - t) * t * ((lastPoint.X + e.touches[0].clientX) / 2) + Math.pow(t, 2) * e.touches[0].clientX
-                    var Py = Math.pow(1 - t, 2) * lastPoint.Y + 2 * (1 - t) * t * ((lastPoint.Y + e.touches[0].clientY) / 2) + Math.pow(t, 2) * e.touches[0].clientY
-                        // console.log({
-                        //     'X': Px,
-                        //     'Y': Py
-                        // })
-                    svg.append('circle').attr('cx', Px).attr('cy', Py).attr('r', 5).attr('fill', 'black')
-
-
-                }
-                // console.log(lastPoint)
-                // console.log({
-                //     "X": e.clientX,
-                //     "Y": e.clientY
-                // })
-            }
-
-        }
+        //         const distance = Math.ceil(Math.sqrt(Math.pow(Math.abs(lastPoint.X - e.touches[0].clientX), 2) + Math.pow(Math.abs(lastPoint.Y - e.touches[0].clientY), 2)))
+        //             //P = (1−t)2P1 + 2(1−t)tP2 + t2P3
+        //         console.log(distance)
+        //             //  var d = 30
+        //         for (var i = 1; i < distance + 1; i++) {
+        //             var t = (1 / distance) * i
+        //             var Px = Math.pow(1 - t, 2) * lastPoint.X + 2 * (1 - t) * t * ((lastPoint.X + e.touches[0].clientX) / 2) + Math.pow(t, 2) * e.touches[0].clientX
+        //             var Py = Math.pow(1 - t, 2) * lastPoint.Y + 2 * (1 - t) * t * ((lastPoint.Y + e.touches[0].clientY) / 2) + Math.pow(t, 2) * e.touches[0].clientY
+        //                 // console.log({
+        //                 //     'X': Px,
+        //                 //     'Y': Py
+        //                 // })
+        //             svg.append('circle').attr('cx', Px).attr('cy', Py).attr('r', 5).attr('fill', 'black')
 
 
-        if (isDrawing == true) {
-            svg.append('circle').attr('cx', e.touches[0].clientX).attr('cy', e.touches[0].clientY).attr('r', 5).attr('fill', 'black')
+        //         }
+        //         // console.log(lastPoint)
+        //         // console.log({
+        //         //     "X": e.clientX,
+        //         //     "Y": e.clientY
+        //         // })
+        //     }
 
-        }
-        lastPoint = {
-            'X': e.touches[0].clientX,
-            'Y': e.touches[0].clientY
-        }
+        // }
+
+
+        // if (isDrawing == true) {
+        //     svg.append('circle').attr('cx', e.touches[0].clientX).attr('cy', e.touches[0].clientY).attr('r', 5).attr('fill', 'black')
+
+        // }
+        // lastPoint = {
+        //     'X': e.touches[0].clientX,
+        //     'Y': e.touches[0].clientY
+        // }
     })
 
     body.addEventListener('touchend', (e) => {
-        e.preventDefault()
+
         console.log('touch end')
-        isDrawing = false
+            // isDrawing = false
 
     })
 </script>
