@@ -86,7 +86,7 @@
     //touch
 
     body.addEventListener('touchStart', (e) => {
-        e.preventDefault()
+
         console.log('touch start')
         isDrawing = true
         lastPoint = {
@@ -100,7 +100,7 @@
     })
 
     body.addEventListener('touchmove', (e) => {
-        e.preventDefault()
+
 
         if (isDrawing == true) {
             console.log('touch move')
