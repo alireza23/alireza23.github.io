@@ -2,96 +2,149 @@
 <html>
 
 <head>
-    <!-- downloaded frm: https://jsbin.com/ateho3/344/edit?html,js,output -->
-    <!-- <script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script> -->
-    <meta charset=utf-8 />
-    <title>Avinash</title>
-
-    <style>
-        body {
-            margin: 0px;
-            padding: 0px;
-            /* overflow: hidden; */
-        }
-    </style>
+    <title>SVG.js</title>
+    <script src="./svg.min.js"></script>
+    <?xml version="1.0" encoding="UTF-8"?>
+    <script src="./d3.min.js"></script>
 </head>
 
-<body>
-    <canvas id="canvas"></canvas>
-    <script>
-        console.log(window.devicePixelRatio)
-        window.onload = function() {
-            var canvas = document.getElementById('canvas');
-            var width = window.innerWidth;
-            var height = window.innerHeight;
-            canvas.height = height;
-            canvas.width = width;
-            var ctx = canvas.getContext('2d');
-            // ctx.globalAlpha = 0.2;
-            ctx.lineCap = 'round';
-            ctx.lineJoin = 'round';
-            // ctx.shadowBlur = 1;
-            // ctx.shadowOffsetX = .5;
-            // ctx.shadowOffsetY = .5;
-            // ctx.shadowColor = "#0d486e";
-
-            ctx.lineWidth = 3;
-            ctx.strokeStyle = '#186699';
-
-            canvas.addEventListener('mousedown', function(e) {
-                this.down = true;
-                this.X = e.pageX;
-                this.Y = e.pageY;
-
-                ctx.beginPath();
-                ctx.moveTo(this.X, this.Y);
-                // ctx.lineCap = 'round';
-                // ctx.lineJoin = 'round';
-
-                // this.color = rgb();
-            }, 0);
-            canvas.addEventListener('mouseup', function() {
-                this.down = false;
-            }, 0);
-            canvas.addEventListener('mousemove', function(e) {
-                this.style.cursor = 'pointer';
-                if (this.down) {
-                    ctx.lineTo(e.pageX, e.pageY);
-                    ctx.stroke();
-                    this.X = e.pageX;
-                    this.Y = e.pageY;
-                }
-            }, 0);
-            canvas.addEventListener('touchstart', function(e) {
-                console.log(e)
-                e.preventDefault()
-                this.down = true;
-                this.X = e.touches[0].pageX;
-                this.Y = e.touches[0].pageY;
-
-                ctx.beginPath();
-                ctx.moveTo(this.X, this.Y);
-                // ctx.lineCap = 'round';
-                // ctx.lineJoin = 'round';
-
-
-            }, 0);
-            canvas.addEventListener('touchend', function(e) {
-                this.down = false;
-                e.preventDefault()
-            }, 0);
-            canvas.addEventListener('touchmove', function(e) {
-                this.style.cursor = 'pointer';
-                e.preventDefault()
-                if (this.down) {
-                    ctx.lineTo(e.touches[0].pageX, e.touches[0].pageY);
-                    ctx.stroke();
-                    this.X = e.touches[0].pageX;
-                    this.Y = e.touches[0].pageY;
-                }
-            }, 0);
-        };
-    </script>
+<body id="body" style="width: 100%; height: 500px;">
+    <div id="svgCanvas"></div>
 </body>
+<script>
+    //P = (1−t)2P1 + 2(1−t)tP2 + t2P3
+    const canvas = d3.select('#svgCanvas')
+    const svg = canvas.append('svg')
+        .attr('height', 1000)
+        .attr('width', '100%')
+    console.log(canvas)
+    let lastPoint = {}
+    let isDrawing = false
+    const body = document.getElementById('body')
+    body.addEventListener('mousedown', (e) => {
+        console.log('mouse down')
+
+        isDrawing = true
+        lastPoint = {
+            'X': e.clientX,
+            'Y': e.clientY
+        }
+        if (isDrawing == true) {
+            svg.append('circle').attr('cx', e.clientX).attr('cy', e.clientY).attr('r', 5).attr('fill', 'black')
+
+        }
+    })
+
+    body.addEventListener('mousemove', (e) => {
+        if (isDrawing == true) {
+            // console.log('mouse move')
+
+            if (Math.abs(lastPoint.X - e.clientX) > 1 || Math.abs(lastPoint.Y - e.clientY) > 1) {
+
+                const distance = Math.ceil(Math.sqrt(Math.pow(Math.abs(lastPoint.X - e.clientX), 2) + Math.pow(Math.abs(lastPoint.Y - e.clientY), 2)))
+                    //P = (1−t)2P1 + 2(1−t)tP2 + t2P3
+                console.log(distance)
+                    //  var d = 30
+                for (var i = 1; i < distance + 1; i++) {
+                    var t = (1 / distance) * i
+                    var Px = Math.pow(1 - t, 2) * lastPoint.X + 2 * (1 - t) * t * ((lastPoint.X + e.clientX) / 2) + Math.pow(t, 2) * e.clientX
+                    var Py = Math.pow(1 - t, 2) * lastPoint.Y + 2 * (1 - t) * t * ((lastPoint.Y + e.clientY) / 2) + Math.pow(t, 2) * e.clientY
+                        // console.log({
+                        //     'X': Px,
+                        //     'Y': Py
+                        // })
+                    svg.append('circle').attr('cx', Px).attr('cy', Py).attr('r', 5).attr('fill', 'black')
+
+
+                }
+                // console.log(lastPoint)
+                // console.log({
+                //     "X": e.clientX,
+                //     "Y": e.clientY
+                // })
+            }
+
+        }
+
+
+        if (isDrawing == true) {
+            svg.append('circle').attr('cx', e.clientX).attr('cy', e.clientY).attr('r', 5).attr('fill', 'black')
+
+        }
+        lastPoint = {
+            'X': e.clientX,
+            'Y': e.clientY
+        }
+    })
+
+    body.addEventListener('mouseup', (e) => {
+        console.log('mouse up')
+        isDrawing = false
+
+    })
+
+    //touch
+
+    body.addEventListener('touchStart', (e) => {
+        console.log('touch start')
+        isDrawing = true
+        lastPoint = {
+            'X': e.touches[0].clientX,
+            'Y': e.touches[0].clientY
+        }
+        if (isDrawing == true) {
+            svg.append('circle').attr('cx', e.touches[0].clientX).attr('cy', e.touches[0].clientY).attr('r', 5).attr('fill', 'black')
+
+        }
+    })
+
+    body.addEventListener('touchmove', (e) => {
+        if (isDrawing == true) {
+            console.log('touch move')
+
+            if (Math.abs(lastPoint.X - e.touches[0].clientX) > 1 || Math.abs(lastPoint.Y - e.touches[0].clientY) > 1) {
+
+                const distance = Math.ceil(Math.sqrt(Math.pow(Math.abs(lastPoint.X - e.touches[0].clientX), 2) + Math.pow(Math.abs(lastPoint.Y - e.touches[0].clientY), 2)))
+                    //P = (1−t)2P1 + 2(1−t)tP2 + t2P3
+                console.log(distance)
+                    //  var d = 30
+                for (var i = 1; i < distance + 1; i++) {
+                    var t = (1 / distance) * i
+                    var Px = Math.pow(1 - t, 2) * lastPoint.X + 2 * (1 - t) * t * ((lastPoint.X + e.touches[0].clientX) / 2) + Math.pow(t, 2) * e.touches[0].clientX
+                    var Py = Math.pow(1 - t, 2) * lastPoint.Y + 2 * (1 - t) * t * ((lastPoint.Y + e.touches[0].clientY) / 2) + Math.pow(t, 2) * e.touches[0].clientY
+                        // console.log({
+                        //     'X': Px,
+                        //     'Y': Py
+                        // })
+                    svg.append('circle').attr('cx', Px).attr('cy', Py).attr('r', 5).attr('fill', 'black')
+
+
+                }
+                // console.log(lastPoint)
+                // console.log({
+                //     "X": e.clientX,
+                //     "Y": e.clientY
+                // })
+            }
+
+        }
+
+
+        if (isDrawing == true) {
+            svg.append('circle').attr('cx', e.touches[0].clientX).attr('cy', e.touches[0].clientY).attr('r', 5).attr('fill', 'black')
+
+        }
+        lastPoint = {
+            'X': e.touches[0].clientX,
+            'Y': e.touches[0].clientY
+        }
+    })
+
+    body.addEventListener('touchend', (e) => {
+        console.log('touch end')
+        isDrawing = false
+
+    })
+</script>
 
 </html>
