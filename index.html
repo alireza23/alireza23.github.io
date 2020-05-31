@@ -128,6 +128,7 @@
 
 
     function mousemove(e) {
+
         if (e.type == 'mousemove') {
             mClientX = e.clientX
             mClientY = e.clientY
@@ -192,6 +193,7 @@
             'X': mClientX,
             'Y': mClientY
         }
+        e.preventdefault()
 
     }
 
